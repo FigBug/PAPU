@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="JPnRUR" name="PAPU" projectType="audioplug" version="1.0.0"
+              bundleIdentifier="com.socalabs.PAPU" includeBinaryInAppConfig="1"
+              buildVST="1" buildVST3="0" buildAU="1" buildAUv3="0" buildRTAS="0"
+              buildAAX="0" pluginName="PAPU" pluginDesc="PAPU" pluginManufacturer="SocaLabs"
+              pluginManufacturerCode="Soca" pluginCode="Papu" pluginChannelConfigs="{0,1}"
+              pluginIsSynth="1" pluginWantsMidiIn="1" pluginProducesMidiOut="0"
+              pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="PAPUAU"
+              pluginRTASCategory="" aaxIdentifier="com.socalabs.PAPU" pluginAAXCategory="AAX_ePlugInCategory_Dynamics"
+              jucerVersion="5.0.2" companyName="SocaLabs" companyWebsite="www.socalabs.com"
+              companyEmail="info@socalabs.com" displaySplashScreen="1" reportAppUsage="1"
+              splashScreenColour="Dark" buildStandalone="0" enableIAA="0">
+  <MAINGROUP id="dPRjsF" name="PAPU">
+    <GROUP id="{EE796482-0D02-0052-80F4-B1FE6CE0D41A}" name="Source">
+      <GROUP id="{3344A43A-B55B-7876-70B3-CCC17DA4B65B}" name="PAPU">
+        <FILE id="MBjjvY" name="Basic_Gb_Apu.cpp" compile="1" resource="0"
+              file="../3rdparty/Gb_Snd_Emu-0.1.4/Basic_Gb_Apu.cpp"/>
+        <FILE id="TS952W" name="Basic_Gb_Apu.h" compile="0" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/Basic_Gb_Apu.h"/>
+        <FILE id="IUY4X6" name="blargg_common.h" compile="0" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/blargg_common.h"/>
+        <FILE id="TyOqxL" name="blargg_source.h" compile="0" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/blargg_source.h"/>
+        <FILE id="yHUDfd" name="Blip_Buffer.cpp" compile="1" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Blip_Buffer.cpp"/>
+        <FILE id="MwbBaq" name="Blip_Buffer.h" compile="0" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Blip_Buffer.h"/>
+        <FILE id="WDrWjf" name="Blip_Synth.h" compile="0" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Blip_Synth.h"/>
+        <FILE id="wqMTVW" name="config.hpp" compile="0" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/boost/config.hpp"/>
+        <FILE id="vMoAKl" name="cstdint.hpp" compile="0" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/boost/cstdint.hpp"/>
+        <FILE id="sLrGac" name="Gb_Apu.cpp" compile="1" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Gb_Apu.cpp"/>
+        <FILE id="iskCRh" name="Gb_Apu.h" compile="0" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Gb_Apu.h"/>
+        <FILE id="VKjzvF" name="Gb_Oscs.cpp" compile="1" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Gb_Oscs.cpp"/>
+        <FILE id="kx4rcf" name="Gb_Oscs.h" compile="0" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Gb_Oscs.h"/>
+        <FILE id="QhFGjF" name="Multi_Buffer.cpp" compile="1" resource="0"
+              file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Multi_Buffer.cpp"/>
+        <FILE id="uItO3T" name="Multi_Buffer.h" compile="0" resource="0" file="../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Multi_Buffer.h"/>
+        <FILE id="oEUccf" name="static_assert.hpp" compile="0" resource="0"
+              file="../3rdparty/Gb_Snd_Emu-0.1.4/boost/static_assert.hpp"/>
+      </GROUP>
+      <GROUP id="{1152B116-4DDF-40B2-E59A-469FEBCF5C64}" name="Resources">
+        <FILE id="oVLZdc" name="logo.png" compile="0" resource="1" file="Resources/logo.png"/>
+      </GROUP>
+      <GROUP id="{960C83BD-AB67-7827-EDF2-14718DC9DA48}" name="Common">
+        <FILE id="yH291b" name="slCommon.h" compile="0" resource="0" file="../modules/slCommon/slCommon.h"/>
+        <FILE id="lOncym" name="slComponents.cpp" compile="1" resource="0"
+              file="../modules/slCommon/slComponents.cpp"/>
+        <FILE id="KzQ8Iz" name="slComponents.h" compile="0" resource="0" file="../modules/slCommon/slComponents.h"/>
+        <FILE id="n1vFYA" name="slDsp.cpp" compile="1" resource="0" file="../modules/slCommon/slDsp.cpp"/>
+        <FILE id="Pfu9dt" name="slDsp.h" compile="0" resource="0" file="../modules/slCommon/slDsp.h"/>
+        <FILE id="vsQult" name="slLookAndFeel.cpp" compile="1" resource="0"
+              file="../modules/slCommon/slLookAndFeel.cpp"/>
+        <FILE id="APFaEs" name="slLookAndFeel.h" compile="0" resource="0" file="../modules/slCommon/slLookAndFeel.h"/>
+        <FILE id="Gp8CSi" name="slParameter.cpp" compile="1" resource="0" file="../modules/slCommon/slParameter.cpp"/>
+        <FILE id="qUAqy4" name="slParameter.h" compile="0" resource="0" file="../modules/slCommon/slParameter.h"/>
+        <FILE id="db2amy" name="slPluginEditor.cpp" compile="1" resource="0"
+              file="../modules/slCommon/slPluginEditor.cpp"/>
+        <FILE id="RCJmPi" name="slPluginEditor.h" compile="0" resource="0"
+              file="../modules/slCommon/slPluginEditor.h"/>
+        <FILE id="Tf30wW" name="slProcessor.cpp" compile="1" resource="0" file="../modules/slCommon/slProcessor.cpp"/>
+        <FILE id="dkx4qs" name="slProcessor.h" compile="0" resource="0" file="../modules/slCommon/slProcessor.h"/>
+        <FILE id="UNYR6r" name="slProgram.cpp" compile="1" resource="0" file="../modules/slCommon/slProgram.cpp"/>
+        <FILE id="qx7GTy" name="slProgram.h" compile="0" resource="0" file="../modules/slCommon/slProgram.h"/>
+        <FILE id="OwCrZP" name="slUtil.cpp" compile="1" resource="0" file="../modules/slCommon/slUtil.cpp"/>
+        <FILE id="dnjll9" name="slUtil.h" compile="0" resource="0" file="../modules/slCommon/slUtil.h"/>
+      </GROUP>
+      <FILE id="iEbZ9q" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="XzLyGB" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="sm654A" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="xX3taW" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" extraCompilerFlags="-Wunused-value">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="PAPU" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
+                       osxCompatibility="10.9 SDK"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="PAPU"
+                       headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
+                       osxArchitecture="64BitUniversal" osxCompatibility="10.9 SDK"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../JUCE/modules"/>
+        <MODULEPATH id="dRowAudio" path="../modules/drowaudio/module"/>
+        <MODULEPATH id="juce_audio_utils" path="../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2015 targetFolder="Builds/VisualStudio2015">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="PAPU_32b" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
+                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files (x86)\VSTPlugins&quot;"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="3" targetName="PAPU_32b" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
+                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files (x86)\VSTPlugins&quot;"/>
+        <CONFIGURATION name="Debug64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
+                       isDebug="1" optimisation="1" targetName="PAPU_64b" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
+                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files\VSTPlugins&quot;"/>
+        <CONFIGURATION name="Release64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
+                       isDebug="0" optimisation="3" targetName="PAPU_64b" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
+                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files\VSTPlugins&quot;"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../JUCE/modules"/>
+        <MODULEPATH id="dRowAudio" path="../modules/drowaudio/module"/>
+        <MODULEPATH id="juce_audio_utils" path="../../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2015>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="dRowAudio" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
+</JUCERPROJECT>
