@@ -13,6 +13,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "gb_apu/Gb_Apu.h"
+#include "gb_apu/Multi_Buffer.h"
 #include "slCommon.h"
 
 //==============================================================================
@@ -38,12 +39,16 @@ public:
 
     //==============================================================================
     
-    static const char* paramPulse1Level;
-    static const char* paramPulse2Level;
-    static const char* paramPulse3Level;
-    static const char* paramNoiseLevel;
-    static const char* paramNoiseWhite;
-    static const char* paramNoiseShift;
+    static const char* paramPulse1Sweep;
+    static const char* paramPulse1Shift;
+    static const char* paramPulse1Duty;
+    static const char* paramPulse1A;
+    static const char* paramPulse1R;
+    static const char* paramPulse1OL;
+    static const char* paramPulse1OR;
+    static const char* paramOutputL;
+    static const char* paramOutputR;
+    
 
 private:
     void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
@@ -56,16 +61,14 @@ private:
     Component::SafePointer<PAPUAudioProcessorEditor> editor;
     
     Gb_Apu apu;
-    const long clocks_per_sec = 3579545;
+    Stereo_Buffer buf;
     
-    struct ChannelInfo
-    {
-        int note = -1;
-        int velocity = 0;
-        bool dirty = false;
-    };
+    blip_time_t time = 0;
     
-    ChannelInfo channelInfo[3];
+    blip_time_t clock() { return time += 4; }
+    
+    uint8_t last24 = 0x00;
+    uint8_t last25 = 0x00;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PAPUAudioProcessor)

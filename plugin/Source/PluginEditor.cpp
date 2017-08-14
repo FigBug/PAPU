@@ -30,7 +30,7 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
     
     addAndMakeVisible (&scope);
     
-    setGridSize (5, 2);
+    setGridSize (10, 4);
     
     scope.setNumSamplesPerPixel (2);
     scope.setVerticalZoomFactor (3.0f);
@@ -55,13 +55,13 @@ void PAPUAudioProcessorEditor::resized()
     slAudioProcessorEditor::resized();
     
     Rectangle<int> r = getControlsArea();
-    
-    componentForId (AP::paramPulse1Level)->setBounds (getGridArea (0, 0));
-    componentForId (AP::paramPulse2Level)->setBounds (getGridArea (1, 0));
-    componentForId (AP::paramPulse3Level)->setBounds (getGridArea (0, 1));
-    componentForId (AP::paramNoiseLevel)->setBounds (getGridArea (1, 1));
-    componentForId (AP::paramNoiseWhite)->setBounds (getGridArea (4, 0));
-    componentForId (AP::paramNoiseShift)->setBounds (getGridArea (4, 1));
 
-    scope.setBounds (getGridArea (2, 0, 2, 2).reduced (5));
+    int i = 0;
+    for (auto* c : controls)
+    {
+        c->setBounds(getGridArea (i % 10, i / 10));
+        i++;
+    }
+    
+    scope.setBounds (getGridArea (2, 2, 2, 2).reduced (5));
 }

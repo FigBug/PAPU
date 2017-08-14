@@ -39,3 +39,4 @@ Release
 *.opendb
 *.xcuserstate
 *.xcscheme
+*.xcbkptlist

@@ -11,12 +11,15 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-const char* PAPUAudioProcessor::paramPulse1Level      = "pulse1Level";
-const char* PAPUAudioProcessor::paramPulse2Level      = "pulse2Level";
-const char* PAPUAudioProcessor::paramPulse3Level      = "pulse3Level";
-const char* PAPUAudioProcessor::paramNoiseLevel       = "noiseLevel";
-const char* PAPUAudioProcessor::paramNoiseWhite       = "noiseWhite";
-const char* PAPUAudioProcessor::paramNoiseShift       = "noiseShift";
+const char* PAPUAudioProcessor::paramPulse1Sweep      = "sweep1";
+const char* PAPUAudioProcessor::paramPulse1Shift      = "shift1";
+const char* PAPUAudioProcessor::paramPulse1Duty       = "shiftDuty";
+const char* PAPUAudioProcessor::paramPulse1A          = "shiftA";
+const char* PAPUAudioProcessor::paramPulse1R          = "shiftR";
+const char* PAPUAudioProcessor::paramPulse1OL         = "shiftOL";
+const char* PAPUAudioProcessor::paramPulse1OR         = "shiftOR";
+const char* PAPUAudioProcessor::paramOutputL          = "outputL";
+const char* PAPUAudioProcessor::paramOutputR          = "outputR";
 
 //==============================================================================
 String percentTextFunction (const slParameter& p, float v)
@@ -45,12 +48,15 @@ String speedTextFunction (const slParameter& p, float v)
 //==============================================================================
 PAPUAudioProcessor::PAPUAudioProcessor()
 {
-    addPluginParameter (new slParameter (paramPulse1Level,     "Pulse 1 Level",      "Pulse 1",     "", 0.0f, 1.0f,  0.0f, 1.0f, 1.0f, percentTextFunction));
-    addPluginParameter (new slParameter (paramPulse2Level,     "Pulse 2 Level",      "Pulse 2",     "", 0.0f, 1.0f,  0.0f, 0.0f, 1.0f, percentTextFunction));
-    addPluginParameter (new slParameter (paramPulse3Level,     "Pulse 3 Level",      "Pulse 3",     "", 0.0f, 1.0f,  0.0f, 0.0f, 1.0f, percentTextFunction));
-    addPluginParameter (new slParameter (paramNoiseLevel,      "Noise Level",        "Noise",       "", 0.0f, 1.0f,  0.0f, 0.0f, 1.0f, percentTextFunction));
-    addPluginParameter (new slParameter (paramNoiseWhite,      "Noise Type",         "Type",        "", 0.0f, 1.0f,  1.0f, 0.0f, 1.0f, typeTextFunction));
-    addPluginParameter (new slParameter (paramNoiseShift,      "Noise Speed",        "Speed",       "", 0.0f, 3.0f,  1.0f, 0.0f, 1.0f, speedTextFunction));
+    addPluginParameter (new slParameter (paramPulse1Sweep,     "Pulse 1 Sweep",      "Sweep 1",     "", -15.0f, 15.0f,  1.0f, 0.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse1Shift,     "Pulse 1 Shift",      "Shift 1",     "",   0.0f, 15.0f,  1.0f, 0.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse1Duty,      "Pulse 1 Duty",       "Duty 1",      "",   0.0f, 3.0f,   1.0f, 0.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse1A,         "Pulse 1 A",          "A 1",         "",   0.0f, 15.0f,  1.0f, 7.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse1R,         "Pulse 1 R",          "R 1",         "",   0.0f, 15.0f,  1.0f, 7.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse1OL,        "Pulse 1 OL",         "OL 1",        "",   0.0f, 1.0f,   1.0f, 1.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse1OR,        "Pulse 1 OR",         "OR 1",        "",   0.0f, 1.0f,   1.0f, 1.0f, 1.0f));
+    addPluginParameter (new slParameter (paramOutputL,         "Output L",           "Out L",       "",   0.0f, 15.0f,  1.0f, 15.0f, 1.0f));
+    addPluginParameter (new slParameter (paramOutputR,         "Output R",           "Out R",       "",   0.0f, 15.0f,  1.0f, 15.0f, 1.0f));
 }
 
 PAPUAudioProcessor::~PAPUAudioProcessor()
@@ -61,13 +67,12 @@ PAPUAudioProcessor::~PAPUAudioProcessor()
 void PAPUAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     outputSmoothed.reset (sampleRate, 0.05);
-/*
-    buf.sample_rate (sampleRate);
-    buf.clock_rate (clocks_per_sec);
-    
-  
+
     apu.output (buf.center(), buf.left(), buf.right());
- */
+    buf.clock_rate (4194304);
+    buf.set_sample_rate (sampleRate);
+    
+    apu.write_register (clock(), 0xff26, 0x8f);
 }
 
 void PAPUAudioProcessor::releaseResources()
@@ -76,8 +81,9 @@ void PAPUAudioProcessor::releaseResources()
 
 void PAPUAudioProcessor::runUntil (int& done, AudioSampleBuffer& buffer, int pos)
 {
+    time = 0;
     int todo = jmin (pos, buffer.getNumSamples()) - done;
-    /*
+
     while (todo > 0)
     {
         if (buf.samples_avail() > 0)
@@ -86,10 +92,15 @@ void PAPUAudioProcessor::runUntil (int& done, AudioSampleBuffer& buffer, int pos
             
             int count = buf.read_samples (out, jmin (todo, 1024 / 2, (int) buf.samples_avail()));
         
-            float* data = buffer.getWritePointer (0, done);
+            float* data0 = buffer.getWritePointer (0, done);
+            float* data1 = buffer.getWritePointer (1, done);
+            
             for (int i = 0; i < count; i++)
-                data[i] = (out[i * 2] + out[i * 2 + 1]) / 2.0f / 32768.0f;
-        
+            {
+                data0[i] = out[i * 2 + 0] / 32768.0f;
+                data1[i] = out[i * 2 + 1] / 32768.0f;
+            }
+            
             done += count;
             todo -= count;
         }
@@ -98,18 +109,23 @@ void PAPUAudioProcessor::runUntil (int& done, AudioSampleBuffer& buffer, int pos
             apu.end_frame (1024);
             buf.end_frame (1024);
         }
-    }*/
+    }
 }
 
 void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midi)
 {
-    const float p1Level = getParameter (paramPulse1Level)->getUserValue();
-    const float p2Level = getParameter (paramPulse2Level)->getUserValue();
-    const float p3Level = getParameter (paramPulse3Level)->getUserValue();
-    const float nLevel  = getParameter (paramNoiseLevel)->getUserValue();
-    const bool nWhite   = getParameter (paramNoiseWhite)->getUserValue() > 0.0f;
-    const int nType     = (int) getParameter (paramNoiseShift)->getUserValue();
-
+    uint16_t reg;
+    
+    reg = 0x88 | (parameterIntValue (paramOutputL) << 4) | parameterIntValue (paramOutputR);
+    if (reg != last24)
+        apu.write_register(clock(), 0xff24, last24 = reg);
+    
+    reg = (parameterIntValue (paramPulse1OL) ? 0x10 : 0x00) |
+          (parameterIntValue (paramPulse1OR) ? 0x01 : 0x00);
+    
+    if (reg != last25)
+        apu.write_register(clock(), 0xff25, last25 = reg);
+    
     int done = 0;
     runUntil (done, buffer, 0);
     
@@ -135,17 +151,7 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             noteQueue.clear();
         }
         
-        const int curNote = noteQueue.size() > 0 ? noteQueue.getFirst() : -1;
-        
-        blip_time_t time = 0;
-        
-        
-         if (channelInfo[0].dirty)
-         {
-             int v = channelInfo[0].velocity;
-             int curNote = channelInfo[0].note;
-             
-         }
+        const int curNote = noteQueue.size() > 0 ? noteQueue.getLast() : -1;
         
         if (curNote != lastNote)
         {
@@ -154,6 +160,21 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             // Noise
             if (curNote != -1)
             {
+                uint8_t sweep = std::abs (parameterIntValue (paramPulse1Sweep));
+                uint8_t neg   = parameterIntValue (paramPulse1Sweep) < 0;
+                uint8_t shift = parameterIntValue (paramPulse1Shift);
+                
+                apu.write_register (clock(), 0xff10, (sweep << 4) | ((neg ? 1 : 0) << 3) | shift);
+                apu.write_register (clock(), 0xff11, (parameterIntValue (paramPulse1Duty) << 6));
+                apu.write_register (clock(), 0xff12, 0x70 | (0 << 3) | parameterIntValue (paramPulse1A));
+                
+                uint16_t period = 2048 - 131072 / getMidiNoteInHertz (curNote);
+                apu.write_register (clock(), 0xff13, period & 0xff);
+                apu.write_register (clock(), 0xff14, 0x80 | ((period >> 8) & 0x3));
+            }
+            else
+            {
+                apu.write_register (clock(), 0xff12, 0x70 | (1 << 3) | parameterIntValue (paramPulse1R));
             }
             
             lastNote = curNote;

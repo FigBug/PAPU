@@ -152,7 +152,7 @@ inline blargg_err_t Multi_Buffer::set_sample_rate( long rate, int msec )
 
 inline int Multi_Buffer::samples_per_frame() const { return samples_per_frame_; }
 
-inline long Stereo_Buffer::samples_avail() const { return bufs [0].samples_avail() * 2; }
+inline long Stereo_Buffer::samples_avail() const { return bufs [0].samples_avail(); }
 
 inline Stereo_Buffer::channel_t Stereo_Buffer::channel( int index ) { return chan; }
 
