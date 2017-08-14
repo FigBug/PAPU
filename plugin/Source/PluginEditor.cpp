@@ -28,12 +28,15 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
         controls.add (c);
     }
     
-    addAndMakeVisible (&scope);
+    addAndMakeVisible (&scopeL);
+    addAndMakeVisible (&scopeR);
     
     setGridSize (10, 4);
     
-    scope.setNumSamplesPerPixel (2);
-    scope.setVerticalZoomFactor (3.0f);
+    scopeL.setNumSamplesPerPixel (2);
+    scopeL.setVerticalZoomFactor (3.0f);
+    scopeR.setNumSamplesPerPixel (2);
+    scopeR.setVerticalZoomFactor (3.0f);
 }
 
 PAPUAudioProcessorEditor::~PAPUAudioProcessorEditor()
@@ -59,9 +62,10 @@ void PAPUAudioProcessorEditor::resized()
     int i = 0;
     for (auto* c : controls)
     {
-        c->setBounds(getGridArea (i % 10, i / 10));
+        c->setBounds(getGridArea (i % 7, i / 7));
         i++;
     }
     
-    scope.setBounds (getGridArea (2, 2, 2, 2).reduced (5));
+    scopeL.setBounds (getGridArea (4, 2, 2, 2).reduced (5));
+    scopeR.setBounds (getGridArea (2, 2, 2, 2).reduced (5));
 }

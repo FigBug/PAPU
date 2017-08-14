@@ -46,6 +46,13 @@ public:
     static const char* paramPulse1R;
     static const char* paramPulse1OL;
     static const char* paramPulse1OR;
+    
+    static const char* paramPulse2Duty;
+    static const char* paramPulse2A;
+    static const char* paramPulse2R;
+    static const char* paramPulse2OL;
+    static const char* paramPulse2OR;
+    
     static const char* paramOutputL;
     static const char* paramOutputR;
     
