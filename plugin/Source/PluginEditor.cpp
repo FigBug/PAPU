@@ -14,11 +14,14 @@
 
 //==============================================================================
 PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
-    : slAudioProcessorEditor (p), processor (p)
+    : slAudioProcessorEditor (p, 60, 100), processor (p)
 {
     additionalProgramming = "Shay Green";
     
     logo = ImageFileFormat::loadFrom (BinaryData::logo_png, BinaryData::logo_pngSize);
+    
+    addAndMakeVisible (&scopeL);
+    addAndMakeVisible (&scopeR);
     
     for (slParameter* pp : p.getPluginParameters())
     {
@@ -28,10 +31,7 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
         controls.add (c);
     }
     
-    addAndMakeVisible (&scopeL);
-    addAndMakeVisible (&scopeR);
-    
-    setGridSize (10, 4);
+    setGridSize (11, 3);
     
     scopeL.setNumSamplesPerPixel (2);
     scopeL.setVerticalZoomFactor (3.0f);
@@ -58,14 +58,41 @@ void PAPUAudioProcessorEditor::resized()
     slAudioProcessorEditor::resized();
     
     Rectangle<int> r = getControlsArea();
-
-    int i = 0;
-    for (auto* c : controls)
+    
+    for (int i = 0; i < 7; i++)
     {
-        c->setBounds(getGridArea (i % 7, i / 7));
-        i++;
+        auto* c = controls[i];
+        if (i == 0)
+            c->setBounds (getGridArea (0, 0).removeFromTop (cy / 2));
+        else if (i == 1)
+            c->setBounds (getGridArea (0, 0).removeFromBottom (cy / 2));
+        else
+            c->setBounds (getGridArea (i - 1, 0));
+        
+    }
+    for (int i = 0; i < 5; i++)
+    {
+        auto* c = controls[i + 7];
+        if (i == 0)
+            c->setBounds (getGridArea (0, 1).removeFromTop (cy / 2));
+        else if (i == 1)
+            c->setBounds (getGridArea (0, 1).removeFromBottom (cy / 2));
+        else
+            c->setBounds (getGridArea (i - 1, 1));
+    }
+    for (int i = 0; i < 7; i++)
+    {
+        auto* c = controls[i + 7 + 5];
+        if (i == 0)
+            c->setBounds (getGridArea (0, 2).removeFromTop (cy / 2));
+        else if (i == 1)
+            c->setBounds (getGridArea (0, 2).removeFromBottom (cy / 2));
+        else
+            c->setBounds (getGridArea (i - 1, 2));
     }
     
-    scopeL.setBounds (getGridArea (6, 2, 2, 2).reduced (5));
-    scopeR.setBounds (getGridArea (8, 2, 2, 2).reduced (5));
+    controls.getLast()->setBounds (getGridArea (10, 2).translated (-7, 0));
+    
+    scopeL.setBounds (getGridArea (6, 0, 5, 3).reduced (5));
+    scopeR.setBounds (getGridArea (6, 0, 5, 3).reduced (5));
 }
