@@ -18,12 +18,16 @@ const char* PAPUAudioProcessor::paramPulse1A          = "A1";
 const char* PAPUAudioProcessor::paramPulse1R          = "R1";
 const char* PAPUAudioProcessor::paramPulse1OL         = "OL1";
 const char* PAPUAudioProcessor::paramPulse1OR         = "OR1";
+const char* PAPUAudioProcessor::paramPulse1Tune       = "tune1";
+const char* PAPUAudioProcessor::paramPulse1Fine       = "fine1";
 
 const char* PAPUAudioProcessor::paramPulse2Duty       = "duty2";
 const char* PAPUAudioProcessor::paramPulse2A          = "A2";
 const char* PAPUAudioProcessor::paramPulse2R          = "R2";
 const char* PAPUAudioProcessor::paramPulse2OL         = "OL2";
 const char* PAPUAudioProcessor::paramPulse2OR         = "OR2";
+const char* PAPUAudioProcessor::paramPulse2Tune       = "tune2";
+const char* PAPUAudioProcessor::paramPulse2Fine       = "fine2";
 
 const char* PAPUAudioProcessor::paramNoiseOL          = "OLN";
 const char* PAPUAudioProcessor::paramNoiseOR          = "ORL";
@@ -98,6 +102,8 @@ PAPUAudioProcessor::PAPUAudioProcessor()
     addPluginParameter (new slParameter (paramPulse1Duty,      "Pulse 1 Duty",       "PW",          "",   0.0f, 3.0f, 1.0f, 0.0f, 1.0f, dutyTextFunction));
     addPluginParameter (new slParameter (paramPulse1A,         "Pulse 1 A",          "Attack",      "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
     addPluginParameter (new slParameter (paramPulse1R,         "Pulse 1 R",          "Release",     "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
+    addPluginParameter (new slParameter (paramPulse1Tune,      "Pulse 1 Tune",       "Tune",        "", -48.0f, 48.0f, 1.0f, 0.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse1Fine,      "Pulse 1 Tune Fine",  "Fine",        "", -100.0f, 100.0f, 1.0f, 0.0f, 1.0f));
     addPluginParameter (new slParameter (paramPulse1Sweep,     "Pulse 1 Sweep",      "Sweep",       "",  -7.0f, 7.0f, 1.0f, 0.0f, 1.0f, stTextFunction));
     addPluginParameter (new slParameter (paramPulse1Shift,     "Pulse 1 Shift",      "Shift",       "",   0.0f, 7.0f, 1.0f, 0.0f, 1.0f));
     
@@ -106,6 +112,8 @@ PAPUAudioProcessor::PAPUAudioProcessor()
     addPluginParameter (new slParameter (paramPulse2Duty,      "Pulse 2 Duty",       "PW",          "",   0.0f, 3.0f, 1.0f, 0.0f, 1.0f, dutyTextFunction));
     addPluginParameter (new slParameter (paramPulse2A,         "Pulse 2 A",          "Attack",      "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
     addPluginParameter (new slParameter (paramPulse2R,         "Pulse 2 R",          "Release",     "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
+    addPluginParameter (new slParameter (paramPulse2Tune,      "Pulse 2 Tune",       "Tune",        "", -48.0f, 48.0f, 1.0f, 0.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse2Fine,      "Pulse 2 Tune Fine",  "Fine",        "", -100.0f, 100.0f, 1.0f, 0.0f, 1.0f));
     
     addPluginParameter (new slParameter (paramNoiseOL,         "Noise OL",           "Left",        "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, enableTextFunction));
     addPluginParameter (new slParameter (paramNoiseOR,         "Noise OR",           "Right",       "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, enableTextFunction));
@@ -233,7 +241,7 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
                 apu.write_register (clock(), 0xff10, (sweep << 4) | ((neg ? 1 : 0) << 3) | shift);
                 apu.write_register (clock(), 0xff11, (parameterIntValue (paramPulse1Duty) << 6));
                 
-                float freq1 = getMidiNoteInHertz (curNote);
+                float freq1 = getMidiNoteInHertz (curNote + parameterIntValue (paramPulse1Tune) + parameterIntValue (paramPulse1Fine) / 100.0f);
                 uint16_t period1 = ((4194304 / freq1) - 65536) / -32;
                 apu.write_register (clock(), 0xff13, period1 & 0xff);
                 uint8_t a1 = parameterIntValue (paramPulse1A);
@@ -243,7 +251,7 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
                 // Ch 2
                 apu.write_register (clock(), 0xff16, (parameterIntValue (paramPulse2Duty) << 6));
                 
-                float freq2 = getMidiNoteInHertz (curNote);
+                float freq2 = getMidiNoteInHertz (curNote + parameterIntValue (paramPulse2Tune) + parameterIntValue (paramPulse2Fine) / 100.0f);
                 uint16_t period2 = ((4194304 / freq2) - 65536) / -32;
                 apu.write_register (clock(), 0xff18, period2 & 0xff);
                 uint8_t a2 = parameterIntValue (paramPulse2A);

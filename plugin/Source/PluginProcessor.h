@@ -44,6 +44,8 @@ public:
     static const char* paramPulse1Duty;
     static const char* paramPulse1A;
     static const char* paramPulse1R;
+    static const char* paramPulse1Tune;
+    static const char* paramPulse1Fine;
     static const char* paramPulse1Sweep;
     static const char* paramPulse1Shift;
     
@@ -52,6 +54,8 @@ public:
     static const char* paramPulse2Duty;
     static const char* paramPulse2A;
     static const char* paramPulse2R;
+    static const char* paramPulse2Tune;
+    static const char* paramPulse2Fine;
 
     static const char* paramNoiseOL;
     static const char* paramNoiseOR;
