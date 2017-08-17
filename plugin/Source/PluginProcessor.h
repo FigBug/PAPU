@@ -39,24 +39,30 @@ public:
 
     //==============================================================================
     
-    static const char* paramPulse1Sweep;
-    static const char* paramPulse1Shift;
+    static const char* paramPulse1OL;
+    static const char* paramPulse1OR;
     static const char* paramPulse1Duty;
     static const char* paramPulse1A;
     static const char* paramPulse1R;
-    static const char* paramPulse1OL;
-    static const char* paramPulse1OR;
+    static const char* paramPulse1Sweep;
+    static const char* paramPulse1Shift;
     
+    static const char* paramPulse2OL;
+    static const char* paramPulse2OR;
     static const char* paramPulse2Duty;
     static const char* paramPulse2A;
     static const char* paramPulse2R;
-    static const char* paramPulse2OL;
-    static const char* paramPulse2OR;
-    
-    static const char* paramOutputL;
-    static const char* paramOutputR;
-    
 
+    static const char* paramNoiseOL;
+    static const char* paramNoiseOR;
+    static const char* paramNoiseShift;
+    static const char* paramNoiseStep;
+    static const char* paramNoiseRatio;
+    static const char* paramNoiseA;
+    static const char* paramNoiseR;
+    
+    static const char* paramOutput;
+    
 private:
     void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
     

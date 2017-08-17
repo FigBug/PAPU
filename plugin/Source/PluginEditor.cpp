@@ -66,6 +66,6 @@ void PAPUAudioProcessorEditor::resized()
         i++;
     }
     
-    scopeL.setBounds (getGridArea (4, 2, 2, 2).reduced (5));
-    scopeR.setBounds (getGridArea (2, 2, 2, 2).reduced (5));
+    scopeL.setBounds (getGridArea (6, 2, 2, 2).reduced (5));
+    scopeR.setBounds (getGridArea (8, 2, 2, 2).reduced (5));
 }
