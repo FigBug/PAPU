@@ -140,8 +140,8 @@ void PAPUAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     outputSmoothed.reset (sampleRate, 0.05);
     
-    //apu.treble_eq( -20.0 ); // lower values muffle it more
-    //buf.bass_freq( 461 ); // higher values simulate smaller speaker
+    apu.treble_eq( -20.0 ); // lower values muffle it more
+    buf.bass_freq( 461 ); // higher values simulate smaller speaker
     
     buf.clock_rate (4194304);
     buf.set_sample_rate (sampleRate);
