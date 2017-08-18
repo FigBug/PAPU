@@ -30,8 +30,7 @@ public:
 
     PAPUAudioProcessor& processor;
     
-    drow::TriggeredScope scopeL;
-    drow::TriggeredScope scopeR;
+    drow::TriggeredScope scope;
     Image logo;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PAPUAudioProcessorEditor)

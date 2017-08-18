@@ -20,8 +20,7 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
     
     logo = ImageFileFormat::loadFrom (BinaryData::logo_png, BinaryData::logo_pngSize);
     
-    addAndMakeVisible (&scopeL);
-    addAndMakeVisible (&scopeR);
+    addAndMakeVisible (&scope);
     
     for (slParameter* pp : p.getPluginParameters())
     {
@@ -37,10 +36,8 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
     
     setGridSize (13, 3);
     
-    scopeL.setNumSamplesPerPixel (2);
-    scopeL.setVerticalZoomFactor (3.0f);
-    scopeR.setNumSamplesPerPixel (2);
-    scopeR.setVerticalZoomFactor (3.0f);
+    scope.setNumSamplesPerPixel (2);
+    scope.setVerticalZoomFactor (3.0f);
 }
 
 PAPUAudioProcessorEditor::~PAPUAudioProcessorEditor()
@@ -97,6 +94,5 @@ void PAPUAudioProcessorEditor::resized()
     
     controls.getLast()->setBounds (getGridArea (7, 2));
     
-    scopeL.setBounds (getGridArea (8, 0, 5, 3).reduced (5));
-    scopeR.setBounds (getGridArea (8, 0, 5, 3).reduced (5));
+    scope.setBounds (getGridArea (8, 0, 5, 3).reduced (5));
 }

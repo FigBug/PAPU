@@ -94,6 +94,11 @@ String stepTextFunction (const slParameter& p, float v)
     return v > 0.0f ? "15" : "7";
 }
 
+String intTextFunction (const slParameter& p, float v)
+{
+    return String (int (v));
+}
+
 //==============================================================================
 PAPUAudioProcessor::PAPUAudioProcessor()
 {
@@ -102,26 +107,26 @@ PAPUAudioProcessor::PAPUAudioProcessor()
     addPluginParameter (new slParameter (paramPulse1Duty,      "Pulse 1 Duty",       "PW",          "",   0.0f, 3.0f, 1.0f, 0.0f, 1.0f, dutyTextFunction));
     addPluginParameter (new slParameter (paramPulse1A,         "Pulse 1 A",          "Attack",      "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
     addPluginParameter (new slParameter (paramPulse1R,         "Pulse 1 R",          "Release",     "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
-    addPluginParameter (new slParameter (paramPulse1Tune,      "Pulse 1 Tune",       "Tune",        "", -48.0f, 48.0f, 1.0f, 0.0f, 1.0f));
-    addPluginParameter (new slParameter (paramPulse1Fine,      "Pulse 1 Tune Fine",  "Fine",        "", -100.0f, 100.0f, 1.0f, 0.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse1Tune,      "Pulse 1 Tune",       "Tune",        "", -48.0f, 48.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
+    addPluginParameter (new slParameter (paramPulse1Fine,      "Pulse 1 Tune Fine",  "Fine",        "", -100.0f, 100.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
     addPluginParameter (new slParameter (paramPulse1Sweep,     "Pulse 1 Sweep",      "Sweep",       "",  -7.0f, 7.0f, 1.0f, 0.0f, 1.0f, stTextFunction));
-    addPluginParameter (new slParameter (paramPulse1Shift,     "Pulse 1 Shift",      "Shift",       "",   0.0f, 7.0f, 1.0f, 0.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse1Shift,     "Pulse 1 Shift",      "Shift",       "",   0.0f, 7.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
     
     addPluginParameter (new slParameter (paramPulse2OL,        "Pulse 2 OL",         "Left",        "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, enableTextFunction));
     addPluginParameter (new slParameter (paramPulse2OR,        "Pulse 2 OR",         "Right",       "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, enableTextFunction));
     addPluginParameter (new slParameter (paramPulse2Duty,      "Pulse 2 Duty",       "PW",          "",   0.0f, 3.0f, 1.0f, 0.0f, 1.0f, dutyTextFunction));
     addPluginParameter (new slParameter (paramPulse2A,         "Pulse 2 A",          "Attack",      "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
     addPluginParameter (new slParameter (paramPulse2R,         "Pulse 2 R",          "Release",     "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
-    addPluginParameter (new slParameter (paramPulse2Tune,      "Pulse 2 Tune",       "Tune",        "", -48.0f, 48.0f, 1.0f, 0.0f, 1.0f));
-    addPluginParameter (new slParameter (paramPulse2Fine,      "Pulse 2 Tune Fine",  "Fine",        "", -100.0f, 100.0f, 1.0f, 0.0f, 1.0f));
+    addPluginParameter (new slParameter (paramPulse2Tune,      "Pulse 2 Tune",       "Tune",        "", -48.0f, 48.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
+    addPluginParameter (new slParameter (paramPulse2Fine,      "Pulse 2 Tune Fine",  "Fine",        "", -100.0f, 100.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
     
     addPluginParameter (new slParameter (paramNoiseOL,         "Noise OL",           "Left",        "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, enableTextFunction));
     addPluginParameter (new slParameter (paramNoiseOR,         "Noise OR",           "Right",       "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, enableTextFunction));
     addPluginParameter (new slParameter (paramNoiseA,          "Noise A",            "Attack",      "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
     addPluginParameter (new slParameter (paramNoiseR,          "Noise R",            "Release",     "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
-    addPluginParameter (new slParameter (paramNoiseShift,      "Noise Shift",        "Shift",       "",   0.0f, 13.0f, 1.0f, 0.0f, 1.0f));
+    addPluginParameter (new slParameter (paramNoiseShift,      "Noise Shift",        "Shift",       "",   0.0f, 13.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
     addPluginParameter (new slParameter (paramNoiseStep,       "Noise Step",         "Steps",       "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, stepTextFunction));
-    addPluginParameter (new slParameter (paramNoiseRatio,      "Noise Ratio",        "Ratio",       "",   0.0f, 7.0f, 1.0f, 0.0f, 1.0f));
+    addPluginParameter (new slParameter (paramNoiseRatio,      "Noise Ratio",        "Ratio",       "",   0.0f, 7.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
     
     addPluginParameter (new slParameter (paramOutput,          "Output",             "Output",      "",   0.0f, 7.0f, 1.0f, 15.0f, 1.0f, percentTextFunction));
 }
@@ -289,8 +294,12 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     
     if (editor)
     {
-        editor->scopeL.addSamples (dataL, buffer.getNumSamples());
-        editor->scopeR.addSamples (dataR, buffer.getNumSamples());
+        float mono[buffer.getNumSamples()];
+        
+        for (int i = 0; i < buffer.getNumSamples(); i++)
+            mono[i] = (dataL[i] + dataR[i]) / 2.0f;
+        
+        editor->scope.addSamples (mono, buffer.getNumSamples());
     }
 }
 
