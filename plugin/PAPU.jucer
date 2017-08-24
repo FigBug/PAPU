@@ -131,11 +131,14 @@
         <MODULEPATH id="juce_audio_utils" path="../../JUCE/modules"/>
       </MODULEPATHS>
     </VS2015>
-    <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile" extraCompilerFlags="-fvisibility=hidden"
+                extraLinkerFlags="-fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="PAPU" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="PAPU" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
+                       libraryPath="/usr/X11R6/lib/"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="PAPU"
-                       headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"/>
+                       headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
+                       libraryPath="/usr/X11R6/lib/"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_video" path="../../JUCE/modules"/>
