@@ -121,7 +121,9 @@
 #endif
 
 // BOOST::uint8_t, BOOST::int16_t, etc.
-#include "boost/cstdint.hpp"
+//#include "boost/cstdint.hpp"
+#include <stdint.h>
+#include <limits.h>
 
 // BOOST_STATIC_ASSERT( expr )
 #include "boost/static_assert.hpp"

@@ -294,7 +294,7 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     
     if (editor)
     {
-        float mono[buffer.getNumSamples()];
+        float* mono = (float*) alloca (buffer.getNumSamples() * sizeof (float));
         
         for (int i = 0; i < buffer.getNumSamples(); i++)
             mono[i] = (dataL[i] + dataR[i]) / 2.0f;
