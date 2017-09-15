@@ -292,6 +292,7 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     float* dataL = buffer.getWritePointer (0);
     float* dataR = buffer.getWritePointer (1);
     
+    ScopedLock sl (editorLock);
     if (editor)
     {
         float* mono = (float*) alloca (buffer.getNumSamples() * sizeof (float));

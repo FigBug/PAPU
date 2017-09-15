@@ -66,6 +66,12 @@ public:
     static const char* paramNoiseR;
     
     static const char* paramOutput;
+
+    void setEditor (PAPUAudioProcessorEditor* editor_)
+    {
+        ScopedLock sl (editorLock);
+        editor = editor_;
+    }
     
 private:
     void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
@@ -75,7 +81,8 @@ private:
     Array<int> noteQueue;
     
     LinearSmoothedValue<float> outputSmoothed;
-    Component::SafePointer<PAPUAudioProcessorEditor> editor;
+    CriticalSection editorLock;
+    PAPUAudioProcessorEditor* editor = nullptr;
     
     Gb_Apu apu;
     Stereo_Buffer buf;
