@@ -68,7 +68,7 @@
 // Set up boost
 #include "boost/config.hpp"
 #ifndef BOOST_MINIMAL
-	#define BOOST boost
+	#define BOOST 
 	#ifndef BLARGG_COMPILER_HAS_NAMESPACE
 		#define BLARGG_COMPILER_HAS_NAMESPACE 1
 	#endif
@@ -98,7 +98,7 @@
 
 #ifndef BOOST
 	#if BLARGG_USE_NAMESPACE
-		#define BOOST boost
+		#define BOOST 
 	#else
 		#define BOOST
 	#endif

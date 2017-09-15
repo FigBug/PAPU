@@ -260,7 +260,11 @@
 // juce_gui_extra flags:
 
 #ifndef    JUCE_WEB_BROWSER
+<<<<<<< HEAD
  //#define JUCE_WEB_BROWSER
+=======
+ #define   JUCE_WEB_BROWSER 0
+>>>>>>> 4c6a41cfdb1d2cf35f8b99bd2571a0c705fbb5da
 #endif
 
 #ifndef    JUCE_ENABLE_LIVE_CONSTANT_EDITOR

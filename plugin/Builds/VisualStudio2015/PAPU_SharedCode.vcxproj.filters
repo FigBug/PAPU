@@ -2937,7 +2937,7 @@
     <ClInclude Include="..\..\..\modules\drowaudio\module\dRowAudio\utility\dRowAudio_XmlHelpers.h">
       <Filter>Juce Modules\dRowAudio\utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\modules\drowaudio\module\dRowAudio\dRowAudio.h">
+    <ClInclude Include="..\..\..\modules\dRowAudio\module\dRowAudio\dRowAudio.h">
       <Filter>Juce Modules\dRowAudio</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">

@@ -8,9 +8,13 @@
               pluginIsSynth="1" pluginWantsMidiIn="1" pluginProducesMidiOut="0"
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="PAPUAU"
               pluginRTASCategory="" aaxIdentifier="com.socalabs.PAPU" pluginAAXCategory="AAX_ePlugInCategory_Dynamics"
+<<<<<<< HEAD
               jucerVersion="5.0.1" companyName="SocaLabs" companyWebsite="www.socalabs.com"
+=======
+              jucerVersion="5.1.0" companyName="SocaLabs" companyWebsite="www.socalabs.com"
+>>>>>>> 4c6a41cfdb1d2cf35f8b99bd2571a0c705fbb5da
               companyEmail="info@socalabs.com" displaySplashScreen="0" reportAppUsage="0"
-              splashScreenColour="Dark" buildStandalone="0" enableIAA="0">
+              splashScreenColour="Dark" buildStandalone="0" enableIAA="0" cppLanguageStandard="11">
   <MAINGROUP id="dPRjsF" name="PAPU">
     <GROUP id="{EE796482-0D02-0052-80F4-B1FE6CE0D41A}" name="Source">
       <GROUP id="{3344A43A-B55B-7876-70B3-CCC17DA4B65B}" name="PAPU">
@@ -131,11 +135,14 @@
         <MODULEPATH id="juce_audio_utils" path="../../JUCE/modules"/>
       </MODULEPATHS>
     </VS2015>
-    <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile" extraCompilerFlags="-fvisibility=hidden"
+                extraLinkerFlags="-fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="PAPU" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="PAPU" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
+                       libraryPath="/usr/X11R6/lib/"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="PAPU"
-                       headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"/>
+                       headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
+                       libraryPath="/usr/X11R6/lib/"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_video" path="../../JUCE/modules"/>
@@ -153,7 +160,7 @@
         <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
-        <MODULEPATH id="dRowAudio" path="../modules/drowaudio/module"/>
+        <MODULEPATH id="dRowAudio" path="../modules/dRowAudio/module"/>
       </MODULEPATHS>
     </LINUX_MAKE>
   </EXPORTFORMATS>
@@ -175,5 +182,5 @@
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
-  <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
+  <JUCEOPTIONS JUCE_QUICKTIME="disabled" JUCE_WEB_BROWSER="disabled"/>
 </JUCERPROJECT>
