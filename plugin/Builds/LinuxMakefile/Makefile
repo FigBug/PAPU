@@ -23,6 +23,8 @@ ifndef CONFIG
   CONFIG=Debug
 endif
 
+JUCE_ARCH_LABEL := $(shell uname -m)
+
 ifeq ($(CONFIG),Debug)
   JUCE_BINDIR := build
   JUCE_LIBDIR := build
@@ -33,10 +35,10 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.1 -DJUCE_APP_VERSION_HEX=0x10001 $(shell pkg-config --cflags alsa freetype2 libcurl x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../../JUCE/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.2 -DJUCE_APP_VERSION_HEX=0x10002 $(shell pkg-config --cflags alsa freetype2 libcurl x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../../JUCE/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
 
   JUCE_CPPFLAGS_VST := -DJucePlugin_Build_VST=1 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
-  JUCE_CFLAGS_VST := -fPIC
+  JUCE_CFLAGS_VST := -fPIC -fvisibility=hidden
   JUCE_LDFLAGS_VST := -shared -Wl,--no-undefined
   JUCE_TARGET_VST := PAPU.so
 
@@ -44,8 +46,8 @@ ifeq ($(CONFIG),Debug)
   JUCE_TARGET_SHARED_CODE := PAPU.a
 
   JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -fPIC -g -ggdb -O0 -fvisibility=hidden $(CFLAGS)
-  JUCE_CXXFLAGS += $(CXXFLAGS) $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -Wl,--no-undefined -L/usr/X11R6/lib/ $(shell pkg-config --libs alsa freetype2 libcurl x11 xext xinerama) -lGL -ldl -lpthread -lrt -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all $(LDFLAGS)
+  JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs alsa freetype2 libcurl x11 xext xinerama) -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all -lGL -ldl -lpthread -lrt $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
@@ -60,10 +62,10 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.1 -DJUCE_APP_VERSION_HEX=0x10001 $(shell pkg-config --cflags alsa freetype2 libcurl x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../../JUCE/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.2 -DJUCE_APP_VERSION_HEX=0x10002 $(shell pkg-config --cflags alsa freetype2 libcurl x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../../JUCE/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
 
   JUCE_CPPFLAGS_VST := -DJucePlugin_Build_VST=1 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
-  JUCE_CFLAGS_VST := -fPIC
+  JUCE_CFLAGS_VST := -fPIC -fvisibility=hidden
   JUCE_LDFLAGS_VST := -shared -Wl,--no-undefined
   JUCE_TARGET_VST := PAPU.so
 
@@ -71,8 +73,8 @@ ifeq ($(CONFIG),Release)
   JUCE_TARGET_SHARED_CODE := PAPU.a
 
   JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -fPIC -O3 -fvisibility=hidden $(CFLAGS)
-  JUCE_CXXFLAGS += $(CXXFLAGS) $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -Wl,--no-undefined -fvisibility=hidden -L/usr/X11R6/lib/ $(shell pkg-config --libs alsa freetype2 libcurl x11 xext xinerama) -lGL -ldl -lpthread -lrt -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all $(LDFLAGS)
+  JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs alsa freetype2 libcurl x11 xext xinerama) -fvisibility=hidden -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all -lGL -ldl -lpthread -lrt $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
@@ -88,6 +90,7 @@ OBJECTS_SHARED_CODE := \
   $(JUCE_OBJDIR)/Gb_Apu_1dfa0a33.o \
   $(JUCE_OBJDIR)/Gb_Oscs_d34734b1.o \
   $(JUCE_OBJDIR)/Multi_Buffer_c7b000b7.o \
+  $(JUCE_OBJDIR)/SingleLineTextEditor_70d4e7df.o \
   $(JUCE_OBJDIR)/slComponents_3caabb18.o \
   $(JUCE_OBJDIR)/slDsp_9ca6ec49.o \
   $(JUCE_OBJDIR)/slLookAndFeel_7955bd86.o \
@@ -165,6 +168,11 @@ $(JUCE_OBJDIR)/Gb_Oscs_d34734b1.o: ../../../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Gb_
 $(JUCE_OBJDIR)/Multi_Buffer_c7b000b7.o: ../../../3rdparty/Gb_Snd_Emu-0.1.4/gb_apu/Multi_Buffer.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling Multi_Buffer.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/SingleLineTextEditor_70d4e7df.o: ../../../modules/slCommon/SingleLineTextEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling SingleLineTextEditor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/slComponents_3caabb18.o: ../../../modules/slCommon/slComponents.cpp

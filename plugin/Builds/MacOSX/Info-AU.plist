@@ -8,7 +8,7 @@
     <key>CFBundleIconFile</key>
     <string></string>
     <key>CFBundleIdentifier</key>
-    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <string>com.socalabs.PAPU</string>
     <key>CFBundleName</key>
     <string>PAPU</string>
     <key>CFBundleDisplayName</key>
@@ -18,9 +18,9 @@
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.1</string>
+    <string>1.0.2</string>
     <key>CFBundleVersion</key>
-    <string>1.0.1</string>
+    <string>1.0.2</string>
     <key>NSHumanReadableCopyright</key>
     <string>SocaLabs</string>
     <key>NSHighResolutionCapable</key>
@@ -41,7 +41,7 @@
         <key>subtype</key>
         <string>Papu</string>
         <key>version</key>
-        <integer>65537</integer>
+        <integer>65538</integer>
       </dict>
     </array>
   </dict>
