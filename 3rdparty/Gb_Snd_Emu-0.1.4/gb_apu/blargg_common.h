@@ -98,7 +98,7 @@
 
 #ifndef BOOST
 	#if BLARGG_USE_NAMESPACE
-		#define BOOST boost
+		#define BOOST 
 	#else
 		#define BOOST
 	#endif
