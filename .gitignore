@@ -40,3 +40,5 @@ Release
 *.xcuserstate
 *.xcscheme
 *.xcbkptlist
+
+plugin/Builds/VisualStudio2015/x64

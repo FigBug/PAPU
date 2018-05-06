@@ -29,13 +29,19 @@
    under the GPL v3 license.
 
    End User License Agreement: www.juce.com/juce-5-licence
+
   ==============================================================================
 */
 
 // BEGIN SECTION A
 
-#define JUCE_DISPLAY_SPLASH_SCREEN 0
-#define JUCE_REPORT_APP_USAGE 0
+#ifndef JUCE_DISPLAY_SPLASH_SCREEN
+ #define JUCE_DISPLAY_SPLASH_SCREEN 0
+#endif
+
+#ifndef JUCE_REPORT_APP_USAGE
+ #define JUCE_REPORT_APP_USAGE 0
+#endif
 
 // END SECTION A
 
@@ -115,6 +121,10 @@
  //#define JUCE_USE_WINRT_MIDI 1
 #endif
 
+#ifndef    JUCE_DISABLE_AUDIO_MIXING_WITH_OTHER_APPS
+ //#define JUCE_DISABLE_AUDIO_MIXING_WITH_OTHER_APPS 1
+#endif
+
 //==============================================================================
 // juce_audio_formats flags:
 
@@ -145,8 +155,16 @@
  //#define JUCE_FORCE_USE_LEGACY_PARAM_IDS 1
 #endif
 
+#ifndef    JUCE_FORCE_LEGACY_PARAMETER_AUTOMATION_TYPE
+ //#define JUCE_FORCE_LEGACY_PARAMETER_AUTOMATION_TYPE 1
+#endif
+
 #ifndef    JUCE_USE_STUDIO_ONE_COMPATIBLE_PARAMETERS
  //#define JUCE_USE_STUDIO_ONE_COMPATIBLE_PARAMETERS 1
+#endif
+
+#ifndef    JUCE_STANDALONE_FILTER_WINDOW_USE_KIOSK_MODE
+ //#define JUCE_STANDALONE_FILTER_WINDOW_USE_KIOSK_MODE 1
 #endif
 
 //==============================================================================
@@ -251,7 +269,7 @@
 // juce_gui_extra flags:
 
 #ifndef    JUCE_WEB_BROWSER
- //#define JUCE_WEB_BROWSER 1
+ #define   JUCE_WEB_BROWSER 0
 #endif
 
 #ifndef    JUCE_ENABLE_LIVE_CONSTANT_EDITOR
@@ -337,13 +355,13 @@
  #define JucePlugin_EditorRequiresKeyboardFocus  0
 #endif
 #ifndef  JucePlugin_Version
- #define JucePlugin_Version                1.0.0
+ #define JucePlugin_Version                1.0.2
 #endif
 #ifndef  JucePlugin_VersionCode
- #define JucePlugin_VersionCode            0x10000
+ #define JucePlugin_VersionCode            0x10002
 #endif
 #ifndef  JucePlugin_VersionString
- #define JucePlugin_VersionString          "1.0.0"
+ #define JucePlugin_VersionString          "1.0.2"
 #endif
 #ifndef  JucePlugin_VSTUniqueID
  #define JucePlugin_VSTUniqueID            JucePlugin_PluginCode

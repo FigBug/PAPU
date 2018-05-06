@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="JPnRUR" name="PAPU" projectType="audioplug" version="1.0.0"
+<JUCERPROJECT id="JPnRUR" name="PAPU" projectType="audioplug" version="1.0.2"
               bundleIdentifier="com.socalabs.PAPU" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="0" buildAU="1" buildAUv3="0" buildRTAS="0"
               buildAAX="0" pluginName="PAPU" pluginDesc="PAPU" pluginManufacturer="SocaLabs"
@@ -8,9 +8,10 @@
               pluginIsSynth="1" pluginWantsMidiIn="1" pluginProducesMidiOut="0"
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="PAPUAU"
               pluginRTASCategory="" aaxIdentifier="com.socalabs.PAPU" pluginAAXCategory="AAX_ePlugInCategory_Dynamics"
-              jucerVersion="5.0.2" companyName="SocaLabs" companyWebsite="www.socalabs.com"
+              jucerVersion="5.2.0" companyName="SocaLabs" companyWebsite="www.socalabs.com"
               companyEmail="info@socalabs.com" displaySplashScreen="0" reportAppUsage="0"
-              splashScreenColour="Dark" buildStandalone="0" enableIAA="0">
+              splashScreenColour="Dark" buildStandalone="0" enableIAA="0" cppLanguageStandard="11"
+              companyCopyright="SocaLabs">
   <MAINGROUP id="dPRjsF" name="PAPU">
     <GROUP id="{EE796482-0D02-0052-80F4-B1FE6CE0D41A}" name="Source">
       <GROUP id="{3344A43A-B55B-7876-70B3-CCC17DA4B65B}" name="PAPU">
@@ -38,6 +39,10 @@
         <FILE id="oVLZdc" name="logo.png" compile="0" resource="1" file="Resources/logo.png"/>
       </GROUP>
       <GROUP id="{960C83BD-AB67-7827-EDF2-14718DC9DA48}" name="Common">
+        <FILE id="FQgcke" name="SingleLineTextEditor.cpp" compile="1" resource="0"
+              file="../modules/slCommon/SingleLineTextEditor.cpp"/>
+        <FILE id="GRyqA6" name="SingleLineTextEditor.h" compile="0" resource="0"
+              file="../modules/slCommon/SingleLineTextEditor.h"/>
         <FILE id="yH291b" name="slCommon.h" compile="0" resource="0" file="../modules/slCommon/slCommon.h"/>
         <FILE id="lOncym" name="slComponents.cpp" compile="1" resource="0"
               file="../modules/slCommon/slComponents.cpp"/>
@@ -73,10 +78,11 @@
     <XCODE_MAC targetFolder="Builds/MacOSX" extraCompilerFlags="-Wunused-value">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="PAPU" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
-                       osxCompatibility="10.9 SDK"/>
+                       osxCompatibility="10.9 SDK" enablePluginBinaryCopyStep="1"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="PAPU"
                        headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
-                       osxArchitecture="64BitUniversal" osxCompatibility="10.9 SDK"/>
+                       osxArchitecture="64BitUniversal" osxCompatibility="10.9 SDK"
+                       enablePluginBinaryCopyStep="1"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
@@ -101,16 +107,22 @@
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="1" optimisation="1" targetName="PAPU_32b" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
-                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files (x86)\VSTPlugins&quot;"/>
+                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files (x86)\VSTPlugins&quot;"
+                       debugInformationFormat="ProgramDatabase" enablePluginBinaryCopyStep="0"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="0" optimisation="3" targetName="PAPU_32b" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
-                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files (x86)\VSTPlugins&quot;"/>
+                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files (x86)\VSTPlugins&quot;"
+                       debugInformationFormat="ProgramDatabase" enablePluginBinaryCopyStep="0"
+                       linkTimeOptimisation="1"/>
         <CONFIGURATION name="Debug64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
                        isDebug="1" optimisation="1" targetName="PAPU_64b" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
-                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files\VSTPlugins&quot;"/>
+                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files\VSTPlugins&quot;"
+                       debugInformationFormat="ProgramDatabase" enablePluginBinaryCopyStep="0"/>
         <CONFIGURATION name="Release64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
                        isDebug="0" optimisation="3" targetName="PAPU_64b" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
-                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files\VSTPlugins&quot;"/>
+                       postbuildCommand="copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files\VSTPlugins&quot;"
+                       debugInformationFormat="ProgramDatabase" enablePluginBinaryCopyStep="0"
+                       linkTimeOptimisation="1"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
@@ -156,7 +168,7 @@
         <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
-        <MODULEPATH id="dRowAudio" path="../modules/drowaudio/module"/>
+        <MODULEPATH id="dRowAudio" path="../modules/dRowAudio/module"/>
       </MODULEPATHS>
     </LINUX_MAKE>
   </EXPORTFORMATS>
@@ -178,5 +190,5 @@
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
-  <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
+  <JUCEOPTIONS JUCE_QUICKTIME="disabled" JUCE_WEB_BROWSER="disabled"/>
 </JUCERPROJECT>
