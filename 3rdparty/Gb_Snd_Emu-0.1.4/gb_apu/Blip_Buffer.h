@@ -159,7 +159,7 @@ public:
 	}
 	
 	int read() const {
-		return accum >> Blip_Buffer::accum_fract;
+		return int (accum >> Blip_Buffer::accum_fract);
 	}
 	
 	void next( int bass_shift = 9 ) {

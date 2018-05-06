@@ -15,6 +15,7 @@
 #include "AppConfig.h"
 
 #include <dRowAudio/dRowAudio.h>
+#include <gin/gin.h>
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_audio_devices/juce_audio_devices.h>
 #include <juce_audio_formats/juce_audio_formats.h>
@@ -43,7 +44,7 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "PAPU";
-    const char* const  versionString  = "1.0.2";
-    const int          versionNumber  = 0x10002;
+    const char* const  versionString  = "1.0.3";
+    const int          versionNumber  = 0x10003;
 }
 #endif

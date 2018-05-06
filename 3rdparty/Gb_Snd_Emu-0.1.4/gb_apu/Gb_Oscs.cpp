@@ -243,7 +243,7 @@ void Gb_Square::run( gb_time_t time, gb_time_t end_time )
 			this->phase = phase;
 			last_amp = amp >> 1;
 		}
-		delay = time - end_time;
+		delay = int (time - end_time);
 	}
 }
 
@@ -346,7 +346,7 @@ void Gb_Wave::run( gb_time_t time, gb_time_t end_time )
 			
 			this->wave_pos = wave_pos;
 		}
-		delay = time - end_time;
+		delay = int (time - end_time);
 	}
 }
 
@@ -445,7 +445,7 @@ void Gb_Noise::run( gb_time_t time, gb_time_t end_time )
 			this->bits = bits;
 			last_amp = amp >> 1;
 		}
-		delay = time - end_time;
+		delay = int (time - end_time);
 	}
 }
 

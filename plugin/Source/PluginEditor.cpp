@@ -12,9 +12,11 @@
 #include "PluginEditor.h"
 #include "BinaryData.h"
 
+using namespace gin;
+
 //==============================================================================
 PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
-    : slAudioProcessorEditor (p, 60, 100), processor (p)
+  : GinAudioProcessorEditor (p, 60, 100), processor (p)
 {
     additionalProgramming = "Shay Green";
     
@@ -22,7 +24,7 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
     
     addAndMakeVisible (&scope);
     
-    for (slParameter* pp : p.getPluginParameters())
+    for (Parameter* pp : p.getPluginParameters())
     {
         ParamComponent* c;
         if (pp->getUid().contains("tune") || pp->getUid().contains("fine") || pp->getUid().contains("sweep"))
@@ -50,7 +52,7 @@ PAPUAudioProcessorEditor::~PAPUAudioProcessorEditor()
 //==============================================================================
 void PAPUAudioProcessorEditor::paint (Graphics& g)
 {
-    slAudioProcessorEditor::paint (g);
+    GinAudioProcessorEditor::paint (g);
         
     g.drawImageAt (logo, getWidth() / 2 - logo.getWidth() / 2, 0);
 }
@@ -59,7 +61,7 @@ void PAPUAudioProcessorEditor::resized()
 {
     using AP = PAPUAudioProcessor;
     
-    slAudioProcessorEditor::resized();
+    GinAudioProcessorEditor::resized();
     
     Rectangle<int> r = getControlsArea();
     
