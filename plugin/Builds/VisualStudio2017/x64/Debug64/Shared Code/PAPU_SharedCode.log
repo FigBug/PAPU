@@ -1,0 +1,76 @@
+﻿  Basic_Gb_Apu.cpp
+  Blip_Buffer.cpp
+  Gb_Apu.cpp
+  Gb_Oscs.cpp
+  Multi_Buffer.cpp
+  PluginProcessor.cpp
+  PluginEditor.cpp
+  BinaryData.cpp
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp(227): warning C4458: declaration of 'output' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Gb_Oscs.h(16): note: see declaration of 'Gb_Osc::output' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp(228): warning C4458: declaration of 'duty' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Gb_Oscs.h(53): note: see declaration of 'Gb_Square::duty' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Multi_Buffer.cpp(201): warning C4244: '=': conversion from 'long' to 'blip_sample_t', possible loss of data
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp(229): warning C4458: declaration of 'phase' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Gb_Oscs.h(52): note: see declaration of 'Gb_Square::phase' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Multi_Buffer.cpp(202): warning C4244: '=': conversion from 'long' to 'blip_sample_t', possible loss of data
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Multi_Buffer.cpp(207): warning C4244: '=': conversion from 'long' to 'blip_sample_t', possible loss of data
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Multi_Buffer.cpp(208): warning C4244: '=': conversion from 'long' to 'blip_sample_t', possible loss of data
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp(330): warning C4458: declaration of 'volume_shift' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Gb_Oscs.h(73): note: see declaration of 'Gb_Wave::volume_shift' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp(331): warning C4458: declaration of 'wave_pos' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Gb_Oscs.h(74): note: see declaration of 'Gb_Wave::wave_pos' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp(122): warning C4018: '>': signed/unsigned mismatch
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp(148): warning C4458: declaration of 'offset' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Buffer.h(203): note: see declaration of 'Blip_Impulse_::offset' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp(420): warning C4458: declaration of 'output' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Gb_Oscs.h(16): note: see declaration of 'Gb_Osc::output' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp(426): warning C4458: declaration of 'bits' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Gb_Oscs.h(89): note: see declaration of 'Gb_Noise::bits' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp(268): warning C4458: declaration of 'buf' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Buffer.h(202): note: see declaration of 'Blip_Impulse_::buf' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp(310): warning C4458: declaration of 'offset' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Buffer.h(203): note: see declaration of 'Blip_Impulse_::offset' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp)
+c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Synth.h(157): warning C4127: conditional expression is constant (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Synth.h(157): note: consider using 'if constexpr' statement instead (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Synth.h(142): note: while compiling class template member function 'void Blip_Synth<3,210>::offset_resampled(blip_resampled_time_t,int,Blip_Buffer *) const' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Synth.h(81): note: see reference to function template instantiation 'void Blip_Synth<3,210>::offset_resampled(blip_resampled_time_t,int,Blip_Buffer *) const' being compiled (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Gb_Apu.h(73): note: see reference to class template instantiation 'Blip_Synth<3,210>' being compiled (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp(374): warning C4458: declaration of 'bass_shift' hides class member
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Buffer.h(122): note: see declaration of 'Blip_Buffer::bass_shift' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp)
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp(423): warning C4244: '+=': conversion from 'int' to 'Blip_Buffer::buf_t_', possible loss of data
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp(171): warning C4244: '=': conversion from 'int' to 'uint8_t', possible loss of data
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp(218): warning C4805: '&=': unsafe mix of type 'bool' and type 'int' in operation
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp(218): warning C4805: '&': unsafe mix of type 'bool' and type 'int' in operation
+..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp(234): warning C4244: '=': conversion from 'int' to 'uint8_t', possible loss of data
+c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Synth.h(157): warning C4127: conditional expression is constant (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp)
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Synth.h(157): note: consider using 'if constexpr' statement instead (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp)
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Synth.h(142): note: while compiling class template member function 'void Blip_Synth<3,210>::offset_resampled(blip_resampled_time_t,int,Blip_Buffer *) const' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp)
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Synth.h(204): note: see reference to function template instantiation 'void Blip_Synth<3,210>::offset_resampled(blip_resampled_time_t,int,Blip_Buffer *) const' being compiled (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp)
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Blip_Synth.h(203): note: while compiling class template member function 'void Blip_Synth<3,210>::offset(blip_time_t,int,Blip_Buffer *) const' (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp)
+  ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp(196): note: see reference to function template instantiation 'void Blip_Synth<3,210>::offset(blip_time_t,int,Blip_Buffer *) const' being compiled
+  c:\dev.github\myplugins\papu\3rdparty\gb_snd_emu-0.1.4\gb_apu\Gb_Apu.h(73): note: see reference to class template instantiation 'Blip_Synth<3,210>' being compiled (compiling source file ..\..\..\3rdparty\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp)
+  include_dRowAudio.cpp
+  include_gin.cpp
+  include_juce_audio_basics.cpp
+  include_juce_audio_devices.cpp
+  include_juce_audio_formats.cpp
+  include_juce_audio_plugin_client_utils.cpp
+..\..\Source\PluginProcessor.cpp(149): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
+..\..\Source\PluginProcessor.cpp(141): warning C4100: 'samplesPerBlock': unreferenced formal parameter
+..\..\Source\PluginProcessor.cpp(198): warning C4244: '=': conversion from 'int' to 'uint16_t', possible loss of data
+..\..\Source\PluginProcessor.cpp(200): warning C4244: '=': conversion from 'uint16_t' to 'uint8_t', possible loss of data
+..\..\Source\PluginProcessor.cpp(210): warning C4244: '=': conversion from 'uint16_t' to 'uint8_t', possible loss of data
+  include_juce_audio_processors.cpp
+  include_juce_audio_utils.cpp
+  include_juce_core.cpp
+  include_juce_cryptography.cpp
+  include_juce_data_structures.cpp
+  include_juce_events.cpp
+  include_juce_graphics.cpp
+  include_juce_gui_basics.cpp
+  include_juce_gui_extra.cpp
+  include_juce_opengl.cpp
+  include_juce_video.cpp
+  PAPU_SharedCode.vcxproj -> C:\dev.github\MyPlugins\PAPU\plugin\Builds\VisualStudio2017\x64\Debug64\Shared Code\PAPU_64b.lib
+          1 file(s) copied.

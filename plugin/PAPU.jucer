@@ -77,7 +77,7 @@
         <MODULEPATH id="gin" path="../modules/gin/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
-    <VS2015 targetFolder="Builds/VisualStudio2015">
+    <VS2017 targetFolder="Builds/VisualStudio2017" toolset="v141_xp">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="1" optimisation="1" targetName="PAPU_32b" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;../../../modules/slCommon"
@@ -117,7 +117,7 @@
         <MODULEPATH id="juce_audio_utils" path="../modules/juce/modules"/>
         <MODULEPATH id="gin" path="../modules/gin/modules"/>
       </MODULEPATHS>
-    </VS2015>
+    </VS2017>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile" extraCompilerFlags="-fvisibility=hidden"
                 extraLinkerFlags="-fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all">
       <CONFIGURATIONS>

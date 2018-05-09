@@ -9,7 +9,9 @@
 #ifndef BLARGG_COMMON_H
 #define BLARGG_COMMON_H
 
+#if __clang__ 
 #pragma clang diagnostic ignored "-Wunused-value"
+#endif
 
 // Allow prefix configuration file *which can re-include blargg_common.h*
 // (probably indirectly).

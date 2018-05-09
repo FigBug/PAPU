@@ -53,7 +53,7 @@ Silent_Buffer::Silent_Buffer() : Multi_Buffer( 1 ) // 0 channels would probably 
 
 // Mono_Buffer
 
-Mono_Buffer::channel_t Mono_Buffer::channel( int index )
+Mono_Buffer::channel_t Mono_Buffer::channel( int )
 {
 	channel_t ch;
 	ch.center = &buf;
@@ -170,8 +170,8 @@ void Stereo_Buffer::mix_stereo( blip_sample_t* out, long count )
 		long l = c + left.read();
 		long r = c + right.read();
 		center.next( bass );
-		out [0] = l;
-		out [1] = r;
+		out [0] = blip_sample_t (l);
+		out [1] = blip_sample_t (r);
 		out += 2;
 		
 		if ( (BOOST::int16_t) l != l )

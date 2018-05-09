@@ -47,12 +47,12 @@ String percentTextFunction (const Parameter& p, float v)
     return String::formatted("%.0f%%", v / p.getUserRangeEnd() * 100);
 }
 
-String enableTextFunction (const Parameter& p, float v)
+String enableTextFunction (const Parameter&, float v)
 {
     return v > 0.0f ? "On" : "Off";
 }
 
-String dutyTextFunction (const Parameter& p, float v)
+String dutyTextFunction (const Parameter&, float v)
 {
     const int duty = int (v);
     switch (duty)
@@ -65,12 +65,12 @@ String dutyTextFunction (const Parameter& p, float v)
     return "";
 }
 
-String arTextFunction (const Parameter& p, float v)
+String arTextFunction (const Parameter&, float v)
 {
     return String::formatted("%.1f s", v * 1.0/64.0 * 16);
 }
 
-String stTextFunction (const Parameter& p, float v)
+String stTextFunction (const Parameter&, float v)
 {
     String str;
     switch (abs (int (v)))
@@ -91,12 +91,12 @@ String stTextFunction (const Parameter& p, float v)
     return str;
 }
 
-String stepTextFunction (const Parameter& p, float v)
+String stepTextFunction (const Parameter&, float v)
 {
     return v > 0.0f ? "15" : "7";
 }
 
-String intTextFunction (const Parameter& p, float v)
+String intTextFunction (const Parameter&, float v)
 {
     return String (int (v));
 }
@@ -241,32 +241,32 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             if (curNote != -1)
             {
                 // Ch 1
-                uint8_t sweep = std::abs (parameterIntValue (paramPulse1Sweep));
+                uint8_t sweep = uint8_t (std::abs (parameterIntValue (paramPulse1Sweep)));
                 uint8_t neg   = parameterIntValue (paramPulse1Sweep) < 0;
-                uint8_t shift = parameterIntValue (paramPulse1Shift);
+                uint8_t shift = uint8_t (parameterIntValue (paramPulse1Shift));
                 
                 apu.write_register (clock(), 0xff10, (sweep << 4) | ((neg ? 1 : 0) << 3) | shift);
                 apu.write_register (clock(), 0xff11, (parameterIntValue (paramPulse1Duty) << 6));
                 
-                float freq1 = getMidiNoteInHertz (curNote + parameterIntValue (paramPulse1Tune) + parameterIntValue (paramPulse1Fine) / 100.0f);
-                uint16_t period1 = ((4194304 / freq1) - 65536) / -32;
+                float freq1 = float (getMidiNoteInHertz (curNote + parameterIntValue (paramPulse1Tune) + parameterIntValue (paramPulse1Fine) / 100.0f));
+                uint16_t period1 = uint16_t (((4194304 / freq1) - 65536) / -32);
                 apu.write_register (clock(), 0xff13, period1 & 0xff);
-                uint8_t a1 = parameterIntValue (paramPulse1A);
+                uint8_t a1 = uint8 (parameterIntValue (paramPulse1A));
                 apu.write_register (clock(), 0xff12, a1 ? (0x00 | (1 << 3) | a1) : 0xf0);
                 apu.write_register (clock(), 0xff14, 0x80 | ((period1 >> 8) & 0x07));
                 
                 // Ch 2
                 apu.write_register (clock(), 0xff16, (parameterIntValue (paramPulse2Duty) << 6));
                 
-                float freq2 = getMidiNoteInHertz (curNote + parameterIntValue (paramPulse2Tune) + parameterIntValue (paramPulse2Fine) / 100.0f);
-                uint16_t period2 = ((4194304 / freq2) - 65536) / -32;
+                float freq2 = float (getMidiNoteInHertz (curNote + parameterIntValue (paramPulse2Tune) + parameterIntValue (paramPulse2Fine) / 100.0f));
+                uint16_t period2 = uint16_t (((4194304 / freq2) - 65536) / -32);
                 apu.write_register (clock(), 0xff18, period2 & 0xff);
-                uint8_t a2 = parameterIntValue (paramPulse2A);
+                uint8_t a2 = uint8_t (parameterIntValue (paramPulse2A));
                 apu.write_register (clock(), 0xff17, a2 ? (0x00 | (1 << 3) | a2) : 0xf0);
                 apu.write_register (clock(), 0xff19, 0x80 | ((period2 >> 8) & 0x07));
                 
                 // Noise
-                uint8_t aN = parameterIntValue (paramNoiseA);
+                uint8_t aN = uint8_t (parameterIntValue (paramNoiseA));
                 apu.write_register (clock(), 0xff21, aN ? (0x00 | (1 << 3) | aN) : 0xf0);
                 apu.write_register (clock(), 0xff22, (parameterIntValue (paramNoiseShift) << 4) |
                                                      (parameterIntValue (paramNoiseStep)  << 3) |
@@ -275,13 +275,13 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             }
             else
             {
-                uint8_t r1 = parameterIntValue (paramPulse1R);
+                uint8_t r1 = uint8_t (parameterIntValue (paramPulse1R));
                 apu.write_register (clock(), 0xff12, r1 ? (0xf0 | (0 << 3) | r1) : 0);
                 
-                uint8_t r2 = parameterIntValue (paramPulse2R);
+                uint8_t r2 = uint8_t (parameterIntValue (paramPulse2R));
                 apu.write_register (clock(), 0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0);
                 
-                uint8_t rN = parameterIntValue (paramNoiseR);
+                uint8_t rN = uint8_t (parameterIntValue (paramNoiseR));
                 apu.write_register (clock(), 0xff21, rN ? (0xf0 | (0 << 3) | rN) : 0);
             }
             

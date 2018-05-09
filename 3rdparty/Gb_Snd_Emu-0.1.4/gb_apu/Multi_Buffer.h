@@ -130,7 +130,7 @@ public:
 	void bass_freq( int ) { }
 	void clear() { }
 	channel_t channel( int ) { return chan; }
-	void end_frame( blip_time_t, bool unused = true ) { }
+	void end_frame( blip_time_t, bool unused = true ) { (void)unused; }
 	long samples_avail() const { return 0; }
 	long read_samples( blip_sample_t*, long ) { return 0; }
 };
@@ -154,7 +154,7 @@ inline int Multi_Buffer::samples_per_frame() const { return samples_per_frame_; 
 
 inline long Stereo_Buffer::samples_avail() const { return bufs [0].samples_avail(); }
 
-inline Stereo_Buffer::channel_t Stereo_Buffer::channel( int index ) { return chan; }
+inline Stereo_Buffer::channel_t Stereo_Buffer::channel( int index ) { (void)index; return chan; }
 
 inline long Multi_Buffer::sample_rate() const { return sample_rate_; }
 
