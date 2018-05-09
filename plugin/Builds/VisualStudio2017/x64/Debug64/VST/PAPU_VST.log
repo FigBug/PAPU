@@ -1,4 +1,0 @@
-﻿  include_juce_audio_plugin_client_VST2.cpp
-     Creating library C:\dev.github\MyPlugins\PAPU\plugin\Builds\VisualStudio2017\x64\Debug64\VST\PAPU_64b.lib and object C:\dev.github\MyPlugins\PAPU\plugin\Builds\VisualStudio2017\x64\Debug64\VST\PAPU_64b.exp
-  PAPU_VST.vcxproj -> C:\dev.github\MyPlugins\PAPU\plugin\Builds\VisualStudio2017\x64\Debug64\VST\PAPU_64b.dll
-          1 file(s) copied.

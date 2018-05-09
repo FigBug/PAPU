@@ -138,7 +138,7 @@ PAPUAudioProcessor::~PAPUAudioProcessor()
 }
 
 //==============================================================================
-void PAPUAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void PAPUAudioProcessor::prepareToPlay (double sampleRate, int /*samplesPerBlock*/)
 {
     outputSmoothed.reset (sampleRate, 0.05);
     
@@ -146,7 +146,7 @@ void PAPUAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     buf.bass_freq( 461 ); // higher values simulate smaller speaker
     
     buf.clock_rate (4194304);
-    buf.set_sample_rate (sampleRate);
+    buf.set_sample_rate (long (sampleRate));
 
     apu.output (buf.center(), buf.left(), buf.right());
 
@@ -195,7 +195,7 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
 {
     uint16_t reg;
     
-    reg = 0x08 | parameterIntValue (paramOutput);
+    reg = uint16_t (0x08 | parameterIntValue (paramOutput));
     if (reg != last24)
         apu.write_register (clock(), 0xff24, last24 = reg);
     
