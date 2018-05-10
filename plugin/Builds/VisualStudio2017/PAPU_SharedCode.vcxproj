@@ -135,7 +135,6 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>$(IntDir)\PAPU_32b.bsc</OutputFile>
     </Bscmake>
-    <Lib/>
     <Lib>
       <TargetMachine>MachineX86</TargetMachine>
     </Lib>
@@ -185,7 +184,6 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>$(IntDir)\PAPU_32b.bsc</OutputFile>
     </Bscmake>
-    <Lib/>
     <Lib>
       <TargetMachine>MachineX86</TargetMachine>
     </Lib>
@@ -233,7 +231,6 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>$(IntDir)\PAPU_64b.bsc</OutputFile>
     </Bscmake>
-    <Lib/>
     <PostBuildEvent>
       <Command>copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files\VSTPlugins&quot;</Command>
     </PostBuildEvent>
@@ -279,7 +276,6 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>$(IntDir)\PAPU_64b.bsc</OutputFile>
     </Bscmake>
-    <Lib/>
     <PostBuildEvent>
       <Command>copy /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;C:\Program Files\VSTPlugins&quot;</Command>
     </PostBuildEvent>
@@ -3123,6 +3119,7 @@
     <ClInclude Include="..\..\..\modules\juce\modules\juce_opengl\juce_opengl.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_video\capture\juce_CameraDevice.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_video\native\juce_android_CameraDevice.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_video\native\juce_ios_CameraDevice.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_video\native\juce_mac_CameraDevice.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_video\native\juce_mac_Video.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_video\native\juce_win32_CameraDevice.h"/>
@@ -3140,9 +3137,6 @@
     <None Include="..\..\..\modules\juce\modules\juce_audio_formats\codecs\oggvorbis\Ogg Vorbis Licence.txt"/>
     <None Include="..\..\..\modules\juce\modules\juce_graphics\image_formats\jpglib\changes to libjpeg for JUCE.txt"/>
     <None Include="..\..\..\modules\juce\modules\juce_graphics\image_formats\pnglib\libpng_readme.txt"/>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include=".\resources.rc"/>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <ImportGroup Label="ExtensionTargets"/>

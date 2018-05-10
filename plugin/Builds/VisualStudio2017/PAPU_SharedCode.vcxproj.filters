@@ -5124,6 +5124,9 @@
     <ClInclude Include="..\..\..\modules\juce\modules\juce_video\native\juce_android_CameraDevice.h">
       <Filter>JUCE Modules\juce_video\native</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_video\native\juce_ios_CameraDevice.h">
+      <Filter>JUCE Modules\juce_video\native</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_video\native\juce_mac_CameraDevice.h">
       <Filter>JUCE Modules\juce_video\native</Filter>
     </ClInclude>
@@ -5171,10 +5174,5 @@
     <None Include="..\..\..\modules\juce\modules\juce_graphics\image_formats\pnglib\libpng_readme.txt">
       <Filter>JUCE Modules\juce_graphics\image_formats\pnglib</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include=".\resources.rc">
-      <Filter>JUCE Library Code</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>
