@@ -14,7 +14,7 @@
     <key>CFBundleDisplayName</key>
     <string>PAPU</string>
     <key>CFBundlePackageType</key>
-    <string>BNDL</string>
+    <string>APPL</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleShortVersionString</key>
@@ -25,31 +25,5 @@
     <string>SocaLabs</string>
     <key>NSHighResolutionCapable</key>
     <true/>
-    <key>AudioComponents</key>
-    <array>
-      <dict>
-        <key>name</key>
-        <string>SocaLabs: PAPU</string>
-        <key>description</key>
-        <string>PAPU</string>
-        <key>factoryFunction</key>
-        <string>PAPUAUFactory</string>
-        <key>manufacturer</key>
-        <string>Soca</string>
-        <key>type</key>
-        <string>aumu</string>
-        <key>subtype</key>
-        <string>Papu</string>
-        <key>version</key>
-        <integer>65539</integer>
-        <key>resourceUsage</key>
-        <dict>
-          <key>network.client</key>
-          <true/>
-          <key>temporary-exception.files.all.read-write</key>
-          <true/>
-        </dict>
-      </dict>
-    </array>
   </dict>
 </plist>

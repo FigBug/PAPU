@@ -73,6 +73,7 @@ public:
     
 private:
     void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
+    void runOscs (int curNote, bool force);
     
     int lastNote = -1;
     int velocity = 0;
@@ -89,9 +90,10 @@ private:
     
     blip_time_t clock() { return time += 4; }
     
-    uint8_t last24 = 0x00;
-    uint8_t last25 = 0x00;
+    void writeReg (int reg, int value, bool force);
     
+    std::map<int, int> regCache;
+        
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PAPUAudioProcessor)
 };

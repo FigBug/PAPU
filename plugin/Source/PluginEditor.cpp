@@ -63,8 +63,6 @@ void PAPUAudioProcessorEditor::resized()
     
     GinAudioProcessorEditor::resized();
     
-    Rectangle<int> r = getControlsArea();
-    
     for (int i = 0; i < 9; i++)
     {
         auto* c = controls[i];
