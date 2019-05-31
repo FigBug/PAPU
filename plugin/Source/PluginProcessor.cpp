@@ -216,6 +216,7 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     MidiBuffer::Iterator itr (midi);
     while (itr.getNextEvent (msg, pos))
     {
+        bool updateBend = false;
         runUntil (done, buffer, pos);
         
         if (msg.isNoteOn())
@@ -226,18 +227,21 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         else if (msg.isNoteOff())
         {
             noteQueue.removeFirstMatchingValue (msg.getNoteNumber());
-            
         }
         else if (msg.isAllNotesOff())
         {
             noteQueue.clear();
         }
-        
+        else if (msg.isPitchWheel())
+        {
+            updateBend = true;
+            pitchBend = (msg.getPitchWheelValue() - 8192) / 8192.0f * 2;
+        }
         const int curNote = noteQueue.size() > 0 ? noteQueue.getLast() : -1;
         
-        if (lastNote != curNote)
+        if (updateBend || lastNote != curNote)
         {
-            runOscs (curNote, true);
+            runOscs (curNote, lastNote != curNote);
             lastNote = curNote;
         }
     }
@@ -259,7 +263,7 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     }
 }
 
-void PAPUAudioProcessor::runOscs (int curNote, bool force)
+void PAPUAudioProcessor::runOscs (int curNote, bool trigger)
 {
     if (curNote != -1)
     {
@@ -268,44 +272,44 @@ void PAPUAudioProcessor::runOscs (int curNote, bool force)
         uint8_t neg   = parameterIntValue (paramPulse1Sweep) < 0;
         uint8_t shift = uint8_t (parameterIntValue (paramPulse1Shift));
         
-        writeReg (0xff10, (sweep << 4) | ((neg ? 1 : 0) << 3) | shift, force);
-        writeReg (0xff11, (parameterIntValue (paramPulse1Duty) << 6), force);
+        writeReg (0xff10, (sweep << 4) | ((neg ? 1 : 0) << 3) | shift, trigger);
+        writeReg (0xff11, (parameterIntValue (paramPulse1Duty) << 6), trigger);
         
-        float freq1 = float (getMidiNoteInHertz (curNote + parameterIntValue (paramPulse1Tune) + parameterIntValue (paramPulse1Fine) / 100.0f));
+        float freq1 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (paramPulse1Tune) + parameterIntValue (paramPulse1Fine) / 100.0f));
         uint16_t period1 = uint16_t (((4194304 / freq1) - 65536) / -32);
-        writeReg (0xff13, period1 & 0xff, force);
+        writeReg (0xff13, period1 & 0xff, trigger);
         uint8_t a1 = uint8 (parameterIntValue (paramPulse1A));
-        writeReg (0xff12, a1 ? (0x00 | (1 << 3) | a1) : 0xf0, force);
-        writeReg (0xff14, 0x80 | ((period1 >> 8) & 0x07), force);
+        writeReg (0xff12, a1 ? (0x00 | (1 << 3) | a1) : 0xf0, trigger);
+        writeReg (0xff14, (trigger ? 0x80 : 0x00) | ((period1 >> 8) & 0x07), trigger);
         
         // Ch 2
-        writeReg (0xff16, (parameterIntValue (paramPulse2Duty) << 6), force);
+        writeReg (0xff16, (parameterIntValue (paramPulse2Duty) << 6), trigger);
         
-        float freq2 = float (getMidiNoteInHertz (curNote + parameterIntValue (paramPulse2Tune) + parameterIntValue (paramPulse2Fine) / 100.0f));
+        float freq2 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (paramPulse2Tune) + parameterIntValue (paramPulse2Fine) / 100.0f));
         uint16_t period2 = uint16_t (((4194304 / freq2) - 65536) / -32);
-        writeReg (0xff18, period2 & 0xff, force);
+        writeReg (0xff18, period2 & 0xff, trigger);
         uint8_t a2 = uint8_t (parameterIntValue (paramPulse2A));
-        writeReg (0xff17, a2 ? (0x00 | (1 << 3) | a2) : 0xf0, force);
-        writeReg (0xff19, 0x80 | ((period2 >> 8) & 0x07), force);
+        writeReg (0xff17, a2 ? (0x00 | (1 << 3) | a2) : 0xf0, trigger);
+        writeReg (0xff19, (trigger ? 0x80 : 0x00) | ((period2 >> 8) & 0x07), trigger);
         
         // Noise
         uint8_t aN = uint8_t (parameterIntValue (paramNoiseA));
-        writeReg (0xff21, aN ? (0x00 | (1 << 3) | aN) : 0xf0, force);
+        writeReg (0xff21, aN ? (0x00 | (1 << 3) | aN) : 0xf0, trigger);
         writeReg (0xff22, (parameterIntValue (paramNoiseShift) << 4) |
                             (parameterIntValue (paramNoiseStep)  << 3) |
-                            (parameterIntValue (paramNoiseRatio)), force);
-        writeReg (0xff23, 0x80, force);
+                            (parameterIntValue (paramNoiseRatio)), trigger);
+        writeReg (0xff23, trigger ? 0x80 : 0x00, trigger);
     }
     else
     {
         uint8_t r1 = uint8_t (parameterIntValue (paramPulse1R));
-        writeReg (0xff12, r1 ? (0xf0 | (0 << 3) | r1) : 0, force);
+        writeReg (0xff12, r1 ? (0xf0 | (0 << 3) | r1) : 0, trigger);
         
         uint8_t r2 = uint8_t (parameterIntValue (paramPulse2R));
-        writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, force);
+        writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, trigger);
         
         uint8_t rN = uint8_t (parameterIntValue (paramNoiseR));
-        writeReg (0xff21, rN ? (0xf0 | (0 << 3) | rN) : 0, force);
+        writeReg (0xff21, rN ? (0xf0 | (0 << 3) | rN) : 0, trigger);
     }
 }
 

@@ -73,10 +73,10 @@ public:
     
 private:
     void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
-    void runOscs (int curNote, bool force);
+    void runOscs (int curNote, bool trigger);
     
-    int lastNote = -1;
-    int velocity = 0;
+    int lastNote = -1, velocity = 0;
+    double pitchBend = 0;
     Array<int> noteQueue;
     
     LinearSmoothedValue<float> outputSmoothed;
