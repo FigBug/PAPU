@@ -35,7 +35,7 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.4 -DJUCE_APP_VERSION_HEX=0x10004 $(shell pkg-config --cflags alsa freetype2 x11 xext xinerama libcurl) -pthread -I../../../modules/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../modules/gin/modules -I../../../modules/juce/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.4 -DJUCE_APP_VERSION_HEX=0x10004 $(shell pkg-config --cflags alsa freetype2 x11 xext xinerama libcurl) -pthread -I../../../modules/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../../modules/plugin_sdk/vstsdk2.4 -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../modules/gin/modules -I../../../modules/juce/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
 
   JUCE_CPPFLAGS_VST := -DJucePlugin_Build_VST=1 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0 -DJucePlugin_Build_Unity=0
   JUCE_CFLAGS_VST := -fPIC -fvisibility=hidden
@@ -65,7 +65,7 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.4 -DJUCE_APP_VERSION_HEX=0x10004 $(shell pkg-config --cflags alsa freetype2 x11 xext xinerama libcurl) -pthread -I../../../modules/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../modules/gin/modules -I../../../modules/juce/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.4 -DJUCE_APP_VERSION_HEX=0x10004 $(shell pkg-config --cflags alsa freetype2 x11 xext xinerama libcurl) -pthread -I../../../modules/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../../modules/plugin_sdk/vstsdk2.4 -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../modules/gin/modules -I../../../modules/juce/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
 
   JUCE_CPPFLAGS_VST := -DJucePlugin_Build_VST=1 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0 -DJucePlugin_Build_Unity=0
   JUCE_CFLAGS_VST := -fPIC -fvisibility=hidden
