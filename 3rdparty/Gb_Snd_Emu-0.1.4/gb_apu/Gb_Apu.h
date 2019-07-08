@@ -76,9 +76,9 @@ private:
 	void run_until( gb_time_t );
 };
 
-inline void Gb_Apu::output( Blip_Buffer* b ) { output( b, NULL, NULL ); }
+inline void Gb_Apu::output( Blip_Buffer* b ) { output( b, nullptr, nullptr ); }
 	
-inline void Gb_Apu::osc_output( int i, Blip_Buffer* b ) { osc_output( i, b, NULL, NULL ); }
+inline void Gb_Apu::osc_output( int i, Blip_Buffer* b ) { osc_output( i, b, nullptr, nullptr ); }
 
 #endif
 

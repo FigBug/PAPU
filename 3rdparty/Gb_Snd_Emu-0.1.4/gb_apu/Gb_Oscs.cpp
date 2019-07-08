@@ -24,11 +24,11 @@ const int trigger = 0x80;
 
 Gb_Osc::Gb_Osc()
 {
-	output = NULL;
-	outputs [0] = NULL;
-	outputs [1] = NULL;
-	outputs [2] = NULL;
-	outputs [3] = NULL;
+	output = nullptr;
+	outputs [0] = nullptr;
+	outputs [1] = nullptr;
+	outputs [2] = nullptr;
+	outputs [3] = nullptr;
 }
 
 void Gb_Osc::reset()

@@ -46,9 +46,9 @@ blargg_err_t Mono_Buffer::set_sample_rate( long rate, int msec )
 
 Silent_Buffer::Silent_Buffer() : Multi_Buffer( 1 ) // 0 channels would probably confuse
 {
-	chan.left   = NULL;
-	chan.center = NULL;
-	chan.right  = NULL;
+	chan.left   = nullptr;
+	chan.center = nullptr;
+	chan.right  = nullptr;
 }
 
 // Mono_Buffer

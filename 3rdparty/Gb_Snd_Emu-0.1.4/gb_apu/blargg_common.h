@@ -141,7 +141,7 @@
 
 // blargg_err_t (NULL on success, otherwise error string)
 typedef const char* blargg_err_t;
-const blargg_err_t blargg_success = 0;
+const blargg_err_t blargg_success = nullptr;
 
 // BLARGG_NEW is used in place of 'new' to create objects. By default,
 // plain new is used.
