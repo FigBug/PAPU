@@ -106,7 +106,7 @@
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -153,7 +153,7 @@
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -203,7 +203,7 @@
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -246,7 +246,7 @@
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -503,22 +503,10 @@
     <ClCompile Include="..\..\..\modules\gin\modules\gin\images\imageeffects.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\..\modules\gin\modules\gin\metadata\commentmetadata.cpp">
+    <ClCompile Include="..\..\..\modules\gin\modules\gin\images\imageeffects_blending.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\..\modules\gin\modules\gin\metadata\exifmetadata.cpp">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modules\gin\modules\gin\metadata\imagemetadata.cpp">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modules\gin\modules\gin\metadata\iptcmetadata.cpp">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modules\gin\modules\gin\metadata\libjpegpng.cpp">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modules\gin\modules\gin\metadata\xmpmetadata.cpp">
+    <ClCompile Include="..\..\..\modules\gin\modules\gin\images\imageeffects_stackblur.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\modules\gin\modules\gin\utilities\downloadmanager.cpp">
@@ -569,7 +557,19 @@
     <ClCompile Include="..\..\..\modules\gin\modules\gin_dsp\dsp\adsr.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\modules\gin\modules\gin_dsp\dsp\analogadsr.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\gin\modules\gin_dsp\dsp\audiofunctions.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\modules\gin\modules\gin_dsp\dsp\audioutil.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\gin\modules\gin_dsp\dsp\oscillators.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\gin\modules\gin_dsp\dsp\resamplingfifo.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\modules\gin\modules\gin_dsp\gin_dsp.cpp">
@@ -1544,6 +1544,66 @@
     <ClCompile Include="..\..\..\modules\juce\modules\juce_data_structures\juce_data_structures.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\containers\juce_SIMDRegister_test.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\filter_design\juce_FilterDesign.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\frequency\juce_Convolution.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\frequency\juce_FFT.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\frequency\juce_FFT_test.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\frequency\juce_Windowing.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_LogRampedValue_test.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_LookupTable.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_Matrix.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_Matrix_test.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_SpecialFunctions.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\native\juce_avx_SIMDNativeOps.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\native\juce_neon_SIMDNativeOps.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\native\juce_sse_SIMDNativeOps.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_FIRFilter.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_FIRFilter_test.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_IIRFilter.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_LadderFilter.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_Oversampling.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modules\juce\modules\juce_dsp\juce_dsp.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\modules\juce\modules\juce_events\broadcasters\juce_ActionBroadcaster.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -2443,6 +2503,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_core.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_cryptography.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_data_structures.cpp"/>
+    <ClCompile Include="..\..\JuceLibraryCode\include_juce_dsp.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_events.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_graphics.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_basics.cpp"/>
@@ -2594,11 +2655,6 @@
     <ClInclude Include="..\..\..\modules\gin\modules\gin\geometry\geometry.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin\images\bmpimageformat.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin\images\imageeffects.h"/>
-    <ClInclude Include="..\..\..\modules\gin\modules\gin\metadata\commentmetadata.h"/>
-    <ClInclude Include="..\..\..\modules\gin\modules\gin\metadata\exifmetadata.h"/>
-    <ClInclude Include="..\..\..\modules\gin\modules\gin\metadata\imagemetadata.h"/>
-    <ClInclude Include="..\..\..\modules\gin\modules\gin\metadata\iptcmetadata.h"/>
-    <ClInclude Include="..\..\..\modules\gin\modules\gin\metadata\xmpmetadata.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin\utilities\downloadmanager.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin\utilities\elevatedfilecopy.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin\utilities\equationparser.h"/>
@@ -2615,7 +2671,11 @@
     <ClInclude Include="..\..\..\modules\gin\modules\gin\utilities\valuetreeobject.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin\gin.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin_dsp\dsp\adsr.h"/>
+    <ClInclude Include="..\..\..\modules\gin\modules\gin_dsp\dsp\analogadsr.h"/>
+    <ClInclude Include="..\..\..\modules\gin\modules\gin_dsp\dsp\audiofunctions.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin_dsp\dsp\audioutil.h"/>
+    <ClInclude Include="..\..\..\modules\gin\modules\gin_dsp\dsp\oscillators.h"/>
+    <ClInclude Include="..\..\..\modules\gin\modules\gin_dsp\dsp\resamplingfifo.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin_dsp\gin_dsp.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin_plugin\components\plugincomponents.h"/>
     <ClInclude Include="..\..\..\modules\gin\modules\gin_plugin\components\pluginlookandfeel.h"/>
@@ -3081,6 +3141,40 @@
     <ClInclude Include="..\..\..\modules\juce\modules\juce_data_structures\values\juce_ValueTreeSynchroniser.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_data_structures\values\juce_ValueWithDefault.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_data_structures\juce_data_structures.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\containers\juce_AudioBlock.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\containers\juce_SIMDRegister.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\containers\juce_SIMDRegister_Impl.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\filter_design\juce_FilterDesign.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\frequency\juce_Convolution.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\frequency\juce_FFT.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\frequency\juce_Windowing.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_FastMathApproximations.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_LogRampedValue.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_LookupTable.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_Matrix.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_Phase.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_Polynomial.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\maths\juce_SpecialFunctions.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\native\juce_avx_SIMDNativeOps.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\native\juce_fallback_SIMDNativeOps.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\native\juce_neon_SIMDNativeOps.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\native\juce_sse_SIMDNativeOps.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_Bias.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_FIRFilter.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_Gain.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_IIRFilter.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_IIRFilter_Impl.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_LadderFilter.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_Oscillator.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_Oversampling.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_ProcessContext.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_ProcessorChain.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_ProcessorDuplicator.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_ProcessorWrapper.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_Reverb.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_StateVariableFilter.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\processors\juce_WaveShaper.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_dsp\juce_dsp.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_events\broadcasters\juce_ActionBroadcaster.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_events\broadcasters\juce_ActionListener.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_events\broadcasters\juce_AsyncUpdater.h"/>
@@ -3150,6 +3244,7 @@
     <ClInclude Include="..\..\..\modules\juce\modules\juce_graphics\image_formats\jpglib\transupp.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_graphics\image_formats\pnglib\png.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_graphics\image_formats\pnglib\pngconf.h"/>
+    <ClInclude Include="..\..\..\modules\juce\modules\juce_graphics\image_formats\pnglib\pngdebug.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_graphics\image_formats\pnglib\pnginfo.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_graphics\image_formats\pnglib\pngpriv.h"/>
     <ClInclude Include="..\..\..\modules\juce\modules\juce_graphics\image_formats\pnglib\pngstruct.h"/>

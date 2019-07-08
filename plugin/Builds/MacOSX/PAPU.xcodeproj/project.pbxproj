@@ -201,6 +201,10 @@
 			isa = PBXBuildFile;
 			fileRef = 26CCB6800EFF727BE3C5F298;
 		};
+		48068BBB93C62ACFE75EAD25 = {
+			isa = PBXBuildFile;
+			fileRef = 9D649AB56BACF51424A0A2B5;
+		};
 		612D1363F5ADD164178021B1 = {
 			isa = PBXBuildFile;
 			fileRef = 97632316D813ACDFABE90D81;
@@ -610,6 +614,13 @@
 			path = "../../JuceLibraryCode/include_juce_events.mm";
 			sourceTree = "SOURCE_ROOT";
 		};
+		9D649AB56BACF51424A0A2B5 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.objcpp;
+			name = "include_juce_dsp.mm";
+			path = "../../JuceLibraryCode/include_juce_dsp.mm";
+			sourceTree = "SOURCE_ROOT";
+		};
 		9D7875C2B8E81B2E3FB88049 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
@@ -785,6 +796,13 @@
 			path = ../../Source/PluginEditor.h;
 			sourceTree = "SOURCE_ROOT";
 		};
+		DE0C5073CBC098E744B7182C = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_dsp";
+			path = "../../../modules/juce/modules/juce_dsp";
+			sourceTree = "SOURCE_ROOT";
+		};
 		DEA6D666EF6796C0E7FFA77E = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
@@ -958,6 +976,7 @@
 				A338B54D17B74768D6681C26,
 				D7076A05DAC8675DF411EAFE,
 				210176C52A90A2621D258AA8,
+				DE0C5073CBC098E744B7182C,
 				E9A02542ACDF6C00D4AF228B,
 				75FAEC641DA05259E6E61C20,
 				A32984C2B3C6C3C61C3BDABB,
@@ -993,6 +1012,7 @@
 				BE7CE14AD04C4CA3D284CF3A,
 				B7F575A2FC9700E5CE702CB9,
 				26CCB6800EFF727BE3C5F298,
+				9D649AB56BACF51424A0A2B5,
 				97632316D813ACDFABE90D81,
 				A89E6788FA28CDF658492497,
 				1391C466687FD881B559A1EA,
@@ -1081,7 +1101,7 @@
 		4CE75EF5312C37FBBFE0F862 = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1138,7 +1158,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1196,7 +1216,7 @@
 		8EDE0D161EF4499CCF2BF175 = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1254,7 +1274,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1313,7 +1333,7 @@
 		FDD1C6912B4A2650F55AB328 = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1364,7 +1384,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1416,7 +1436,7 @@
 		E627043B9D9567C36A0D39D0 = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1467,7 +1487,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1895,6 +1915,7 @@
 				B0778B1E0C21A3B7566AB2C5,
 				DD01FE9DF91512C9102B2ED2,
 				DEDD6B586B45547E0A730F9E,
+				48068BBB93C62ACFE75EAD25,
 				612D1363F5ADD164178021B1,
 				432D081D4C8801B351FC00CB,
 				69DF229BBCEA47CA331B266D,
