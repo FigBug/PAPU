@@ -35,7 +35,11 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
+<<<<<<< HEAD
   JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.4 -DJUCE_APP_VERSION_HEX=0x10004 $(shell pkg-config --cflags alsa freetype2 x11 xext xinerama libcurl) -pthread -I../../../modules/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../../modules/plugin_sdk/vstsdk2.4 -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../modules/gin/modules -I../../../modules/juce/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
+=======
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.4 -DJUCE_APP_VERSION_HEX=0x10004 $(shell pkg-config --cflags alsa x11 xinerama xext freetype2 libcurl) -pthread -I../../../modules/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../modules/gin/modules -I../../../modules/juce/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
+>>>>>>> Resave project
 
   JUCE_CPPFLAGS_VST := -DJucePlugin_Build_VST=1 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0 -DJucePlugin_Build_Unity=0
   JUCE_CFLAGS_VST := -fPIC -fvisibility=hidden
@@ -50,7 +54,7 @@ ifeq ($(CONFIG),Debug)
 
   JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -fPIC -g -ggdb -O0 -fvisibility=hidden $(CFLAGS)
   JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs alsa freetype2 x11 xext xinerama libcurl) -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all -lGL -ldl -lpthread -lrt $(LDFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs alsa x11 xinerama xext freetype2 libcurl) -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all -lrt -ldl -lpthread -lGL $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
@@ -65,7 +69,11 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
+<<<<<<< HEAD
   JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.4 -DJUCE_APP_VERSION_HEX=0x10004 $(shell pkg-config --cflags alsa freetype2 x11 xext xinerama libcurl) -pthread -I../../../modules/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../../modules/plugin_sdk/vstsdk2.4 -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../modules/gin/modules -I../../../modules/juce/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
+=======
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.4 -DJUCE_APP_VERSION_HEX=0x10004 $(shell pkg-config --cflags alsa x11 xinerama xext freetype2 libcurl) -pthread -I../../../modules/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I../../../modules/dRowAudio/module -I../../../modules/gin/modules -I../../../modules/juce/modules -I../../../3rdparty/Gb_Snd_Emu-0.1.4 -I../../../modules/slCommon $(CPPFLAGS)
+>>>>>>> Resave project
 
   JUCE_CPPFLAGS_VST := -DJucePlugin_Build_VST=1 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0 -DJucePlugin_Build_Unity=0
   JUCE_CFLAGS_VST := -fPIC -fvisibility=hidden
@@ -80,7 +88,7 @@ ifeq ($(CONFIG),Release)
 
   JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -fPIC -O3 -fvisibility=hidden $(CFLAGS)
   JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs alsa freetype2 x11 xext xinerama libcurl) -fvisibility=hidden -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all -lGL -ldl -lpthread -lrt $(LDFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs alsa x11 xinerama xext freetype2 libcurl) -fvisibility=hidden -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-O1 -Wl,--as-needed -Wl,--strip-all -lrt -ldl -lpthread -lGL $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
@@ -132,7 +140,7 @@ Standalone : $(JUCE_OUTDIR)/$(JUCE_TARGET_STANDALONE_PLUGIN)
 
 $(JUCE_OUTDIR)/$(JUCE_TARGET_VST) : $(OBJECTS_VST) $(RESOURCES) $(JUCE_OUTDIR)/$(JUCE_TARGET_SHARED_CODE)
 	@command -v pkg-config >/dev/null 2>&1 || { echo >&2 "pkg-config not installed. Please, install it."; exit 1; }
-	@pkg-config --print-errors alsa freetype2 x11 xext xinerama libcurl
+	@pkg-config --print-errors alsa x11 xinerama xext freetype2 libcurl
 	@echo Linking "PAPU - VST"
 	-$(V_AT)mkdir -p $(JUCE_BINDIR)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
@@ -141,7 +149,7 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_VST) : $(OBJECTS_VST) $(RESOURCES) $(JUCE_OUTDIR)/$
 
 $(JUCE_OUTDIR)/$(JUCE_TARGET_STANDALONE_PLUGIN) : $(OBJECTS_STANDALONE_PLUGIN) $(RESOURCES) $(JUCE_OUTDIR)/$(JUCE_TARGET_SHARED_CODE)
 	@command -v pkg-config >/dev/null 2>&1 || { echo >&2 "pkg-config not installed. Please, install it."; exit 1; }
-	@pkg-config --print-errors alsa freetype2 x11 xext xinerama libcurl
+	@pkg-config --print-errors alsa x11 xinerama xext freetype2 libcurl
 	@echo Linking "PAPU - Standalone Plugin"
 	-$(V_AT)mkdir -p $(JUCE_BINDIR)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
@@ -150,7 +158,7 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_STANDALONE_PLUGIN) : $(OBJECTS_STANDALONE_PLUGIN) $
 
 $(JUCE_OUTDIR)/$(JUCE_TARGET_SHARED_CODE) : $(OBJECTS_SHARED_CODE) $(RESOURCES)
 	@command -v pkg-config >/dev/null 2>&1 || { echo >&2 "pkg-config not installed. Please, install it."; exit 1; }
-	@pkg-config --print-errors alsa freetype2 x11 xext xinerama libcurl
+	@pkg-config --print-errors alsa x11 xinerama xext freetype2 libcurl
 	@echo Linking "PAPU - Shared Code"
 	-$(V_AT)mkdir -p $(JUCE_BINDIR)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
