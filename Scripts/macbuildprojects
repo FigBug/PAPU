@@ -1,0 +1,29 @@
+DEV_APP_ID="Developer ID Application: Roland Rabien (3FS7DJDG38)"
+DEV_INST_ID="Developer ID Installer: Roland Rabien (3FS7DJDG38)"
+
+rm -Rf bin
+mkdir bin
+mkdir bin/mac
+
+pushd .
+cd "../plugin/Builds/MacOSX"
+xcodebuild -configuration Release || exit 1
+popd
+
+pwd
+cp -R ~/Library/Audio/Plug-Ins/VST/PAPU.vst bin
+cp -R ~/Library/Audio/Plug-Ins/Components/PAPU.component bin
+
+cd bin
+for filename in ./*.vst; do
+  codesign -s "$DEV_APP_ID" -v "$filename"
+done
+for filename in ./*.component; do
+  codesign -s "$DEV_APP_ID" -v "$filename" 
+done
+cd ..
+
+cd bin
+zip -r PAPU_Mac.zip PAPU.vst PAPU.component
+cp *.zip mac
+cd ..
