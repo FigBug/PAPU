@@ -1,6 +1,6 @@
 ROOT=$(cd "$(dirname "$0")/.."; pwd)
 echo ROOT: "$ROOT"
-cd "$ROOT/module/juce/extras/Projucer/Builds/MacOSX/"
+cd "$ROOT/modules/juce/extras/Projucer/Builds/MacOSX/"
 xcodebuild -configuration Release || exit 1
 
 ./build/Release/Projucer.app/Contents/MacOS/Projucer --resave "$ROOT/plugin/PAPU.jucer"
