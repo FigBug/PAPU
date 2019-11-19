@@ -1,8 +1,8 @@
 echo on
-cd "%~dp0%"
+cd "%~dp0..%"
 set ROOT=%cd%
 cd "%ROOT%"
 echo "%ROOT%"
 
-call pcresaveprojects.bat
-call pcbuildprojects.bat
+call Scripts/pcresaveprojects.bat
+call Scripts/pcbuildprojects.bat
