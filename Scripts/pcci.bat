@@ -1,4 +1,5 @@
-cd "%~dp0%.."
+echo on
+cd "%~dp0%"
 set ROOT=%cd%
 cd "%ROOT%"
 echo "%ROOT%"
