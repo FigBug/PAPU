@@ -1,3 +1,4 @@
+echo on
 set MSBUILD_EXE=C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe
 
 set ROOT=%cd%
@@ -16,7 +17,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 cd "%ROOT\Scripts\bin"
 
 copy "%ROOT%\plugin\Builds\VisualStudio2017\x64\Release64\VST\PAPU_64b.dll" .
-copy "%ROOT%\plugin\Builds\VisualStudio2017\x64\Release\VST\PAPU_32b.dll" .
+copy "%ROOT%\plugin\Builds\VisualStudio2017\Win32\Release\VST\PAPU_32b.dll" .
 
-zip PAPU_Win.zip PAPU_32b.dll PAPU_64b.dll
-copy PAPU_Win.zip win
+rem zip PAPU_Win.zip PAPU_32b.dll PAPU_64b.dll
+rem copy PAPU_Win.zip win
