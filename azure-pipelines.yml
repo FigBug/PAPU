@@ -26,7 +26,7 @@ jobs:
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'macOS'
-      targetPath: 'Scripts/bin/mac'
+      targetPath: 'Scripts/macci'
 - job: windows
   pool:
     vmImage: 'vs2017-win2016'
