@@ -6,7 +6,6 @@ cd "%ROOT%"
 
 cd Scripts
 mkdir bin
-mkdir bin\win
 
 cd "..\plugin\Builds\VisualStudio2017"
 "%MSBUILD_EXE%" PAPU.sln /p:VisualStudioVersion=15.0 /m /t:Build /p:Configuration=Release64 /p:Platform=x64 /p:PreferredToolArchitecture=x64
@@ -14,10 +13,9 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 "%MSBUILD_EXE%" PAPU.sln /p:VisualStudioVersion=15.0 /m /t:Build /p:Configuration=Release /p:PlatformTarget=x86 /p:PreferredToolArchitecture=x64
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-cd "%ROOT\Scripts\bin"
+cd "%ROOT%\Scripts\bin"
 
 copy "%ROOT%\plugin\Builds\VisualStudio2017\x64\Release64\VST\PAPU_64b.dll" .
 copy "%ROOT%\plugin\Builds\VisualStudio2017\Win32\Release\VST\PAPU_32b.dll" .
 
-rem zip PAPU_Win.zip PAPU_32b.dll PAPU_64b.dll
-rem copy PAPU_Win.zip win
+mkdir bin\win
