@@ -21,7 +21,7 @@ jobs:
   - checkout: self
     submodules: true
     persistCredentials: true
-  - script: Scripts/macci/build
+  - script: Scripts/macci
     displayName: 'macOS Build'
   - task: PublishPipelineArtifact@0
     inputs:
@@ -33,7 +33,7 @@ jobs:
   steps:
   - script: |
       set MSBUILD_EXE=C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe
-      Scripts/winci
+      Scripts\winci.bat
     displayName: 'Windows Build'
   - task: PublishPipelineArtifact@0
     inputs:
