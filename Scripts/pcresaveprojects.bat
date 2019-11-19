@@ -4,6 +4,7 @@ set ROOT=%cd%
 
 cd "%ROOT%\modules\juce\extras\Projucer\Builds\VisualStudio2017\"
 "%MSBUILD_EXE%" Projucer.sln /p:VisualStudioVersion=15.0 /m /t:Build /p:Configuration=Release /p:Platform=x64 /p:PreferredToolArchitecture=x64 
+if %errorlevel% neq 0 exit /b %errorlevel%
 
 .\x64\Release\App\Projucer.exe --resave "%ROOT%\plugin\PAPU.jucer"
 
