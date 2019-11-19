@@ -26,7 +26,7 @@ jobs:
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'macOS'
-      targetPath: 'Scripts/macci'
+      targetPath: 'Scripts/bin/mac'
 - job: windows
   pool:
     vmImage: 'vs2017-win2016'
@@ -43,7 +43,7 @@ jobs:
     displayName: 'Windows Build'
   - task: ArchiveFiles@2
     inputs:
-      rootFolderOrFile: 'Scripts\bin' 
+      rootFolderOrFile: 'Scripts\bin\zip' 
       includeRootFolder: false
       archiveType: 'zip' 
       archiveFile: 'Scripts\bin\win\PAPU_Win.zip' 
