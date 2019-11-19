@@ -8,5 +8,5 @@ mkdir bin
 mkdir bin\mac
 
 cd "..\plugin\Builds\VisualStudio2017"
-"%MSBUILD_EXE%" PAPU.sln /p:VisualStudioVersion=15.0 /m /t:Build /p:Configuration=Release /p:Platform=x64 /p:PreferredToolArchitecture=x64  /p:TreatWarningsAsErrors=true
+"%MSBUILD_EXE%" PAPU.sln /p:VisualStudioVersion=15.0 /m /t:Build /p:Configuration=Release /p:Platform=x64 /p:PreferredToolArchitecture=x64
 
