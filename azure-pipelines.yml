@@ -31,6 +31,9 @@ jobs:
   pool:
     vmImage: 'vs2017-win2016'
   steps:
+  - checkout: self
+    submodules: true
+    persistCredentials: true
   - script: Scripts\pcci.bat
     displayName: 'Windows Build'
   - task: PublishPipelineArtifact@0
