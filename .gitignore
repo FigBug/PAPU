@@ -48,3 +48,5 @@ plugin/Builds/VisualStudio2017/.vs
 *.user
 
 xcuserdata
+Builds
+JuceLibraryCode
