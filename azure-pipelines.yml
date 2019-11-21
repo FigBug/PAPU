@@ -32,7 +32,7 @@ jobs:
     inputs:
       credentialsOption: 'serviceEndpoint'
       serverEndpoint: 'ftp_figbug_com'
-      rootDirectory: 'Scripts/bin/win'
+      rootDirectory: 'Scripts/bin/mac'
       filePatterns: '**'
       remoteDirectory: '/home/socalabs/www/files'
       clean: false
