@@ -20,4 +20,4 @@ copy "%ROOT%\plugin\Builds\VisualStudio2017\x64\Release64\VST\PAPU_64b.dll"
 copy "%ROOT%\plugin\Builds\VisualStudio2017\Win32\Release\VST\PAPU_32b.dll"
 
 7z a PAPU_Win.zip PAPU_32b.dll PAPU_64b.dll
-copy PAPU_Win.zip bin
+copy PAPU_Win.zip win
