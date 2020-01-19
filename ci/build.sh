@@ -83,14 +83,18 @@ if [ "$OS" = "mac" ]; then
   cd Builds/MacOSX
   xcodebuild -configuration Release || exit 1
   cd build/Release
-  cp notarize cd "$ROOT/ci/bin"
+  cp notarize "$ROOT/ci/bin"
 
   # Notarize
-  "$ROOT/ci/bin/notarize" -v $PLUGIN.vst $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.vst
-  "$ROOT/ci/bin/notarize" -v $PLUGIN.vst $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.au
-
   cd "$ROOT/ci/bin"
-  zip -r $PLUGIN_Mac.zip $PLUGIN.vst $PLUGIN.component
+  zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst $PLUGIN.component
+
+  "$ROOT/ci/bin/notarize" -v -ns $PLUGIN.zip $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.vst
+
+  rm ${PLUGIN}_Mac.zip
+  xcrun stapler staple $PLUGIN.vst
+  xcrun stapler staple $PLUGIN.component
+  zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst $PLUGIN.component
 
 fi
 
