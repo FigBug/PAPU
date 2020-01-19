@@ -1,6 +1,4 @@
-#!/bin/bash -e
-set -x
-set
+#!/bin/bash
 
 # mac specific stuff
 if [ $OS = "mac" ]; then
@@ -29,6 +27,7 @@ fi
 
 ROOT=$(cd "$(dirname "$0")/.."; pwd)
 cd "$ROOT"
+echo "$ROOT"
 
 cd "$ROOT/ci"
 rm -Rf bin
