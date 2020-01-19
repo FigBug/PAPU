@@ -76,8 +76,21 @@ if [ "$OS" = "mac" ]; then
     codesign -s "$DEV_APP_ID" -v "$filename" --options=runtime
   done
 
+  # Build notarize tool
+  cd "$ROOT/modules/gin/tools/notarize"
+  "$ROOT/ci/bin/Projucer.app/Contents/MacOS/Projucer" --resave "notarize.jucer"
+  cd Builds/MacOSX
+  xcodebuild -configuration Release || exit 1
+  cd build/Release
+  cp notarize cd "$ROOT/ci/bin"
+
+  # Notarize
+  notarize -v $PLUGIN.vst $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.vst
+  notarize -v $PLUGIN.vst $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.au
+
   cd "$ROOT/ci/bin"
   zip -r $PLUGIN_Mac.zip $PLUGIN.vst $PLUGIN.component
+
 fi
 
 # Build Win version
