@@ -1,4 +1,5 @@
 #!/bin/bash -e
+set -x
 
 PLUGIN="PAPU"
 
@@ -90,10 +91,10 @@ if [ "$OS" = "win" ]; then
   "$MSBUILD_EXE" "$PLUGIN.sln" "//p:VisualStudioVersion=16.0" "//m" "//t:Build" "//p:Configuration=Release64" "//p:Platform=x64" "//p:PreferredToolArchitecture=x64"
   "$MSBUILD_EXE" "$PLUGIN.sln" "//p:VisualStudioVersion=16.0" "//m" "//t:Build" "//p:Configuration=Release" "//p:PlatformTarget=x86" "//p:PreferredToolArchitecture=x64"
 
-  cd "$ROOT%/ci/bin"
+  cd "$ROOT/ci/bin"
 
-  cp "$ROOT%/plugin/Builds/VisualStudio2019/x64/Release64/VST/$PLUGIN_64b.dll" .
-  cp "$ROOT%/plugin/Builds/VisualStudio2019/Win32/Release/VST/$PLUGIN_32b.dll" .
+  cp "$ROOT/plugin/Builds/VisualStudio2019/x64/Release64/VST/$PLUGIN_64b.dll" .
+  cp "$ROOT/plugin/Builds/VisualStudio2019/Win32/Release/VST/$PLUGIN_32b.dll" .
 
   zip -r $PLUGIN_Win.zip ${PLUGIN}_64b.vst ${PLUGIN}_32b.vst
 fi
