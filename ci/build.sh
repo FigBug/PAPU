@@ -1,7 +1,4 @@
 #!/bin/bash -e
-set -x
-
-set
 
 PLUGIN="PAPU"
 
@@ -89,14 +86,14 @@ if [ "$OS" = "win" ]; then
   MSBUILD_EXE=$("$VS_WHERE" -latest -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe")
   echo $MSBUILD_EXE
 
-  cd "$ROOT/plugin/Builds/VisualStudio2017"
-  "$MSBUILD_EXE" "$PLUGIN.sln" "//p:VisualStudioVersion=15.0" "//m" "//t:Build" "//p:Configuration=Release64" "//p:Platform=x64" "//p:PreferredToolArchitecture=x64"
-  "$MSBUILD_EXE" "$PLUGIN.sln" "//p:VisualStudioVersion=15.0" "//m" "//t:Build" "//p:Configuration=Release" "//p:PlatformTarget=x86" "//p:PreferredToolArchitecture=x64"
+  cd "$ROOT/plugin/Builds/VisualStudio2019"
+  "$MSBUILD_EXE" "$PLUGIN.sln" "//p:VisualStudioVersion=16.0" "//m" "//t:Build" "//p:Configuration=Release64" "//p:Platform=x64" "//p:PreferredToolArchitecture=x64"
+  "$MSBUILD_EXE" "$PLUGIN.sln" "//p:VisualStudioVersion=16.0" "//m" "//t:Build" "//p:Configuration=Release" "//p:PlatformTarget=x86" "//p:PreferredToolArchitecture=x64"
 
   cd "$ROOT%/Scripts/bin"
 
-  cp "$ROOT%/plugin/Builds/VisualStudio2017/x64/Release64/VST/$PLUGIN_64b.dll"
-  cp "$ROOT%/plugin/Builds/VisualStudio2017/Win32/Release/VST/$PLUGIN_32b.dll"
+  cp "$ROOT%/plugin/Builds/VisualStudio2019/x64/Release64/VST/$PLUGIN_64b.dll"
+  cp "$ROOT%/plugin/Builds/VisualStudio2019/Win32/Release/VST/$PLUGIN_32b.dll"
 
   zip -r $PLUGIN_Win.zip ${PLUGIN}_64b.vst ${PLUGIN}_32b.vst
 fi
