@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set
+
 PLUGIN="PAPU"
 
 # mac specific stuff
@@ -81,7 +83,7 @@ fi
 
 # Build Win version
 if [ "$OS" = "win" ]; then
-  VS_WHERE="$ProgramFiles(x86)/Microsoft Visual Studio/Installer/vswhere"
+  VS_WHERE="${ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere"
   echo $VS_WHERE
 
   MSBUILD_EXE=`"%VS_WHERE%" -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe`
