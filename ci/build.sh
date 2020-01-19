@@ -78,6 +78,7 @@ if [ "$OS" = "mac" ]; then
 
   # Build notarize tool
   cd "$ROOT/modules/gin/tools/notarize"
+  "$ROOT/ci/bin/Projucer.app/Contents/MacOS/Projucer" --set-global-search-path osx defaultJuceModulePath "$ROOT/modules/juce/modules" 
   "$ROOT/ci/bin/Projucer.app/Contents/MacOS/Projucer" --resave "notarize.jucer"
   cd Builds/MacOSX
   xcodebuild -configuration Release || exit 1
@@ -85,8 +86,8 @@ if [ "$OS" = "mac" ]; then
   cp notarize cd "$ROOT/ci/bin"
 
   # Notarize
-  notarize -v $PLUGIN.vst $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.vst
-  notarize -v $PLUGIN.vst $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.au
+  "$ROOT/ci/bin/notarize" -v $PLUGIN.vst $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.vst
+  "$ROOT/ci/bin/notarize" -v $PLUGIN.vst $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.au
 
   cd "$ROOT/ci/bin"
   zip -r $PLUGIN_Mac.zip $PLUGIN.vst $PLUGIN.component
