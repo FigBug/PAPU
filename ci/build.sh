@@ -21,8 +21,6 @@ if [ $OS = "mac" ]; then
   fi
   DEV_APP_ID="Developer ID Application: Roland Rabien (3FS7DJDG38)"
   DEV_INST_ID="Developer ID Installer: Roland Rabien (3FS7DJDG38)"
-else
-  # windows stuff
 fi
 
 ROOT=$(cd "$(dirname "$0")/.."; pwd)
