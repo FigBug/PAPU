@@ -1,10 +1,9 @@
 #!/bin/bash -e
 set -x
-
 set
 
 # mac specific stuff
-if [ "$OS" = "mac" ]; then
+if [ $OS = "mac" ]; then
   # Create a temp keychain
   if [ -n "$GITHUB_ACTIONS" ]; then
     echo "Create a keychain"
