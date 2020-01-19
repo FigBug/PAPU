@@ -85,8 +85,10 @@ fi
 if [ "$OS" = "win" ]; then
   VS_WHERE="C:/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe"
   echo $VS_WHERE
-
-  MSBUILD_EXE=$("%VS_WHERE%" -latest -requires Microsoft.Component.MSBuild -find "MSBuild/**/Bin/MSBuild.exe")
+  
+  WHAT=$("$VS_WHERE")
+  echo $WHAT
+  MSBUILD_EXE=$("$VS_WHERE" -latest -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe")
   echo $MSBUILD_EXE
 
   cd "$ROOT/plugin/Builds/VisualStudio2017"
