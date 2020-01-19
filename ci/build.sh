@@ -1,5 +1,7 @@
 #!/bin/bash
 
+PLUGIN="PAPU"
+
 # mac specific stuff
 if [ $OS = "mac" ]; then
   # Create a temp keychain
@@ -40,21 +42,21 @@ echo "Hash: $HASH"
 cd "$ROOT/ci/bin"
 while true
 do
-  PROJUCER_URL=$(curl "https://projucer.rabien.com/get_projucer.php?hash=$HASH&os=$OS&key=$APIKEY")
+  PROJUCER_URL=$(curl -s -S "https://projucer.rabien.com/get_projucer.php?hash=$HASH&os=$OS&key=$APIKEY")
   echo "Response: $PROJUCER_URL"
   if [[ $PROJUCER_URL == http* ]]; then
     wget $PROJUCER_URL
     unzip Projucer.zip
     break
   fi
-  sleep 1
+  sleep 15
 done
 
 # Resave jucer file
 if [ "$OS" = "mac" ]; then
-  "$ROOT/ci/bin/Projucer.app/Contents/MacOS/Projucer" --resave "$ROOT/plugin/PAPU.jucer"
+  "$ROOT/ci/bin/Projucer.app/Contents/MacOS/Projucer" --resave "$ROOT/plugin/$PLUGIN.jucer"
 else
-  "$ROOT/ci/bin/Projucer.exe" --resave "$ROOT/plugin/PAPU.jucer"
+  "$ROOT/ci/bin/Projucer.exe" --resave "$ROOT/plugin/$PLUGIN.jucer"
 fi
 
 # Build mac version
@@ -62,8 +64,8 @@ if [ "$OS" = "mac" ]; then
   cd "$ROOT/plugin/Builds/MacOSX"
   xcodebuild -configuration Release || exit 1
 
-  cp -R ~/Library/Audio/Plug-Ins/VST/PAPU.vst "$ROOT/ci/bin"
-  cp -R ~/Library/Audio/Plug-Ins/Components/PAPU.component "$ROOT/ci/bin"
+  cp -R ~/Library/Audio/Plug-Ins/VST/$PLUGIN.vst "$ROOT/ci/bin"
+  cp -R ~/Library/Audio/Plug-Ins/Components/$PLUGIN.component "$ROOT/ci/bin"
 
   cd "$ROOT/ci/bin"
   for filename in ./*.vst; do
@@ -74,6 +76,25 @@ if [ "$OS" = "mac" ]; then
   done
 
   cd "$ROOT/ci/bin"
-  zip -r PAPU_Mac.zip PAPU.vst PAPU.component
+  zip -r $PLUGIN_Mac.zip $PLUGIN.vst $PLUGIN.component
 fi
 
+# Build Win version
+if [ "$OS" = "win" ]; then
+  VS_WHERE="$ProgramFiles(x86)/Microsoft Visual Studio/Installer/vswhere"
+  echo $VS_WHERE
+
+  MSBUILD_EXE=`"%VS_WHERE%" -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe`
+  echo $MSBUILD_EXE
+
+  cd "$ROOT/plugin/Builds/VisualStudio2017"
+  "$MSBUILD_EXE" $PLUGIN.sln /p:VisualStudioVersion=15.0 /m /t:Build /p:Configuration=Release64 /p:Platform=x64 /p:PreferredToolArchitecture=x64
+  "$MSBUILD_EXE" $PLUGIN.sln /p:VisualStudioVersion=15.0 /m /t:Build /p:Configuration=Release /p:PlatformTarget=x86 /p:PreferredToolArchitecture=x64
+
+  cd "$ROOT%/Scripts/bin"
+
+  cp "$ROOT%/plugin/Builds/VisualStudio2017/x64/Release64/VST/$PLUGIN_64b.dll"
+  cp "$ROOT%/plugin/Builds/VisualStudio2017/Win32/Release/VST/$PLUGIN_32b.dll"
+
+  zip -r $PLUGIN_Win.zip ${PLUGIN}_64b.vst ${PLUGIN}_32b.vst
+fi
