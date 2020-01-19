@@ -1,5 +1,4 @@
 #!/bin/bash -e
-set -x
 
 PLUGIN="PAPU"
 
@@ -89,7 +88,7 @@ if [ "$OS" = "mac" ]; then
   cd "$ROOT/ci/bin"
   zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst $PLUGIN.component
 
-  "$ROOT/ci/bin/notarize" -v -ns $PLUGIN.zip $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.vst
+  "$ROOT/ci/bin/notarize" -v -ns ${PLUGIN}_Mac.zip $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.vst
 
   rm ${PLUGIN}_Mac.zip
   xcrun stapler staple $PLUGIN.vst
