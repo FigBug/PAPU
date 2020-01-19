@@ -90,8 +90,8 @@ if [ "$OS" = "win" ]; then
   echo $MSBUILD_EXE
 
   cd "$ROOT/plugin/Builds/VisualStudio2017"
-  "$MSBUILD_EXE" $PLUGIN.sln "/p:VisualStudioVersion=15.0" /m "/t:Build" "/p:Configuration=Release64" "/p:Platform=x64" "/p:PreferredToolArchitecture=x64"
-  "$MSBUILD_EXE" $PLUGIN.sln "/p:VisualStudioVersion=15.0" /m "/t:Build" "/p:Configuration=Release" "/p:PlatformTarget=x86" "/p:PreferredToolArchitecture=x64"
+  "$MSBUILD_EXE" "$PLUGIN.sln" "/p:VisualStudioVersion=15.0" "/m" "/t:Build" "/p:Configuration=Release64" "/p:Platform=x64" "/p:PreferredToolArchitecture=x64"
+  "$MSBUILD_EXE" "$PLUGIN.sln" "/p:VisualStudioVersion=15.0" "/m" "/t:Build" "/p:Configuration=Release" "/p:PlatformTarget=x86" "/p:PreferredToolArchitecture=x64"
 
   cd "$ROOT%/Scripts/bin"
 
