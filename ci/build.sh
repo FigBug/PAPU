@@ -47,7 +47,7 @@ do
   PROJUCER_URL=$(curl -s -S "https://projucer.rabien.com/get_projucer.php?hash=$HASH&os=$OS&key=$APIKEY")
   echo "Response: $PROJUCER_URL"
   if [[ $PROJUCER_URL == http* ]]; then
-    curl $PROJUCER_URL -o "$ROOT/ci/bin/Projucer.zip"
+    curl -s -S $PROJUCER_URL -o "$ROOT/ci/bin/Projucer.zip"
     unzip Projucer.zip
     break
   fi
@@ -86,7 +86,7 @@ if [ "$OS" = "win" ]; then
   VS_WHERE="C:/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere"
   echo $VS_WHERE
 
-  MSBUILD_EXE=`"%VS_WHERE%" -latest -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe"`
+  MSBUILD_EXE=$("%VS_WHERE%" -latest -requires Microsoft.Component.MSBuild -find 'MSBuild\**\Bin\MSBuild.exe')
   echo $MSBUILD_EXE
 
   cd "$ROOT/plugin/Builds/VisualStudio2017"
