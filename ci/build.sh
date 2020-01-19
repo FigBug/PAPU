@@ -40,9 +40,9 @@ echo "Hash: $HASH"
 cd "$ROOT/ci/bin"
 while true
 do
-  PROJUCER_URL=`wget https://projucer.rabien.com/get_projucer.php?hash=$HASH&os=$OS&key=$APIKEY`
-  echo $PROJUCER_URL
-  if [ $PROJUCER_URL == http* ]; then
+  PROJUCER_URL=$(curl "https://projucer.rabien.com/get_projucer.php?hash=$HASH&os=$OS&key=$APIKEY")
+  echo "Response: $PROJUCER_URL"
+  if [[ $PROJUCER_URL == http* ]]; then
     wget $PROJUCER_URL
     unzip Projucer.zip
     break
