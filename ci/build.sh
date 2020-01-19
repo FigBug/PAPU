@@ -45,7 +45,7 @@ do
   PROJUCER_URL=$(curl -s -S "https://projucer.rabien.com/get_projucer.php?hash=$HASH&os=$OS&key=$APIKEY")
   echo "Response: $PROJUCER_URL"
   if [[ $PROJUCER_URL == http* ]]; then
-    wget $PROJUCER_URL
+    curl $PROJUCER_URL -o "$ROOT/ci/bin/Projucer.zip"
     unzip Projucer.zip
     break
   fi
