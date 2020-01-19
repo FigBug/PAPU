@@ -93,8 +93,8 @@ if [ "$OS" = "win" ]; then
 
   cd "$ROOT/ci/bin"
 
-  cp "$ROOT/plugin/Builds/VisualStudio2019/x64/Release64/VST/$PLUGIN_64b.dll" .
-  cp "$ROOT/plugin/Builds/VisualStudio2019/Win32/Release/VST/$PLUGIN_32b.dll" .
+  cp "$ROOT/plugin/Builds/VisualStudio2019/x64/Release64/VST/${PLUGIN}_64b.dll" .
+  cp "$ROOT/plugin/Builds/VisualStudio2019/Win32/Release/VST/${PLUGIN}_32b.dll" .
 
   zip -r $PLUGIN_Win.zip ${PLUGIN}_64b.vst ${PLUGIN}_32b.vst
 fi
