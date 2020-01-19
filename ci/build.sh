@@ -71,10 +71,10 @@ if [ "$OS" = "mac" ]; then
 
   cd "$ROOT/ci/bin"
   for filename in ./*.vst; do
-    codesign -s "$DEV_APP_ID" -v "$filename"
+    codesign -s "$DEV_APP_ID" -v "$filename" --options=runtime
   done
   for filename in ./*.component; do
-    codesign -s "$DEV_APP_ID" -v "$filename" 
+    codesign -s "$DEV_APP_ID" -v "$filename" --options=runtime
   done
 
   cd "$ROOT/ci/bin"
