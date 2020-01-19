@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/bash -e
+set -x
 
 set
 
@@ -84,10 +85,7 @@ fi
 # Build Win version
 if [ "$OS" = "win" ]; then
   VS_WHERE="C:/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe"
-  echo $VS_WHERE
   
-  WHAT=$("$VS_WHERE")
-  echo $WHAT
   MSBUILD_EXE=$("$VS_WHERE" -latest -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe")
   echo $MSBUILD_EXE
 
