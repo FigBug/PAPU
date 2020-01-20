@@ -95,7 +95,7 @@ if [ "$OS" = "mac" ]; then
   xcrun stapler staple $PLUGIN.component
   zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst $PLUGIN.component
 
-  curl -F 'files=@${PLUGIN}_Mac.zip' "https://socalabs.com/files/set.php?key=$APIKEY"
+  curl -F "files=@${PLUGIN}_Mac.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
 fi
 
 # Build Win version
