@@ -116,5 +116,5 @@ if [ "$OS" = "win" ]; then
 
   7z a {$PLUGIN}_Win.zip ${PLUGIN}_64b.dll ${PLUGIN}_32b.dll
 
-  curl -F 'files=@${PLUGIN}_Win.zip' "https://socalabs.com/files/set.php?key=$APIKEY"
+  curl -F "files=@${PLUGIN}_Win.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
 fi
