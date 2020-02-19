@@ -23,7 +23,7 @@ class PAPUAudioProcessor : public gin::GinProcessor
 public:
     //==============================================================================
     PAPUAudioProcessor();
-    ~PAPUAudioProcessor();
+    ~PAPUAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -64,12 +64,8 @@ public:
     static const char* paramNoiseR;
     
     static const char* paramOutput;
-
-    void setEditor (PAPUAudioProcessorEditor* editor_)
-    {
-        ScopedLock sl (editorLock);
-        editor = editor_;
-    }
+    
+    gin::AudioFifo fifo {1, 44100};
     
 private:
     void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
@@ -80,8 +76,7 @@ private:
     Array<int> noteQueue;
     
     LinearSmoothedValue<float> outputSmoothed;
-    CriticalSection editorLock;
-    PAPUAudioProcessorEditor* editor = nullptr;
+    
     
     Gb_Apu apu;
     Stereo_Buffer buf;

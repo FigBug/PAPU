@@ -16,7 +16,7 @@ using namespace gin;
 
 //==============================================================================
 PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
-  : GinAudioProcessorEditor (p, 60, 100), processor (p)
+  : GinAudioProcessorEditor (p, 60, 100), proc (p)
 {
     additionalProgramming = "Shay Green";
     
@@ -24,10 +24,10 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
     
     addAndMakeVisible (&scope);
     
-    for (Parameter* pp : p.getPluginParameters())
+    for (auto pp : p.getPluginParameters())
     {
         ParamComponent* c;
-        if (pp->getUid().contains("tune") || pp->getUid().contains("fine") || pp->getUid().contains("sweep"))
+        if (pp->getUid().contains ("tune") || pp->getUid().contains ("fine") || pp->getUid().contains ("sweep"))
             c = new Knob (pp, true);
         else
             c = pp->isOnOff() ? (ParamComponent*)new Switch (pp) : (ParamComponent*)new Knob (pp);
@@ -40,13 +40,10 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
     
     scope.setNumSamplesPerPixel (2);
     scope.setVerticalZoomFactor (3.0f);
-
-    p.setEditor (this);
 }
 
 PAPUAudioProcessorEditor::~PAPUAudioProcessorEditor()
 {
-    processor.setEditor (nullptr);
 }
 
 //==============================================================================
@@ -59,13 +56,11 @@ void PAPUAudioProcessorEditor::paint (Graphics& g)
 
 void PAPUAudioProcessorEditor::resized()
 {
-    using AP = PAPUAudioProcessor;
-    
     GinAudioProcessorEditor::resized();
     
     for (int i = 0; i < 9; i++)
     {
-        auto* c = controls[i];
+        auto c = controls[i];
         if (i == 0)
             c->setBounds (getGridArea (0, 0).removeFromTop (cy / 2).translated (0, 7));
         else if (i == 1)
@@ -76,7 +71,7 @@ void PAPUAudioProcessorEditor::resized()
     }
     for (int i = 0; i < 7; i++)
     {
-        auto* c = controls[i + 9];
+        auto c = controls[i + 9];
         if (i == 0)
             c->setBounds (getGridArea (0, 1).removeFromTop (cy / 2).translated (0, 7));
         else if (i == 1)
@@ -86,7 +81,7 @@ void PAPUAudioProcessorEditor::resized()
     }
     for (int i = 0; i < 7; i++)
     {
-        auto* c = controls[i + 9 + 7];
+        auto c = controls[i + 9 + 7];
         if (i == 0)
             c->setBounds (getGridArea (0, 2).removeFromTop (cy / 2).translated (0, 7));
         else if (i == 1)

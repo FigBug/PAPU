@@ -20,15 +20,15 @@ class PAPUAudioProcessorEditor  : public gin::GinAudioProcessorEditor
 {
 public:
     PAPUAudioProcessorEditor (PAPUAudioProcessor&);
-    ~PAPUAudioProcessorEditor();
+    ~PAPUAudioProcessorEditor() override;
 
     //==============================================================================
     void resized() override;
     void paint (Graphics& g) override;
 
-    PAPUAudioProcessor& processor;
+    PAPUAudioProcessor& proc;
     
-    drow::TriggeredScope scope;
+    gin::TriggeredScope scope { proc.fifo };
     Image logo;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PAPUAudioProcessorEditor)

@@ -104,33 +104,30 @@ String intTextFunction (const Parameter&, float v)
 //==============================================================================
 PAPUAudioProcessor::PAPUAudioProcessor()
 {
-    addPluginParameter (new Parameter (paramPulse1OL,        "Pulse 1 OL",         "Left",        "",   0.0f, 1.0f, 1.0f, 1.0f, 1.0f, enableTextFunction));
-    addPluginParameter (new Parameter (paramPulse1OR,        "Pulse 1 OR",         "Right",       "",   0.0f, 1.0f, 1.0f, 1.0f, 1.0f, enableTextFunction));
-    addPluginParameter (new Parameter (paramPulse1Duty,      "Pulse 1 Duty",       "PW",          "",   0.0f, 3.0f, 1.0f, 0.0f, 1.0f, dutyTextFunction));
-    addPluginParameter (new Parameter (paramPulse1A,         "Pulse 1 A",          "Attack",      "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
-    addPluginParameter (new Parameter (paramPulse1R,         "Pulse 1 R",          "Release",     "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
-    addPluginParameter (new Parameter (paramPulse1Tune,      "Pulse 1 Tune",       "Tune",        "", -48.0f, 48.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
-    addPluginParameter (new Parameter (paramPulse1Fine,      "Pulse 1 Tune Fine",  "Fine",        "", -100.0f, 100.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
-    addPluginParameter (new Parameter (paramPulse1Sweep,     "Pulse 1 Sweep",      "Sweep",       "",  -7.0f, 7.0f, 1.0f, 0.0f, 1.0f, stTextFunction));
-    addPluginParameter (new Parameter (paramPulse1Shift,     "Pulse 1 Shift",      "Shift",       "",   0.0f, 7.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
-    
-    addPluginParameter (new Parameter (paramPulse2OL,        "Pulse 2 OL",         "Left",        "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, enableTextFunction));
-    addPluginParameter (new Parameter (paramPulse2OR,        "Pulse 2 OR",         "Right",       "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, enableTextFunction));
-    addPluginParameter (new Parameter (paramPulse2Duty,      "Pulse 2 Duty",       "PW",          "",   0.0f, 3.0f, 1.0f, 0.0f, 1.0f, dutyTextFunction));
-    addPluginParameter (new Parameter (paramPulse2A,         "Pulse 2 A",          "Attack",      "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
-    addPluginParameter (new Parameter (paramPulse2R,         "Pulse 2 R",          "Release",     "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
-    addPluginParameter (new Parameter (paramPulse2Tune,      "Pulse 2 Tune",       "Tune",        "", -48.0f, 48.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
-    addPluginParameter (new Parameter (paramPulse2Fine,      "Pulse 2 Tune Fine",  "Fine",        "", -100.0f, 100.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
-    
-    addPluginParameter (new Parameter (paramNoiseOL,         "Noise OL",           "Left",        "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, enableTextFunction));
-    addPluginParameter (new Parameter (paramNoiseOR,         "Noise OR",           "Right",       "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, enableTextFunction));
-    addPluginParameter (new Parameter (paramNoiseA,          "Noise A",            "Attack",      "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
-    addPluginParameter (new Parameter (paramNoiseR,          "Noise R",            "Release",     "",   0.0f, 7.0f, 1.0f, 1.0f, 1.0f, arTextFunction));
-    addPluginParameter (new Parameter (paramNoiseShift,      "Noise Shift",        "Shift",       "",   0.0f, 13.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
-    addPluginParameter (new Parameter (paramNoiseStep,       "Noise Step",         "Steps",       "",   0.0f, 1.0f, 1.0f, 0.0f, 1.0f, stepTextFunction));
-    addPluginParameter (new Parameter (paramNoiseRatio,      "Noise Ratio",        "Ratio",       "",   0.0f, 7.0f, 1.0f, 0.0f, 1.0f, intTextFunction));
-    
-    addPluginParameter (new Parameter (paramOutput,          "Output",             "Output",      "",   0.0f, 7.0f, 1.0f, 15.0f, 1.0f, percentTextFunction));
+    addExtParam (paramPulse1OL,    "Pulse 1 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse1OR,    "Pulse 1 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse1Duty,  "Pulse 1 Duty",      "PW",      "",  {    0.0f,   3.0f, 1.0f, 1.0f },  0.0f, 0.0f, dutyTextFunction);
+    addExtParam (paramPulse1A,     "Pulse 1 A",         "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse1R,     "Pulse 1 R",         "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse1Tune,  "Pulse 1 Tune",      "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse1Fine,  "Pulse 1 Tune Fine", "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse1Sweep, "Pulse 1 Sweep",     "Sweep",   "",  {   -7.0f,   7.0f, 1.0f, 1.0f },  0.0f, 0.0f, stTextFunction);
+    addExtParam (paramPulse1Shift, "Pulse 1 Shift",     "Shift",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse2OL,    "Pulse 2 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse2OR,    "Pulse 2 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse2Duty,  "Pulse 2 Duty",      "PW",      "",  {    0.0f,   3.0f, 1.0f, 1.0f },  0.0f, 0.0f, dutyTextFunction);
+    addExtParam (paramPulse2A,     "Pulse 2 A",         "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse2R,     "Pulse 2 R",         "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse2Tune,  "Pulse 2 Tune",      "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse2Fine,  "Pulse 2 Tune Fine", "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramNoiseOL,     "Noise OL",          "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramNoiseOR,     "Noise OR",          "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramNoiseA,      "Noise A",           "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
+    addExtParam (paramNoiseR,      "Noise R",           "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
+    addExtParam (paramNoiseShift,  "Noise Shift",       "Shift",   "",  {    0.0f,  13.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramNoiseStep,   "Noise Step",        "Steps",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, stepTextFunction);
+    addExtParam (paramNoiseRatio,  "Noise Ratio",       "Ratio",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramOutput,      "Output",            "Output",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  7.0f, 0.0f, percentTextFunction);
 }
 
 PAPUAudioProcessor::~PAPUAudioProcessor()
@@ -246,20 +243,20 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         }
     }
     
-    runUntil (done, buffer, buffer.getNumSamples());
+    int numSamples = buffer.getNumSamples();
+    runUntil (done, buffer, numSamples);
     
-    float* dataL = buffer.getWritePointer (0);
-    float* dataR = buffer.getWritePointer (1);
-    
-    ScopedLock sl (editorLock);
-    if (editor)
+    if (fifo.getFreeSpace() >= numSamples)
     {
-        float* mono = (float*) alloca (buffer.getNumSamples() * sizeof (float));
+        auto dataL = buffer.getReadPointer (0);
+        auto dataR = buffer.getReadPointer (1);
+
+        auto mono = (float*) alloca (numSamples * sizeof (float));
         
-        for (int i = 0; i < buffer.getNumSamples(); i++)
+        for (int i = 0; i < numSamples; i++)
             mono[i] = (dataL[i] + dataR[i]) / 2.0f;
         
-        editor->scope.addSamples (mono, buffer.getNumSamples());
+        fifo.writeMono (mono, numSamples);
     }
 }
 
@@ -330,8 +327,7 @@ bool PAPUAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* PAPUAudioProcessor::createEditor()
 {
-    editor = new PAPUAudioProcessorEditor (*this);
-    return editor;
+    return new PAPUAudioProcessorEditor (*this);
 }
 
 //==============================================================================
