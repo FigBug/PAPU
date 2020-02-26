@@ -2,6 +2,18 @@
 
 PLUGIN="PAPU"
 
+# linux specific stiff
+if [ $OS = "linux" ]; then
+  export GDK_BACKEND=x11
+
+  sudo apt-get update
+  sudo apt-get install clang git ladspa-sdk freeglut3-dev g++ libasound2-dev libcurl4-openssl-dev libfreetype6-dev libjack-jackd2-dev libx11-dev libxcomposite-dev libxcursor-dev libxinerama-dev libxrandr-dev mesa-common-dev webkit2gtk-4.0 juce-tools xvfb
+
+  Xvfb :99 &
+  export DISPLAY=:99
+  sleep 5
+fi
+
 # mac specific stuff
 if [ $OS = "mac" ]; then
   # Create a temp keychain
@@ -55,6 +67,8 @@ done
 # Resave jucer file
 if [ "$OS" = "mac" ]; then
   "$ROOT/ci/bin/Projucer.app/Contents/MacOS/Projucer" --resave "$ROOT/plugin/$PLUGIN.jucer"
+elif [ "$OS" = "linux" ]; then
+  "$ROOT/ci/bin/Projucer" --resave "$ROOT/plugin/$PLUGIN.jucer"
 else
   "$ROOT/ci/bin/Projucer.exe" --resave "$ROOT/plugin/$PLUGIN.jucer"
 fi
@@ -96,6 +110,21 @@ if [ "$OS" = "mac" ]; then
   zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst $PLUGIN.component
 
   curl -F "files=@${PLUGIN}_Mac.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
+fi
+
+# Build linux version
+if [ "$OS" = "linux" ]; then
+  cd "$ROOT/plugin/Builds/LinuxMakefile"
+  make CONFIG=Release
+
+  cd "$ROOT/plugin/Builds/LinuxMakefile"
+  cp  ./build/$PLUGIN.so "$ROOT/ci/bin"
+
+  cd "$ROOT/ci/bin"
+  rm -Rf ${PLUGIN}_Linux.zip
+  zip -r ${PLUGIN}_Linux.zip $PLUGIN.so
+
+  curl -F "files=@${PLUGIN}_Linux.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
 fi
 
 # Build Win version
