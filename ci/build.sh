@@ -83,10 +83,10 @@ if [ "$OS" = "mac" ]; then
 
   cd "$ROOT/ci/bin"
   for filename in ./*.vst; do
-    codesign -s "$DEV_APP_ID" -v "$filename" --options=runtime
+    codesign -s "$DEV_APP_ID" -v "$filename" --options=runtime --timestamp
   done
   for filename in ./*.component; do
-    codesign -s "$DEV_APP_ID" -v "$filename" --options=runtime
+    codesign -s "$DEV_APP_ID" -v "$filename" --options=runtime --timestamp
   done
 
   # Build notarize tool
