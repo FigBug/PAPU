@@ -41,6 +41,9 @@ ROOT=$(cd "$(dirname "$0")/.."; pwd)
 cd "$ROOT"
 echo "$ROOT"
 
+BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+echo "$BRANCH"
+
 cd "$ROOT/ci"
 rm -Rf bin
 mkdir bin
@@ -108,8 +111,10 @@ if [ "$OS" = "mac" ]; then
   xcrun stapler staple $PLUGIN.vst
   xcrun stapler staple $PLUGIN.component
   zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst $PLUGIN.component
-
-  curl -F "files=@${PLUGIN}_Mac.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
+  
+  if [ "$BRANCH" = "release" ]; then
+    curl -F "files=@${PLUGIN}_Mac.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
+  fi
 fi
 
 # Build linux version
@@ -117,14 +122,17 @@ if [ "$OS" = "linux" ]; then
   cd "$ROOT/plugin/Builds/LinuxMakefile"
   make CONFIG=Release
 
-  cd "$ROOT/plugin/Builds/LinuxMakefile"
-  cp  ./build/$PLUGIN.so "$ROOT/ci/bin"
+  cp ./build/$PLUGIN.so "$ROOT/ci/bin"
 
   cd "$ROOT/ci/bin"
-  rm -Rf ${PLUGIN}_Linux.zip
+
+  # Upload
+  cd "$ROOT/ci/bin"
   zip -r ${PLUGIN}_Linux.zip $PLUGIN.so
 
-  curl -F "files=@${PLUGIN}_Linux.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
+  if [ "$BRANCH" = "release" ]; then
+    curl -F "files=@${PLUGIN}_Mac.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
+  fi
 fi
 
 # Build Win version
@@ -145,5 +153,7 @@ if [ "$OS" = "win" ]; then
 
   7z a ${PLUGIN}_Win.zip ${PLUGIN}_64b.dll ${PLUGIN}_32b.dll
 
-  curl -F "files=@${PLUGIN}_Win.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
+  if [ "$BRANCH" = "release" ]; then
+    curl -F "files=@${PLUGIN}_Win.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
+  fi
 fi

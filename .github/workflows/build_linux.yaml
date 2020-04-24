@@ -1,5 +1,9 @@
 name: Build Linux
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - release
 jobs:
   build:
     name: Build Linux
