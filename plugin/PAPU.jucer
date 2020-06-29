@@ -9,10 +9,11 @@
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="PAPUAU"
               aaxIdentifier="com.socalabs.PAPU" pluginAAXCategory="2" jucerVersion="5.4.7"
               companyName="SocaLabs" companyWebsite="www.socalabs.com" companyEmail="info@socalabs.com"
-              displaySplashScreen="0" reportAppUsage="0" splashScreenColour="Dark"
+              displaySplashScreen="1" reportAppUsage="0" splashScreenColour="Dark"
               buildStandalone="1" enableIAA="0" cppLanguageStandard="17" companyCopyright="SocaLabs"
               pluginFormats="buildAU,buildStandalone,buildVST" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
-              pluginAUMainType="'aumu'" pluginVSTCategory="kPlugCategSynth">
+              pluginAUMainType="'aumu'" pluginVSTCategory="kPlugCategSynth"
+              defines="JUCE_DISPLAY_SPLASH_SCREEN=0">
   <MAINGROUP id="dPRjsF" name="PAPU">
     <GROUP id="{EE796482-0D02-0052-80F4-B1FE6CE0D41A}" name="Source">
       <GROUP id="{3344A43A-B55B-7876-70B3-CCC17DA4B65B}" name="PAPU">
