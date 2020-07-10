@@ -13,33 +13,296 @@
 
 using namespace gin;
 
-const char* PAPUAudioProcessor::paramPulse1Sweep      = "sweep1";
-const char* PAPUAudioProcessor::paramPulse1Shift      = "shift1";
-const char* PAPUAudioProcessor::paramPulse1Duty       = "duty1";
-const char* PAPUAudioProcessor::paramPulse1A          = "A1";
-const char* PAPUAudioProcessor::paramPulse1R          = "R1";
-const char* PAPUAudioProcessor::paramPulse1OL         = "OL1";
-const char* PAPUAudioProcessor::paramPulse1OR         = "OR1";
-const char* PAPUAudioProcessor::paramPulse1Tune       = "tune1";
-const char* PAPUAudioProcessor::paramPulse1Fine       = "fine1";
+String PAPUAudioProcessor::paramPulse1Sweep      = "sweep1";
+String PAPUAudioProcessor::paramPulse1Shift      = "shift1";
+String PAPUAudioProcessor::paramPulse1Duty       = "duty1";
+String PAPUAudioProcessor::paramPulse1A          = "A1";
+String PAPUAudioProcessor::paramPulse1R          = "R1";
+String PAPUAudioProcessor::paramPulse1OL         = "OL1";
+String PAPUAudioProcessor::paramPulse1OR         = "OR1";
+String PAPUAudioProcessor::paramPulse1Tune       = "tune1";
+String PAPUAudioProcessor::paramPulse1Fine       = "fine1";
+String PAPUAudioProcessor::paramPulse2Duty       = "duty2";
+String PAPUAudioProcessor::paramPulse2A          = "A2";
+String PAPUAudioProcessor::paramPulse2R          = "R2";
+String PAPUAudioProcessor::paramPulse2OL         = "OL2";
+String PAPUAudioProcessor::paramPulse2OR         = "OR2";
+String PAPUAudioProcessor::paramPulse2Tune       = "tune2";
+String PAPUAudioProcessor::paramPulse2Fine       = "fine2";
+String PAPUAudioProcessor::paramNoiseOL          = "OLN";
+String PAPUAudioProcessor::paramNoiseOR          = "ORL";
+String PAPUAudioProcessor::paramNoiseShift       = "shiftN";
+String PAPUAudioProcessor::paramNoiseStep        = "stepN";
+String PAPUAudioProcessor::paramNoiseRatio       = "ratioN";
+String PAPUAudioProcessor::paramNoiseA           = "AN";
+String PAPUAudioProcessor::paramNoiseR           = "AR";
+String PAPUAudioProcessor::paramOutput           = "output";
+String PAPUAudioProcessor::paramVoices           = "param";
 
-const char* PAPUAudioProcessor::paramPulse2Duty       = "duty2";
-const char* PAPUAudioProcessor::paramPulse2A          = "A2";
-const char* PAPUAudioProcessor::paramPulse2R          = "R2";
-const char* PAPUAudioProcessor::paramPulse2OL         = "OL2";
-const char* PAPUAudioProcessor::paramPulse2OR         = "OR2";
-const char* PAPUAudioProcessor::paramPulse2Tune       = "tune2";
-const char* PAPUAudioProcessor::paramPulse2Fine       = "fine2";
+//==============================================================================
+PAPUEngine::PAPUEngine (PAPUAudioProcessor& p)
+    : processor (p)
+{
+}
 
-const char* PAPUAudioProcessor::paramNoiseOL          = "OLN";
-const char* PAPUAudioProcessor::paramNoiseOR          = "ORL";
-const char* PAPUAudioProcessor::paramNoiseShift       = "shiftN";
-const char* PAPUAudioProcessor::paramNoiseStep        = "stepN";
-const char* PAPUAudioProcessor::paramNoiseRatio       = "ratioN";
-const char* PAPUAudioProcessor::paramNoiseA           = "AN";
-const char* PAPUAudioProcessor::paramNoiseR           = "AR";
+void PAPUEngine::prepareToPlay (double sampleRate)
+{
+    apu.treble_eq( -20.0 ); // lower values muffle it more
+    buf.bass_freq( 461 ); // higher values simulate smaller speaker
 
-const char* PAPUAudioProcessor::paramOutput           = "output";
+    buf.clock_rate (4194304);
+    buf.set_sample_rate (long (sampleRate));
+
+    apu.output (buf.center(), buf.left(), buf.right());
+
+    writeReg (0xff26, 0x8f, true);
+}
+
+int PAPUEngine::parameterIntValue (const String& uid)
+{
+    return processor.parameterIntValue (uid);
+}
+
+void PAPUEngine::runUntil (int& done, AudioSampleBuffer& buffer, int pos)
+{
+    int todo = jmin (pos, buffer.getNumSamples()) - done;
+
+    while (todo > 0)
+    {
+        if (buf.samples_avail() > 0)
+        {
+            blip_sample_t out[1024];
+
+            int count = int (buf.read_samples (out, jmin (todo, 1024 / 2, (int) buf.samples_avail())));
+
+            auto data0 = buffer.getWritePointer (0, done);
+            auto data1 = buffer.getWritePointer (1, done);
+
+            for (int i = 0; i < count; i++)
+            {
+                data0[i] += out[i * 2 + 0] / 32768.0f;
+                data1[i] += out[i * 2 + 1] / 32768.0f;
+            }
+
+            done += count;
+            todo -= count;
+        }
+        else
+        {
+            time = 0;
+
+            bool stereo = apu.end_frame (1024);
+            buf.end_frame (1024, stereo);
+        }
+    }
+}
+
+void PAPUEngine::runOscs (int curNote, bool trigger)
+{
+    if (curNote != -1)
+    {
+        // Ch 1
+        uint8_t sweep = uint8_t (std::abs (parameterIntValue (PAPUAudioProcessor::paramPulse1Sweep)));
+        uint8_t neg   = parameterIntValue (PAPUAudioProcessor::paramPulse1Sweep) < 0;
+        uint8_t shift = uint8_t (parameterIntValue (PAPUAudioProcessor::paramPulse1Shift));
+
+        writeReg (0xff10, (sweep << 4) | ((neg ? 1 : 0) << 3) | shift, trigger);
+        writeReg (0xff11, (parameterIntValue (PAPUAudioProcessor::paramPulse1Duty) << 6), trigger);
+
+        freq1 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (PAPUAudioProcessor::paramPulse1Tune) + parameterIntValue (PAPUAudioProcessor::paramPulse1Fine) / 100.0f));
+        uint16_t period1 = uint16_t (((4194304 / freq1) - 65536) / -32);
+        writeReg (0xff13, period1 & 0xff, trigger);
+        uint8_t a1 = uint8 (parameterIntValue (PAPUAudioProcessor::paramPulse1A));
+        writeReg (0xff12, a1 ? (0x00 | (1 << 3) | a1) : 0xf0, trigger);
+        writeReg (0xff14, (trigger ? 0x80 : 0x00) | ((period1 >> 8) & 0x07), trigger);
+
+        // Ch 2
+        writeReg (0xff16, (parameterIntValue (PAPUAudioProcessor::paramPulse2Duty) << 6), trigger);
+
+        freq2 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (PAPUAudioProcessor::paramPulse2Tune) + parameterIntValue (PAPUAudioProcessor::paramPulse2Fine) / 100.0f));
+        uint16_t period2 = uint16_t (((4194304 / freq2) - 65536) / -32);
+        writeReg (0xff18, period2 & 0xff, trigger);
+        uint8_t a2 = uint8_t (parameterIntValue (PAPUAudioProcessor::paramPulse2A));
+        writeReg (0xff17, a2 ? (0x00 | (1 << 3) | a2) : 0xf0, trigger);
+        writeReg (0xff19, (trigger ? 0x80 : 0x00) | ((period2 >> 8) & 0x07), trigger);
+
+        // Noise
+        uint8_t aN = uint8_t (parameterIntValue (PAPUAudioProcessor::paramNoiseA));
+        writeReg (0xff21, aN ? (0x00 | (1 << 3) | aN) : 0xf0, trigger);
+        writeReg (0xff22, (parameterIntValue (PAPUAudioProcessor::paramNoiseShift) << 4) |
+                  (parameterIntValue (PAPUAudioProcessor::paramNoiseStep)  << 3) |
+                  (parameterIntValue (PAPUAudioProcessor::paramNoiseRatio)), trigger);
+        writeReg (0xff23, trigger ? 0x80 : 0x00, trigger);
+    }
+    else if (trigger)
+    {
+        uint8_t r1 = uint8_t (parameterIntValue (PAPUAudioProcessor::paramPulse1R));
+        uint8_t a1 = uint8 (parameterIntValue (PAPUAudioProcessor::paramPulse1A));
+
+        if (a1 == 0 && r1 != 0)
+        {
+            uint16_t period1 = uint16_t (((4194304 / freq1) - 65536) / -32);
+
+            writeReg (0xff13, period1 & 0xff, trigger);
+            writeReg (0xff12, r1 ? (0xf0 | (0 << 3) | r1) : 0, trigger);
+            writeReg (0xff14, (trigger ? 0x80 : 0x00) | ((period1 >> 8) & 0x07), trigger);
+        }
+        else
+        {
+            writeReg (0xff12, r1 ? (0xf0 | (0 << 3) | r1) : 0, trigger);
+        }
+
+        uint8_t r2 = uint8_t (parameterIntValue (PAPUAudioProcessor::paramPulse2R));
+        uint8_t a2 = uint8_t (parameterIntValue (PAPUAudioProcessor::paramPulse2A));
+
+        if (a2 == 0 && r2 != 0)
+        {
+            uint16_t period2 = uint16_t (((4194304 / freq2) - 65536) / -32);
+
+            writeReg (0xff18, period2 & 0xff, trigger);
+            writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, trigger);
+            writeReg (0xff19, (trigger ? 0x80 : 0x00) | ((period2 >> 8) & 0x07), trigger);
+        }
+        else
+        {
+            writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, trigger);
+        }
+
+        uint8_t rN = uint8_t (parameterIntValue (PAPUAudioProcessor::paramNoiseR));
+        uint8_t aN = uint8_t (parameterIntValue (PAPUAudioProcessor::paramNoiseA));
+
+        if (aN == 0 && rN != 0)
+        {
+            writeReg (0xff21, rN ? (0xf0 | (0 << 3) | rN) : 0, trigger);
+            writeReg (0xff23, trigger ? 0x80 : 0x00, trigger);
+        }
+        else
+        {
+            writeReg (0xff21, rN ? (0xf0 | (0 << 3) | rN) : 0, trigger);
+        }
+    }
+}
+
+void PAPUEngine::writeReg (int reg, int value, bool force)
+{
+    auto itr = regCache.find (reg);
+    if (force || itr == regCache.end() || itr->second != value)
+    {
+        regCache[reg] = value;
+        apu.write_register (clock(), gb_addr_t (reg), value);
+    }
+}
+
+void PAPUEngine::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midi)
+{
+    uint16_t reg;
+
+    reg = uint16_t (0x08 | parameterIntValue (PAPUAudioProcessor::paramOutput));
+    writeReg (0xff24, reg, false);
+
+    reg = (parameterIntValue (PAPUAudioProcessor::paramPulse1OL) ? 0x10 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramPulse1OR) ? 0x01 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramPulse2OL) ? 0x20 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramPulse2OR) ? 0x02 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramNoiseOL)  ? 0x80 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramNoiseOR)  ? 0x08 : 0x00);
+
+    writeReg (0xff25, reg, false);
+
+    int done = 0;
+    runOscs (lastNote, false);
+    runUntil (done, buffer, 0);
+
+    for (auto itr : midi)
+    {
+        auto msg = itr.getMessage();
+        int pos = itr.samplePosition;
+
+        bool updateBend = false;
+        runUntil (done, buffer, pos);
+
+        if (msg.isNoteOn())
+        {
+            noteQueue.add (msg.getNoteNumber());
+        }
+        else if (msg.isNoteOff())
+        {
+            noteQueue.removeFirstMatchingValue (msg.getNoteNumber());
+        }
+        else if (msg.isAllNotesOff())
+        {
+            noteQueue.clear();
+        }
+        else if (msg.isPitchWheel())
+        {
+            updateBend = true;
+            pitchBend = (msg.getPitchWheelValue() - 8192) / 8192.0f * 2;
+        }
+        const int curNote = noteQueue.size() > 0 ? noteQueue.getLast() : -1;
+
+        if (updateBend || lastNote != curNote)
+        {
+            runOscs (curNote, lastNote != curNote);
+            lastNote = curNote;
+        }
+    }
+
+    int numSamples = buffer.getNumSamples();
+    runUntil (done, buffer, numSamples);
+}
+
+void PAPUEngine::prepareBlock (AudioSampleBuffer& buffer)
+{
+    uint16_t reg;
+
+    reg = uint16_t (0x08 | parameterIntValue (PAPUAudioProcessor::paramOutput));
+    writeReg (0xff24, reg, false);
+
+    reg = (parameterIntValue (PAPUAudioProcessor::paramPulse1OL) ? 0x10 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramPulse1OR) ? 0x01 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramPulse2OL) ? 0x20 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramPulse2OR) ? 0x02 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramNoiseOL)  ? 0x80 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramNoiseOR)  ? 0x08 : 0x00);
+
+    writeReg (0xff25, reg, false);
+
+    int done = 0;
+    runOscs (lastNote, false);
+    runUntil (done, buffer, 0);
+
+    jassert (done == 0);
+}
+
+void PAPUEngine::handleMessage (const MidiMessage& msg)
+{
+    bool updateBend = false;
+
+    if (msg.isNoteOn())
+    {
+        noteQueue.add (msg.getNoteNumber());
+    }
+    else if (msg.isNoteOff())
+    {
+        noteQueue.removeFirstMatchingValue (msg.getNoteNumber());
+    }
+    else if (msg.isAllNotesOff())
+    {
+        noteQueue.clear();
+    }
+    else if (msg.isPitchWheel())
+    {
+        updateBend = true;
+        pitchBend = (msg.getPitchWheelValue() - 8192) / 8192.0f * 2;
+    }
+    const int curNote = noteQueue.size() > 0 ? noteQueue.getLast() : -1;
+
+    if (updateBend || lastNote != curNote)
+    {
+        runOscs (curNote, lastNote != curNote);
+        lastNote = curNote;
+    }
+}
 
 //==============================================================================
 String percentTextFunction (const Parameter& p, float v)
@@ -128,6 +391,10 @@ PAPUAudioProcessor::PAPUAudioProcessor()
     addExtParam (paramNoiseStep,   "Noise Step",        "Steps",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, stepTextFunction);
     addExtParam (paramNoiseRatio,  "Noise Ratio",       "Ratio",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
     addExtParam (paramOutput,      "Output",            "Output",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  7.0f, 0.0f, percentTextFunction);
+    addExtParam (paramVoices,      "Voices",            "Voices",  "",  {    1.0f,   8.0f, 1.0f, 1.0f },  1.0f, 0.0f, intTextFunction);
+
+    for (int i = 0; i < 16; i++)
+        papus.add (new PAPUEngine (*this));
 }
 
 PAPUAudioProcessor::~PAPUAudioProcessor()
@@ -137,114 +404,64 @@ PAPUAudioProcessor::~PAPUAudioProcessor()
 //==============================================================================
 void PAPUAudioProcessor::prepareToPlay (double sampleRate, int /*samplesPerBlock*/)
 {
-    outputSmoothed.reset (sampleRate, 0.05);
-    
-    apu.treble_eq( -20.0 ); // lower values muffle it more
-    buf.bass_freq( 461 ); // higher values simulate smaller speaker
-    
-    buf.clock_rate (4194304);
-    buf.set_sample_rate (long (sampleRate));
-
-    apu.output (buf.center(), buf.left(), buf.right());
-
-    writeReg (0xff26, 0x8f, true);
+    for (auto p : papus)
+        p->prepareToPlay (sampleRate);
 }
 
 void PAPUAudioProcessor::releaseResources()
 {
 }
 
-void PAPUAudioProcessor::runUntil (int& done, AudioSampleBuffer& buffer, int pos)
-{
-    int todo = jmin (pos, buffer.getNumSamples()) - done;
-
-    while (todo > 0)
-    {
-        if (buf.samples_avail() > 0)
-        {
-            blip_sample_t out[1024];
-            
-            int count = int (buf.read_samples (out, jmin (todo, 1024 / 2, (int) buf.samples_avail())));
-        
-            float* data0 = buffer.getWritePointer (0, done);
-            float* data1 = buffer.getWritePointer (1, done);
-            
-            for (int i = 0; i < count; i++)
-            {
-                data0[i] = out[i * 2 + 0] / 32768.0f;
-                data1[i] = out[i * 2 + 1] / 32768.0f;
-            }
-            
-            done += count;
-            todo -= count;
-        }
-        else
-        {
-            time = 0;
-
-            bool stereo = apu.end_frame (1024);
-            buf.end_frame (1024, stereo);
-        }
-    }
-}
-
 void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midi)
 {
-    uint16_t reg;
-    
-    reg = uint16_t (0x08 | parameterIntValue (paramOutput));
-    writeReg (0xff24, reg, false);
-    
-    reg = (parameterIntValue (paramPulse1OL) ? 0x10 : 0x00) |
-          (parameterIntValue (paramPulse1OR) ? 0x01 : 0x00) |
-          (parameterIntValue (paramPulse2OL) ? 0x20 : 0x00) |
-          (parameterIntValue (paramPulse2OR) ? 0x02 : 0x00) |
-          (parameterIntValue (paramNoiseOL)  ? 0x80 : 0x00) |
-          (parameterIntValue (paramNoiseOR)  ? 0x08 : 0x00);
-    
-    writeReg (0xff25, reg, false);
-    
-    int done = 0;
-    runOscs (lastNote, false);
-    runUntil (done, buffer, 0);
-    
-    for (auto itr : midi)
-    {
-        auto msg = itr.getMessage();
-        int pos = itr.samplePosition;
-
-        bool updateBend = false;
-        runUntil (done, buffer, pos);
-        
-        if (msg.isNoteOn())
-        {
-            noteQueue.add (msg.getNoteNumber());
-        }
-        else if (msg.isNoteOff())
-        {
-            noteQueue.removeFirstMatchingValue (msg.getNoteNumber());
-        }
-        else if (msg.isAllNotesOff())
-        {
-            noteQueue.clear();
-        }
-        else if (msg.isPitchWheel())
-        {
-            updateBend = true;
-            pitchBend = (msg.getPitchWheelValue() - 8192) / 8192.0f * 2;
-        }
-        const int curNote = noteQueue.size() > 0 ? noteQueue.getLast() : -1;
-        
-        if (updateBend || lastNote != curNote)
-        {
-            runOscs (curNote, lastNote != curNote);
-            lastNote = curNote;
-        }
-    }
-    
     int numSamples = buffer.getNumSamples();
-    runUntil (done, buffer, numSamples);
-    
+    buffer.clear();
+
+    int voices = parameterIntValue (paramVoices);
+
+    if (voices == 1)
+    {
+        papus[0]->processBlock (buffer, midi);
+    }
+    else
+    {
+        int done = 0;
+
+        for (int i = 0; i < voices; i++)
+            papus[i]->prepareBlock (buffer);
+
+        for (auto itr : midi)
+        {
+            auto msg = itr.getMessage();
+            int pos = itr.samplePosition;
+
+            runUntil (done, buffer, pos);
+
+            if (msg.isNoteOn())
+            {
+                if (auto voice = findFreeVoice())
+                    voice->handleMessage (msg);
+            }
+            else if (msg.isNoteOff())
+            {
+                if (auto voice = findVoiceForNote (msg.getNoteNumber()))
+                    voice->handleMessage (msg);
+            }
+            else if (msg.isAllNotesOff())
+            {
+                for (int i = 0; i < voices; i++)
+                    papus[i]->handleMessage (msg);
+            }
+            else if (msg.isPitchWheel())
+            {
+                for (int i = 0; i < voices; i++)
+                    papus[i]->handleMessage (msg);
+            }
+        }
+
+        runUntil (done, buffer, numSamples);
+    }
+
     if (fifo.getFreeSpace() >= numSamples)
     {
         auto dataL = buffer.getReadPointer (0);
@@ -259,101 +476,41 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     }
 }
 
-void PAPUAudioProcessor::runOscs (int curNote, bool trigger)
+void PAPUAudioProcessor::runUntil (int& done, AudioSampleBuffer& buffer, int pos)
 {
-    if (curNote != -1)
+    int voices = parameterIntValue (paramVoices);
+    for (int i = 0; i < voices; i++)
     {
-        // Ch 1
-        uint8_t sweep = uint8_t (std::abs (parameterIntValue (paramPulse1Sweep)));
-        uint8_t neg   = parameterIntValue (paramPulse1Sweep) < 0;
-        uint8_t shift = uint8_t (parameterIntValue (paramPulse1Shift));
-        
-        writeReg (0xff10, (sweep << 4) | ((neg ? 1 : 0) << 3) | shift, trigger);
-        writeReg (0xff11, (parameterIntValue (paramPulse1Duty) << 6), trigger);
-        
-        freq1 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (paramPulse1Tune) + parameterIntValue (paramPulse1Fine) / 100.0f));
-        uint16_t period1 = uint16_t (((4194304 / freq1) - 65536) / -32);
-        writeReg (0xff13, period1 & 0xff, trigger);
-        uint8_t a1 = uint8 (parameterIntValue (paramPulse1A));
-        writeReg (0xff12, a1 ? (0x00 | (1 << 3) | a1) : 0xf0, trigger);
-        writeReg (0xff14, (trigger ? 0x80 : 0x00) | ((period1 >> 8) & 0x07), trigger);
-        
-        // Ch 2
-        writeReg (0xff16, (parameterIntValue (paramPulse2Duty) << 6), trigger);
-        
-        freq2 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (paramPulse2Tune) + parameterIntValue (paramPulse2Fine) / 100.0f));
-        uint16_t period2 = uint16_t (((4194304 / freq2) - 65536) / -32);
-        writeReg (0xff18, period2 & 0xff, trigger);
-        uint8_t a2 = uint8_t (parameterIntValue (paramPulse2A));
-        writeReg (0xff17, a2 ? (0x00 | (1 << 3) | a2) : 0xf0, trigger);
-        writeReg (0xff19, (trigger ? 0x80 : 0x00) | ((period2 >> 8) & 0x07), trigger);
-        
-        // Noise
-        uint8_t aN = uint8_t (parameterIntValue (paramNoiseA));
-        writeReg (0xff21, aN ? (0x00 | (1 << 3) | aN) : 0xf0, trigger);
-        writeReg (0xff22, (parameterIntValue (paramNoiseShift) << 4) |
-                            (parameterIntValue (paramNoiseStep)  << 3) |
-                            (parameterIntValue (paramNoiseRatio)), trigger);
-        writeReg (0xff23, trigger ? 0x80 : 0x00, trigger);
-    }
-    else if (trigger)
-    {
-        uint8_t r1 = uint8_t (parameterIntValue (paramPulse1R));
-        uint8_t a1 = uint8 (parameterIntValue (paramPulse1A));
-
-        if (a1 == 0 && r1 != 0)
-        {
-            uint16_t period1 = uint16_t (((4194304 / freq1) - 65536) / -32);
-
-            writeReg (0xff13, period1 & 0xff, trigger);
-            writeReg (0xff12, r1 ? (0xf0 | (0 << 3) | r1) : 0, trigger);
-            writeReg (0xff14, (trigger ? 0x80 : 0x00) | ((period1 >> 8) & 0x07), trigger);
-        }
-        else
-        {
-            writeReg (0xff12, r1 ? (0xf0 | (0 << 3) | r1) : 0, trigger);
-        }
-        
-        uint8_t r2 = uint8_t (parameterIntValue (paramPulse2R));
-        uint8_t a2 = uint8_t (parameterIntValue (paramPulse2A));
-
-        if (a2 == 0 && r2 != 0)
-        {
-            uint16_t period2 = uint16_t (((4194304 / freq2) - 65536) / -32);
-
-            writeReg (0xff18, period2 & 0xff, trigger);
-            writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, trigger);
-            writeReg (0xff19, (trigger ? 0x80 : 0x00) | ((period2 >> 8) & 0x07), trigger);
-        }
-        else
-        {
-            writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, trigger);
-        }
-        
-        uint8_t rN = uint8_t (parameterIntValue (paramNoiseR));
-        uint8_t aN = uint8_t (parameterIntValue (paramNoiseA));
-
-        if (aN == 0 && rN != 0)
-        {
-            writeReg (0xff21, rN ? (0xf0 | (0 << 3) | rN) : 0, trigger);
-            writeReg (0xff23, trigger ? 0x80 : 0x00, trigger);
-        }
-        else
-        {
-            writeReg (0xff21, rN ? (0xf0 | (0 << 3) | rN) : 0, trigger);
-        }
+        int doneCopy = done;
+        papus[i]->runUntil (doneCopy, buffer, pos);
     }
 }
 
-void PAPUAudioProcessor::writeReg (int reg, int value, bool force)
+PAPUEngine* PAPUAudioProcessor::findFreeVoice()
 {
-    auto itr = regCache.find (reg);
-    if (force || itr == regCache.end() || itr->second != value)
+    int voices = parameterIntValue (paramVoices);
+    for (int i = 0; i < voices; i++)
     {
-        regCache[reg] = value;
-        apu.write_register (clock(), gb_addr_t (reg), value);
+        int vidx = (nextVoice + i) % voices;
+        if (papus[vidx]->getNote() == -1)
+        {
+            nextVoice = (nextVoice + 1) % voices;
+            return papus[vidx];
+        }
     }
+    return nullptr;
 }
+
+PAPUEngine* PAPUAudioProcessor::findVoiceForNote (int note)
+{
+    int voices = parameterIntValue (paramVoices);
+    for (int i = 0; i < voices; i++)
+        if (papus[i]->getNote() == note)
+            return papus[i];
+
+    return nullptr;
+}
+
 //==============================================================================
 bool PAPUAudioProcessor::hasEditor() const
 {

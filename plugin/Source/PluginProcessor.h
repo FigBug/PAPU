@@ -15,6 +15,45 @@
 #include "gb_apu/Multi_Buffer.h"
 
 //==============================================================================
+class PAPUAudioProcessor;
+class PAPUEngine
+{
+public:
+    PAPUEngine (PAPUAudioProcessor& p);
+
+    void prepareToPlay (double sampleRate);
+    void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midi);
+
+    void prepareBlock (AudioSampleBuffer& buffer);
+    void handleMessage (const MidiMessage& msg);
+    void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
+
+    int getNote()   { return lastNote; }
+
+private:
+    int parameterIntValue (const String& uid);
+    void runOscs (int curNote, bool trigger);
+
+    PAPUAudioProcessor& processor;
+
+    int lastNote = -1;
+    double pitchBend = 0;
+    Array<int> noteQueue;
+    float freq1 = 0.0f, freq2 = 0.0f;
+
+    Gb_Apu apu;
+    Stereo_Buffer buf;
+
+    blip_time_t time = 0;
+
+    blip_time_t clock() { return time += 4; }
+
+    void writeReg (int reg, int value, bool force);
+
+    std::map<int, int> regCache;
+};
+
+//==============================================================================
 /**
 */
 class PAPUAudioProcessorEditor;
@@ -36,60 +75,42 @@ public:
     bool hasEditor() const override;
 
     //==============================================================================
-    
-    static const char* paramPulse1OL;
-    static const char* paramPulse1OR;
-    static const char* paramPulse1Duty;
-    static const char* paramPulse1A;
-    static const char* paramPulse1R;
-    static const char* paramPulse1Tune;
-    static const char* paramPulse1Fine;
-    static const char* paramPulse1Sweep;
-    static const char* paramPulse1Shift;
-    
-    static const char* paramPulse2OL;
-    static const char* paramPulse2OR;
-    static const char* paramPulse2Duty;
-    static const char* paramPulse2A;
-    static const char* paramPulse2R;
-    static const char* paramPulse2Tune;
-    static const char* paramPulse2Fine;
-
-    static const char* paramNoiseOL;
-    static const char* paramNoiseOR;
-    static const char* paramNoiseShift;
-    static const char* paramNoiseStep;
-    static const char* paramNoiseRatio;
-    static const char* paramNoiseA;
-    static const char* paramNoiseR;
-    
-    static const char* paramOutput;
+    static String paramPulse1OL;
+    static String paramPulse1OR;
+    static String paramPulse1Duty;
+    static String paramPulse1A;
+    static String paramPulse1R;
+    static String paramPulse1Tune;
+    static String paramPulse1Fine;
+    static String paramPulse1Sweep;
+    static String paramPulse1Shift;
+    static String paramPulse2OL;
+    static String paramPulse2OR;
+    static String paramPulse2Duty;
+    static String paramPulse2A;
+    static String paramPulse2R;
+    static String paramPulse2Tune;
+    static String paramPulse2Fine;
+    static String paramNoiseOL;
+    static String paramNoiseOR;
+    static String paramNoiseShift;
+    static String paramNoiseStep;
+    static String paramNoiseRatio;
+    static String paramNoiseA;
+    static String paramNoiseR;
+    static String paramOutput;
+    static String paramVoices;
     
     gin::AudioFifo fifo {1, 44100};
     
 private:
     void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
-    void runOscs (int curNote, bool trigger);
+    PAPUEngine* findFreeVoice();
+    PAPUEngine* findVoiceForNote (int note);
     
-    int lastNote = -1;
-    double pitchBend = 0;
-    Array<int> noteQueue;
-    float freq1 = 0.0f, freq2 = 0.0f;
-    
-    LinearSmoothedValue<float> outputSmoothed;
-    
-    
-    Gb_Apu apu;
-    Stereo_Buffer buf;
-    
-    blip_time_t time = 0;
-    
-    blip_time_t clock() { return time += 4; }
-    
-    void writeReg (int reg, int value, bool force);
-    
-    std::map<int, int> regCache;
-        
+    OwnedArray<PAPUEngine> papus;
+    int nextVoice = 0;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PAPUAudioProcessor)
 };
