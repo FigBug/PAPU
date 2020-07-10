@@ -219,7 +219,6 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         if (msg.isNoteOn())
         {
             noteQueue.add (msg.getNoteNumber());
-            velocity = msg.getVelocity();
         }
         else if (msg.isNoteOff())
         {
@@ -251,7 +250,7 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
         auto dataL = buffer.getReadPointer (0);
         auto dataR = buffer.getReadPointer (1);
 
-        auto mono = (float*) alloca (numSamples * sizeof (float));
+        auto mono = (float*) alloca (size_t (numSamples) * sizeof (float));
         
         for (int i = 0; i < numSamples; i++)
             mono[i] = (dataL[i] + dataR[i]) / 2.0f;
@@ -272,7 +271,7 @@ void PAPUAudioProcessor::runOscs (int curNote, bool trigger)
         writeReg (0xff10, (sweep << 4) | ((neg ? 1 : 0) << 3) | shift, trigger);
         writeReg (0xff11, (parameterIntValue (paramPulse1Duty) << 6), trigger);
         
-        float freq1 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (paramPulse1Tune) + parameterIntValue (paramPulse1Fine) / 100.0f));
+        freq1 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (paramPulse1Tune) + parameterIntValue (paramPulse1Fine) / 100.0f));
         uint16_t period1 = uint16_t (((4194304 / freq1) - 65536) / -32);
         writeReg (0xff13, period1 & 0xff, trigger);
         uint8_t a1 = uint8 (parameterIntValue (paramPulse1A));
@@ -282,7 +281,7 @@ void PAPUAudioProcessor::runOscs (int curNote, bool trigger)
         // Ch 2
         writeReg (0xff16, (parameterIntValue (paramPulse2Duty) << 6), trigger);
         
-        float freq2 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (paramPulse2Tune) + parameterIntValue (paramPulse2Fine) / 100.0f));
+        freq2 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (paramPulse2Tune) + parameterIntValue (paramPulse2Fine) / 100.0f));
         uint16_t period2 = uint16_t (((4194304 / freq2) - 65536) / -32);
         writeReg (0xff18, period2 & 0xff, trigger);
         uint8_t a2 = uint8_t (parameterIntValue (paramPulse2A));
@@ -297,16 +296,52 @@ void PAPUAudioProcessor::runOscs (int curNote, bool trigger)
                             (parameterIntValue (paramNoiseRatio)), trigger);
         writeReg (0xff23, trigger ? 0x80 : 0x00, trigger);
     }
-    else
+    else if (trigger)
     {
         uint8_t r1 = uint8_t (parameterIntValue (paramPulse1R));
-        writeReg (0xff12, r1 ? (0xf0 | (0 << 3) | r1) : 0, trigger);
+        uint8_t a1 = uint8 (parameterIntValue (paramPulse1A));
+
+        if (a1 == 0 && r1 != 0)
+        {
+            uint16_t period1 = uint16_t (((4194304 / freq1) - 65536) / -32);
+
+            writeReg (0xff13, period1 & 0xff, trigger);
+            writeReg (0xff12, r1 ? (0xf0 | (0 << 3) | r1) : 0, trigger);
+            writeReg (0xff14, (trigger ? 0x80 : 0x00) | ((period1 >> 8) & 0x07), trigger);
+        }
+        else
+        {
+            writeReg (0xff12, r1 ? (0xf0 | (0 << 3) | r1) : 0, trigger);
+        }
         
         uint8_t r2 = uint8_t (parameterIntValue (paramPulse2R));
-        writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, trigger);
+        uint8_t a2 = uint8_t (parameterIntValue (paramPulse2A));
+
+        if (a2 == 0 && r2 != 0)
+        {
+            uint16_t period2 = uint16_t (((4194304 / freq2) - 65536) / -32);
+
+            writeReg (0xff18, period2 & 0xff, trigger);
+            writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, trigger);
+            writeReg (0xff19, (trigger ? 0x80 : 0x00) | ((period2 >> 8) & 0x07), trigger);
+        }
+        else
+        {
+            writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, trigger);
+        }
         
         uint8_t rN = uint8_t (parameterIntValue (paramNoiseR));
-        writeReg (0xff21, rN ? (0xf0 | (0 << 3) | rN) : 0, trigger);
+        uint8_t aN = uint8_t (parameterIntValue (paramNoiseA));
+
+        if (aN == 0 && rN != 0)
+        {
+            writeReg (0xff21, rN ? (0xf0 | (0 << 3) | rN) : 0, trigger);
+            writeReg (0xff23, trigger ? 0x80 : 0x00, trigger);
+        }
+        else
+        {
+            writeReg (0xff21, rN ? (0xf0 | (0 << 3) | rN) : 0, trigger);
+        }
     }
 }
 
@@ -316,7 +351,7 @@ void PAPUAudioProcessor::writeReg (int reg, int value, bool force)
     if (force || itr == regCache.end() || itr->second != value)
     {
         regCache[reg] = value;
-        apu.write_register (clock(), reg, value);
+        apu.write_register (clock(), gb_addr_t (reg), value);
     }
 }
 //==============================================================================
