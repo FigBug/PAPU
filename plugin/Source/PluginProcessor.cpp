@@ -478,12 +478,16 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
 
 void PAPUAudioProcessor::runUntil (int& done, AudioSampleBuffer& buffer, int pos)
 {
+    int todo = jmin (pos, buffer.getNumSamples()) - done;
+
     int voices = parameterIntValue (paramVoices);
     for (int i = 0; i < voices; i++)
     {
         int doneCopy = done;
         papus[i]->runUntil (doneCopy, buffer, pos);
     }
+
+    done += todo;
 }
 
 PAPUEngine* PAPUAudioProcessor::findFreeVoice()
