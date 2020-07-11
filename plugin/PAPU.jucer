@@ -38,6 +38,7 @@
               file="../3rdparty/Gb_Snd_Emu-0.1.4/boost/static_assert.hpp"/>
       </GROUP>
       <GROUP id="{1152B116-4DDF-40B2-E59A-469FEBCF5C64}" name="Resources">
+        <FILE id="NBuCVT" name="icon.png" compile="0" resource="1" file="Resources/icon.png"/>
         <FILE id="oVLZdc" name="logo.png" compile="0" resource="1" file="Resources/logo.png"/>
       </GROUP>
       <FILE id="MBef8F" name="PadPluginEditor.cpp" compile="1" resource="0"
@@ -160,7 +161,8 @@
     </LINUX_MAKE>
     <XCODE_IPHONE targetFolder="Builds/iOS" iosScreenOrientation="UIInterfaceOrientationLandscapeLeft,UIInterfaceOrientationLandscapeRight,UIInterfaceOrientationPortrait,UIInterfaceOrientationPortraitUpsideDown"
                   iPadScreenOrientation="UIInterfaceOrientationLandscapeLeft,UIInterfaceOrientationLandscapeRight,UIInterfaceOrientationPortrait,UIInterfaceOrientationPortraitUpsideDown"
-                  iosBackgroundAudio="1" iosDeviceFamily="2">
+                  iosBackgroundAudio="1" iosDeviceFamily="2" smallIcon="NBuCVT"
+                  bigIcon="NBuCVT">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4"
                        iosCompatibility="11.0"/>
