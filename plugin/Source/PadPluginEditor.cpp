@@ -1,20 +1,21 @@
 #include "PluginProcessor.h"
-#include "PluginEditor.h"
+#include "PadPluginEditor.h"
 #include "BinaryData.h"
 
-#if ! JUCE_IOS
+#if JUCE_IOS
 
 using namespace gin;
 
 //==============================================================================
 PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
-  : GinAudioProcessorEditor (p, 60, 100), proc (p)
+  : GinAudioProcessorEditor (p, 80, 120), proc (p)
 {
     additionalProgramming = "Shay Green";
     
     logo = ImageFileFormat::loadFrom (BinaryData::logo_png, BinaryData::logo_pngSize);
     
-    addAndMakeVisible (&scope);
+    addAndMakeVisible (scope);
+    addAndMakeVisible (keyboard);
     
     for (auto pp : p.getPluginParameters())
     {
@@ -32,6 +33,10 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
     
     scope.setNumSamplesPerPixel (2);
     scope.setVerticalZoomFactor (3.0f);
+
+    keyboard.setKeyWidth (80);
+    keyboard.setLowestVisibleKey (60);
+    keyboard.setScrollButtonWidth (15);
 }
 
 PAPUAudioProcessorEditor::~PAPUAudioProcessorEditor()
@@ -87,7 +92,11 @@ void PAPUAudioProcessorEditor::resized()
     controls[n - 1]->setBounds (getGridArea (7, 1));
     controls[n - 2]->setBounds (getGridArea (7, 2));
     
-    scope.setBounds (getGridArea (8, 0, 5, 3).reduced (5));
+    auto rcScope = getGridArea (8, 0, 5, 3).reduced (5);
+    scope.setBounds (rcScope.withRight (getWidth() - inset - 5));
+
+    auto rcKeyboard = getLocalBounds().reduced (5);
+    keyboard.setBounds (rcKeyboard.withTop (rcScope.getBottom() + 10));
 }
 
 #endif

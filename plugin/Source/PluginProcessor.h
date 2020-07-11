@@ -102,7 +102,8 @@ public:
     static String paramVoices;
     
     gin::AudioFifo fifo {1, 44100};
-    
+
+    MidiKeyboardState state;    
 private:
     void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
     PAPUEngine* findFreeVoice();

@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
-#if ! JUCE_IOS
+#if JUCE_IOS
 
 //==============================================================================
 /**
@@ -22,6 +22,8 @@ public:
     
     gin::TriggeredScope scope { proc.fifo };
     Image logo;
+
+    MidiKeyboardComponent keyboard { proc.state, MidiKeyboardComponent::horizontalKeyboard };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PAPUAudioProcessorEditor)
 };
