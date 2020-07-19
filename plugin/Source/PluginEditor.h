@@ -8,7 +8,7 @@
 //==============================================================================
 /**
 */
-class PAPUAudioProcessorEditor  : public gin::GinAudioProcessorEditor
+class PAPUAudioProcessorEditor  : public gin::ProcessorEditor
 {
 public:
     PAPUAudioProcessorEditor (PAPUAudioProcessor&);

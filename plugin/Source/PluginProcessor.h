@@ -57,7 +57,7 @@ private:
 /**
 */
 class PAPUAudioProcessorEditor;
-class PAPUAudioProcessor : public gin::GinProcessor
+class PAPUAudioProcessor : public gin::Processor
 {
 public:
     //==============================================================================

@@ -8,7 +8,7 @@ using namespace gin;
 
 //==============================================================================
 PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
-  : GinAudioProcessorEditor (p, 60, 100), proc (p)
+  : ProcessorEditor (p, 60, 100), proc (p)
 {
     additionalProgramming = "Shay Green";
     
@@ -41,14 +41,14 @@ PAPUAudioProcessorEditor::~PAPUAudioProcessorEditor()
 //==============================================================================
 void PAPUAudioProcessorEditor::paint (Graphics& g)
 {
-    GinAudioProcessorEditor::paint (g);
+    ProcessorEditor::paint (g);
         
     g.drawImageAt (logo, getWidth() / 2 - logo.getWidth() / 2, 0);
 }
 
 void PAPUAudioProcessorEditor::resized()
 {
-    GinAudioProcessorEditor::resized();
+    ProcessorEditor::resized();
     
     for (int i = 0; i < 9; i++)
     {
