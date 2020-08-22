@@ -4,26 +4,24 @@
 
 #if JUCE_IOS
 
-using namespace gin;
-
 //==============================================================================
 PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
   : ProcessorEditor (p, 80, 120), proc (p)
 {
     additionalProgramming = "Shay Green";
     
-    logo = ImageFileFormat::loadFrom (BinaryData::logo_png, BinaryData::logo_pngSize);
+    logo = juce::ImageFileFormat::loadFrom (BinaryData::logo_png, BinaryData::logo_pngSize);
     
     addAndMakeVisible (scope);
     addAndMakeVisible (keyboard);
     
     for (auto pp : p.getPluginParameters())
     {
-        ParamComponent* c;
+        gin::ParamComponent* c;
         if (pp->getUid().contains ("tune") || pp->getUid().contains ("fine") || pp->getUid().contains ("sweep"))
-            c = new Knob (pp, true);
+            c = new gin::Knob (pp, true);
         else
-            c = pp->isOnOff() ? (ParamComponent*)new Switch (pp) : (ParamComponent*)new Knob (pp);
+            c = pp->isOnOff() ? (gin::ParamComponent*)new gin::Switch (pp) : (gin::ParamComponent*)new gin::Knob (pp);
         
         addAndMakeVisible (c);
         controls.add (c);
@@ -44,7 +42,7 @@ PAPUAudioProcessorEditor::~PAPUAudioProcessorEditor()
 }
 
 //==============================================================================
-void PAPUAudioProcessorEditor::paint (Graphics& g)
+void PAPUAudioProcessorEditor::paint (juce::Graphics& g)
 {
     ProcessorEditor::paint (g);
         

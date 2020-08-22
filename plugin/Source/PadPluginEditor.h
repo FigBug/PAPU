@@ -16,14 +16,14 @@ public:
 
     //==============================================================================
     void resized() override;
-    void paint (Graphics& g) override;
+    void paint (juce::Graphics& g) override;
 
     PAPUAudioProcessor& proc;
     
     gin::TriggeredScope scope { proc.fifo };
-    Image logo;
+    juce::Image logo;
 
-    MidiKeyboardComponent keyboard { proc.state, MidiKeyboardComponent::horizontalKeyboard };
+    juce::MidiKeyboardComponent keyboard { proc.state, juce::MidiKeyboardComponent::horizontalKeyboard };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PAPUAudioProcessorEditor)
 };

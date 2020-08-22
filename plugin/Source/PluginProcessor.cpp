@@ -2,33 +2,31 @@
 #include "PluginEditor.h"
 #include "PadPluginEditor.h"
 
-using namespace gin;
-
-String PAPUAudioProcessor::paramPulse1Sweep      = "sweep1";
-String PAPUAudioProcessor::paramPulse1Shift      = "shift1";
-String PAPUAudioProcessor::paramPulse1Duty       = "duty1";
-String PAPUAudioProcessor::paramPulse1A          = "A1";
-String PAPUAudioProcessor::paramPulse1R          = "R1";
-String PAPUAudioProcessor::paramPulse1OL         = "OL1";
-String PAPUAudioProcessor::paramPulse1OR         = "OR1";
-String PAPUAudioProcessor::paramPulse1Tune       = "tune1";
-String PAPUAudioProcessor::paramPulse1Fine       = "fine1";
-String PAPUAudioProcessor::paramPulse2Duty       = "duty2";
-String PAPUAudioProcessor::paramPulse2A          = "A2";
-String PAPUAudioProcessor::paramPulse2R          = "R2";
-String PAPUAudioProcessor::paramPulse2OL         = "OL2";
-String PAPUAudioProcessor::paramPulse2OR         = "OR2";
-String PAPUAudioProcessor::paramPulse2Tune       = "tune2";
-String PAPUAudioProcessor::paramPulse2Fine       = "fine2";
-String PAPUAudioProcessor::paramNoiseOL          = "OLN";
-String PAPUAudioProcessor::paramNoiseOR          = "ORL";
-String PAPUAudioProcessor::paramNoiseShift       = "shiftN";
-String PAPUAudioProcessor::paramNoiseStep        = "stepN";
-String PAPUAudioProcessor::paramNoiseRatio       = "ratioN";
-String PAPUAudioProcessor::paramNoiseA           = "AN";
-String PAPUAudioProcessor::paramNoiseR           = "AR";
-String PAPUAudioProcessor::paramOutput           = "output";
-String PAPUAudioProcessor::paramVoices           = "param";
+juce::String PAPUAudioProcessor::paramPulse1Sweep      = "sweep1";
+juce::String PAPUAudioProcessor::paramPulse1Shift      = "shift1";
+juce::String PAPUAudioProcessor::paramPulse1Duty       = "duty1";
+juce::String PAPUAudioProcessor::paramPulse1A          = "A1";
+juce::String PAPUAudioProcessor::paramPulse1R          = "R1";
+juce::String PAPUAudioProcessor::paramPulse1OL         = "OL1";
+juce::String PAPUAudioProcessor::paramPulse1OR         = "OR1";
+juce::String PAPUAudioProcessor::paramPulse1Tune       = "tune1";
+juce::String PAPUAudioProcessor::paramPulse1Fine       = "fine1";
+juce::String PAPUAudioProcessor::paramPulse2Duty       = "duty2";
+juce::String PAPUAudioProcessor::paramPulse2A          = "A2";
+juce::String PAPUAudioProcessor::paramPulse2R          = "R2";
+juce::String PAPUAudioProcessor::paramPulse2OL         = "OL2";
+juce::String PAPUAudioProcessor::paramPulse2OR         = "OR2";
+juce::String PAPUAudioProcessor::paramPulse2Tune       = "tune2";
+juce::String PAPUAudioProcessor::paramPulse2Fine       = "fine2";
+juce::String PAPUAudioProcessor::paramNoiseOL          = "OLN";
+juce::String PAPUAudioProcessor::paramNoiseOR          = "ORL";
+juce::String PAPUAudioProcessor::paramNoiseShift       = "shiftN";
+juce::String PAPUAudioProcessor::paramNoiseStep        = "stepN";
+juce::String PAPUAudioProcessor::paramNoiseRatio       = "ratioN";
+juce::String PAPUAudioProcessor::paramNoiseA           = "AN";
+juce::String PAPUAudioProcessor::paramNoiseR           = "AR";
+juce::String PAPUAudioProcessor::paramOutput           = "output";
+juce::String PAPUAudioProcessor::paramVoices           = "param";
 
 //==============================================================================
 PAPUEngine::PAPUEngine (PAPUAudioProcessor& p)
@@ -49,14 +47,14 @@ void PAPUEngine::prepareToPlay (double sampleRate)
     writeReg (0xff26, 0x8f, true);
 }
 
-int PAPUEngine::parameterIntValue (const String& uid)
+int PAPUEngine::parameterIntValue (const juce::String& uid)
 {
     return processor.parameterIntValue (uid);
 }
 
-void PAPUEngine::runUntil (int& done, AudioSampleBuffer& buffer, int pos)
+void PAPUEngine::runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos)
 {
-    int todo = jmin (pos, buffer.getNumSamples()) - done;
+    int todo = juce::jmin (pos, buffer.getNumSamples()) - done;
 
     while (todo > 0)
     {
@@ -64,7 +62,7 @@ void PAPUEngine::runUntil (int& done, AudioSampleBuffer& buffer, int pos)
         {
             blip_sample_t out[1024];
 
-            int count = int (buf.read_samples (out, jmin (todo, 1024 / 2, (int) buf.samples_avail())));
+            int count = int (buf.read_samples (out, juce::jmin (todo, 1024 / 2, (int) buf.samples_avail())));
 
             auto data0 = buffer.getWritePointer (0, done);
             auto data1 = buffer.getWritePointer (1, done);
@@ -100,17 +98,17 @@ void PAPUEngine::runOscs (int curNote, bool trigger)
         writeReg (0xff10, (sweep << 4) | ((neg ? 1 : 0) << 3) | shift, trigger);
         writeReg (0xff11, (parameterIntValue (PAPUAudioProcessor::paramPulse1Duty) << 6), trigger);
 
-        freq1 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (PAPUAudioProcessor::paramPulse1Tune) + parameterIntValue (PAPUAudioProcessor::paramPulse1Fine) / 100.0f));
+        freq1 = float (gin::getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (PAPUAudioProcessor::paramPulse1Tune) + parameterIntValue (PAPUAudioProcessor::paramPulse1Fine) / 100.0f));
         uint16_t period1 = uint16_t (((4194304 / freq1) - 65536) / -32);
         writeReg (0xff13, period1 & 0xff, trigger);
-        uint8_t a1 = uint8 (parameterIntValue (PAPUAudioProcessor::paramPulse1A));
+        uint8_t a1 = uint8_t (parameterIntValue (PAPUAudioProcessor::paramPulse1A));
         writeReg (0xff12, a1 ? (0x00 | (1 << 3) | a1) : 0xf0, trigger);
         writeReg (0xff14, (trigger ? 0x80 : 0x00) | ((period1 >> 8) & 0x07), trigger);
 
         // Ch 2
         writeReg (0xff16, (parameterIntValue (PAPUAudioProcessor::paramPulse2Duty) << 6), trigger);
 
-        freq2 = float (getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (PAPUAudioProcessor::paramPulse2Tune) + parameterIntValue (PAPUAudioProcessor::paramPulse2Fine) / 100.0f));
+        freq2 = float (gin::getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (PAPUAudioProcessor::paramPulse2Tune) + parameterIntValue (PAPUAudioProcessor::paramPulse2Fine) / 100.0f));
         uint16_t period2 = uint16_t (((4194304 / freq2) - 65536) / -32);
         writeReg (0xff18, period2 & 0xff, trigger);
         uint8_t a2 = uint8_t (parameterIntValue (PAPUAudioProcessor::paramPulse2A));
@@ -128,7 +126,7 @@ void PAPUEngine::runOscs (int curNote, bool trigger)
     else if (trigger)
     {
         uint8_t r1 = uint8_t (parameterIntValue (PAPUAudioProcessor::paramPulse1R));
-        uint8_t a1 = uint8 (parameterIntValue (PAPUAudioProcessor::paramPulse1A));
+        uint8_t a1 = uint8_t (parameterIntValue (PAPUAudioProcessor::paramPulse1A));
 
         if (a1 == 0 && r1 != 0)
         {
@@ -184,7 +182,7 @@ void PAPUEngine::writeReg (int reg, int value, bool force)
     }
 }
 
-void PAPUEngine::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midi)
+void PAPUEngine::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midi)
 {
     uint16_t reg;
 
@@ -242,7 +240,7 @@ void PAPUEngine::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midi)
     runUntil (done, buffer, numSamples);
 }
 
-void PAPUEngine::prepareBlock (AudioSampleBuffer& buffer)
+void PAPUEngine::prepareBlock (juce::AudioSampleBuffer& buffer)
 {
     uint16_t reg;
 
@@ -265,7 +263,7 @@ void PAPUEngine::prepareBlock (AudioSampleBuffer& buffer)
     jassert (done == 0);
 }
 
-void PAPUEngine::handleMessage (const MidiMessage& msg)
+void PAPUEngine::handleMessage (const juce::MidiMessage& msg)
 {
     bool updateBend = false;
 
@@ -296,17 +294,17 @@ void PAPUEngine::handleMessage (const MidiMessage& msg)
 }
 
 //==============================================================================
-String percentTextFunction (const Parameter& p, float v)
+juce::String percentTextFunction (const gin::Parameter& p, float v)
 {
-    return String::formatted("%.0f%%", v / p.getUserRangeEnd() * 100);
+    return juce::String::formatted("%.0f%%", v / p.getUserRangeEnd() * 100);
 }
 
-String enableTextFunction (const Parameter&, float v)
+juce::String enableTextFunction (const gin::Parameter&, float v)
 {
     return v > 0.0f ? "On" : "Off";
 }
 
-String dutyTextFunction (const Parameter&, float v)
+juce::String dutyTextFunction (const gin::Parameter&, float v)
 {
     const int duty = int (v);
     switch (duty)
@@ -319,14 +317,14 @@ String dutyTextFunction (const Parameter&, float v)
     return "";
 }
 
-String arTextFunction (const Parameter&, float v)
+juce::String arTextFunction (const gin::Parameter&, float v)
 {
-    return String::formatted("%.1f s", v * 1.0/64.0 * 16);
+    return juce::String::formatted("%.1f s", v * 1.0/64.0 * 16);
 }
 
-String stTextFunction (const Parameter&, float v)
+juce::String stTextFunction (const gin::Parameter&, float v)
 {
-    String str;
+    juce::String str;
     switch (abs (int (v)))
     {
         case 0: str = "Off"; break;
@@ -345,14 +343,14 @@ String stTextFunction (const Parameter&, float v)
     return str;
 }
 
-String stepTextFunction (const Parameter&, float v)
+juce::String stepTextFunction (const gin::Parameter&, float v)
 {
     return v > 0.0f ? "15" : "7";
 }
 
-String intTextFunction (const Parameter&, float v)
+juce::String intTextFunction (const gin::Parameter&, float v)
 {
-    return String (int (v));
+    return juce::String (int (v));
 }
 
 //==============================================================================
@@ -403,7 +401,7 @@ void PAPUAudioProcessor::releaseResources()
 {
 }
 
-void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midi)
+void PAPUAudioProcessor::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midi)
 {
     int numSamples = buffer.getNumSamples();
     buffer.clear();
@@ -471,9 +469,9 @@ void PAPUAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     }
 }
 
-void PAPUAudioProcessor::runUntil (int& done, AudioSampleBuffer& buffer, int pos)
+void PAPUAudioProcessor::runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos)
 {
-    int todo = jmin (pos, buffer.getNumSamples()) - done;
+    int todo = juce::jmin (pos, buffer.getNumSamples()) - done;
 
     int voices = parameterIntValue (paramVoices);
     for (int i = 0; i < voices; i++)
@@ -516,14 +514,14 @@ bool PAPUAudioProcessor::hasEditor() const
     return true;
 }
 
-AudioProcessorEditor* PAPUAudioProcessor::createEditor()
+juce::AudioProcessorEditor* PAPUAudioProcessor::createEditor()
 {
     return new PAPUAudioProcessorEditor (*this);
 }
 
 //==============================================================================
 // This creates new instances of the plugin..
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new PAPUAudioProcessor();
 }

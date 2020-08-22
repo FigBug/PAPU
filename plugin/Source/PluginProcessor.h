@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 #include "gb_apu/Gb_Apu.h"
 #include "gb_apu/Multi_Buffer.h"
 
@@ -22,23 +22,23 @@ public:
     PAPUEngine (PAPUAudioProcessor& p);
 
     void prepareToPlay (double sampleRate);
-    void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midi);
+    void processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midi);
 
-    void prepareBlock (AudioSampleBuffer& buffer);
-    void handleMessage (const MidiMessage& msg);
-    void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
+    void prepareBlock (juce::AudioSampleBuffer& buffer);
+    void handleMessage (const juce::MidiMessage& msg);
+    void runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos);
 
     int getNote()   { return lastNote; }
 
 private:
-    int parameterIntValue (const String& uid);
+    int parameterIntValue (const juce::String& uid);
     void runOscs (int curNote, bool trigger);
 
     PAPUAudioProcessor& processor;
 
     int lastNote = -1;
     double pitchBend = 0;
-    Array<int> noteQueue;
+    juce::Array<int> noteQueue;
     float freq1 = 0.0f, freq2 = 0.0f;
 
     Gb_Apu apu;
@@ -68,48 +68,48 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer&, MidiBuffer&) override;
+    void processBlock (juce::AudioSampleBuffer&, juce::MidiBuffer&) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;
 
     //==============================================================================
-    static String paramPulse1OL;
-    static String paramPulse1OR;
-    static String paramPulse1Duty;
-    static String paramPulse1A;
-    static String paramPulse1R;
-    static String paramPulse1Tune;
-    static String paramPulse1Fine;
-    static String paramPulse1Sweep;
-    static String paramPulse1Shift;
-    static String paramPulse2OL;
-    static String paramPulse2OR;
-    static String paramPulse2Duty;
-    static String paramPulse2A;
-    static String paramPulse2R;
-    static String paramPulse2Tune;
-    static String paramPulse2Fine;
-    static String paramNoiseOL;
-    static String paramNoiseOR;
-    static String paramNoiseShift;
-    static String paramNoiseStep;
-    static String paramNoiseRatio;
-    static String paramNoiseA;
-    static String paramNoiseR;
-    static String paramOutput;
-    static String paramVoices;
+    static juce::String paramPulse1OL;
+    static juce::String paramPulse1OR;
+    static juce::String paramPulse1Duty;
+    static juce::String paramPulse1A;
+    static juce::String paramPulse1R;
+    static juce::String paramPulse1Tune;
+    static juce::String paramPulse1Fine;
+    static juce::String paramPulse1Sweep;
+    static juce::String paramPulse1Shift;
+    static juce::String paramPulse2OL;
+    static juce::String paramPulse2OR;
+    static juce::String paramPulse2Duty;
+    static juce::String paramPulse2A;
+    static juce::String paramPulse2R;
+    static juce::String paramPulse2Tune;
+    static juce::String paramPulse2Fine;
+    static juce::String paramNoiseOL;
+    static juce::String paramNoiseOR;
+    static juce::String paramNoiseShift;
+    static juce::String paramNoiseStep;
+    static juce::String paramNoiseRatio;
+    static juce::String paramNoiseA;
+    static juce::String paramNoiseR;
+    static juce::String paramOutput;
+    static juce::String paramVoices;
     
     gin::AudioFifo fifo {1, 44100};
 
-    MidiKeyboardState state;    
+    juce::MidiKeyboardState state;
 private:
-    void runUntil (int& done, AudioSampleBuffer& buffer, int pos);
+    void runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos);
     PAPUEngine* findFreeVoice();
     PAPUEngine* findVoiceForNote (int note);
     
-    OwnedArray<PAPUEngine> papus;
+    juce::OwnedArray<PAPUEngine> papus;
     int nextVoice = 0;
 
     //==============================================================================
