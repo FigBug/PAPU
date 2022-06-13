@@ -6,11 +6,9 @@
 
 //==============================================================================
 PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
-  : ProcessorEditor (p, 60, 100), proc (p)
+  : ProcessorEditor (p), proc (p)
 {
     additionalProgramming = "Shay Green";
-    
-    logo = juce::ImageFileFormat::loadFrom (BinaryData::logo_png, BinaryData::logo_pngSize);
     
     addAndMakeVisible (&scope);
     
@@ -30,6 +28,11 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
     
     scope.setNumSamplesPerPixel (2);
     scope.setVerticalZoomFactor (3.0f);
+    scope.setColour (gin::TriggeredScope::lineColourId, findColour (gin::PluginLookAndFeel::grey45ColourId));
+    scope.setColour (gin::TriggeredScope::traceColourId + 0, findColour (gin::PluginLookAndFeel::accentColourId));
+    scope.setColour (gin::TriggeredScope::envelopeColourId + 0, juce::Colours::transparentBlack);
+    scope.setColour (gin::TriggeredScope::traceColourId + 1, findColour (gin::PluginLookAndFeel::accentColourId));
+    scope.setColour (gin::TriggeredScope::envelopeColourId + 1, juce::Colours::transparentBlack);
 }
 
 PAPUAudioProcessorEditor::~PAPUAudioProcessorEditor()
@@ -40,8 +43,6 @@ PAPUAudioProcessorEditor::~PAPUAudioProcessorEditor()
 void PAPUAudioProcessorEditor::paint (juce::Graphics& g)
 {
     ProcessorEditor::paint (g);
-        
-    g.drawImageAt (logo, getWidth() / 2 - logo.getWidth() / 2, 0);
 }
 
 void PAPUAudioProcessorEditor::resized()

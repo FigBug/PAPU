@@ -21,7 +21,6 @@ public:
     PAPUAudioProcessor& proc;
     
     gin::TriggeredScope scope { proc.fifo };
-    juce::Image logo;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PAPUAudioProcessorEditor)
 };

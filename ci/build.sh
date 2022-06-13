@@ -136,14 +136,14 @@ if [ "$OS" = "win" ]; then
   MSBUILD_EXE=$("$VS_WHERE" -latest -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe")
   echo $MSBUILD_EXE
 
-  cd "$ROOT/plugin/Builds/VisualStudio2019"
+  cd "$ROOT/plugin/Builds/VisualStudio2022"
   "$MSBUILD_EXE" "$PLUGIN.sln" "//p:VisualStudioVersion=16.0" "//m" "//t:Build" "//p:Configuration=Release64" "//p:Platform=x64" "//p:PreferredToolArchitecture=x64"
   "$MSBUILD_EXE" "$PLUGIN.sln" "//p:VisualStudioVersion=16.0" "//m" "//t:Build" "//p:Configuration=Release" "//p:PlatformTarget=x86" "//p:PreferredToolArchitecture=x64"
 
   cd "$ROOT/ci/bin"
 
-  cp "$ROOT/plugin/Builds/VisualStudio2019/x64/Release64/VST/${PLUGIN}_64b.dll" .
-  cp "$ROOT/plugin/Builds/VisualStudio2019/Win32/Release/VST/${PLUGIN}_32b.dll" .
+  cp "$ROOT/plugin/Builds/VisualStudio2022/x64/Release64/VST/${PLUGIN}_64b.dll" .
+  cp "$ROOT/plugin/Builds/VisualStudio2022/Win32/Release/VST/${PLUGIN}_32b.dll" .
 
   7z a ${PLUGIN}_Win.zip ${PLUGIN}_64b.dll ${PLUGIN}_32b.dll
 
