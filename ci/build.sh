@@ -80,12 +80,9 @@ if [ "$OS" = "mac" ]; then
   cp -R ~/Library/Audio/Plug-Ins/Components/$PLUGIN.component "$ROOT/ci/bin"
 
   cd "$ROOT/ci/bin"
-  for filename in ./*.vst; do
-    codesign -s "$DEV_APP_ID" -v "$filename" --options=runtime --timestamp --force
-  done
-  for filename in ./*.component; do
-    codesign -s "$DEV_APP_ID" -v "$filename" --options=runtime --timestamp --force
-  done
+  codesign -s "$DEV_APP_ID" -v $PLUGIN.vst --options=runtime --timestamp --force
+  codesign -s "$DEV_APP_ID" -v $PLUGIN.vst --options=runtime --timestamp --force
+  codesign -s "$DEV_APP_ID" -v $PLUGIN.component --options=runtime --timestamp --force
 
   # Build notarize tool
   cd "$ROOT/modules/gin/tools/notarize"
