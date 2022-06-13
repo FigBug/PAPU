@@ -81,7 +81,7 @@ if [ "$OS" = "mac" ]; then
 
   cd "$ROOT/ci/bin"
   codesign -s "$DEV_APP_ID" -v $PLUGIN.vst --options=runtime --timestamp --force
-  codesign -s "$DEV_APP_ID" -v $PLUGIN.vst --options=runtime --timestamp --force
+  codesign -s "$DEV_APP_ID" -v $PLUGIN.vst3 --options=runtime --timestamp --force
   codesign -s "$DEV_APP_ID" -v $PLUGIN.component --options=runtime --timestamp --force
 
   # Build notarize tool
