@@ -76,6 +76,7 @@ if [ "$OS" = "mac" ]; then
   xcodebuild -configuration Release || exit 1
 
   cp -R ~/Library/Audio/Plug-Ins/VST/$PLUGIN.vst "$ROOT/ci/bin"
+  cp -R ~/Library/Audio/Plug-Ins/VST3/$PLUGIN.vst3 "$ROOT/ci/bin"
   cp -R ~/Library/Audio/Plug-Ins/Components/$PLUGIN.component "$ROOT/ci/bin"
 
   cd "$ROOT/ci/bin"
