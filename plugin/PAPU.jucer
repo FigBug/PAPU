@@ -11,7 +11,7 @@
               companyWebsite="www.socalabs.com" companyEmail="info@socalabs.com"
               displaySplashScreen="1" reportAppUsage="0" splashScreenColour="Dark"
               buildStandalone="1" enableIAA="0" cppLanguageStandard="17" companyCopyright="SocaLabs"
-              pluginFormats="buildAU,buildAUv3,buildStandalone,buildVST,buildVST3"
+              pluginFormats="buildAU,buildAUv3,buildLV2,buildStandalone,buildVST,buildVST3"
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
               pluginAUMainType="'aumu'" pluginVSTCategory="kPlugCategSynth"
               defines="JUCE_DISPLAY_SPLASH_SCREEN=0&#10;JUCE_MODAL_LOOPS_PERMITTED=1"
