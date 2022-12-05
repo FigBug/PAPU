@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="JPnRUR" name="PAPU" projectType="audioplug" version="1.2.0"
+<JUCERPROJECT id="JPnRUR" name="PAPU" projectType="audioplug" version="1.1.0"
               bundleIdentifier="com.socalabs.PAPU" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="1" buildAU="1" buildAUv3="1" buildRTAS="0"
               buildAAX="0" pluginName="PAPU" pluginDesc="PAPU" pluginManufacturer="SocaLabs"
@@ -59,7 +59,7 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" extraCompilerFlags="-Wunused-value"
                vstLegacyFolder="../modules/plugin_sdk/vstsdk2.4" hardenedRuntime="1"
-               extraDefs="JUCE_COREGRAPHICS_DRAW_ASYNC=1">
+               extraDefs="JUCE_COREGRAPHICS_DRAW_ASYNC=1" iosDevelopmentTeamID="RLWFGYNE3S">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="PAPU" headerPath="../../../3rdparty/Gb_Snd_Emu-0.1.4&#10;"
                        osxCompatibility="10.11 SDK" enablePluginBinaryCopyStep="1" recommendedWarnings="LLVM"
