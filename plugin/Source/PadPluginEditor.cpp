@@ -10,8 +10,6 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
 {
     additionalProgramming = "Shay Green";
     
-    logo = juce::ImageFileFormat::loadFrom (BinaryData::logo_png, BinaryData::logo_pngSize);
-    
     addAndMakeVisible (scope);
     addAndMakeVisible (keyboard);
     
@@ -37,7 +35,6 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
     scope.setColour (gin::TriggeredScope::traceColourId + 1, findColour (gin::PluginLookAndFeel::accentColourId));
     scope.setColour (gin::TriggeredScope::envelopeColourId + 1, juce::Colours::transparentBlack);
 
-
     keyboard.setKeyWidth (80);
     keyboard.setLowestVisibleKey (60);
     keyboard.setScrollButtonWidth (15);
@@ -51,8 +48,6 @@ PAPUAudioProcessorEditor::~PAPUAudioProcessorEditor()
 void PAPUAudioProcessorEditor::paint (juce::Graphics& g)
 {
     ProcessorEditor::paint (g);
-        
-    g.drawImageAt (logo, getWidth() / 2 - logo.getWidth() / 2, 0);
 }
 
 void PAPUAudioProcessorEditor::resized()

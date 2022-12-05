@@ -21,7 +21,6 @@ public:
     PAPUAudioProcessor& proc;
     
     gin::TriggeredScope scope { proc.fifo };
-    juce::Image logo;
 
     juce::MidiKeyboardComponent keyboard { proc.state, juce::MidiKeyboardComponent::horizontalKeyboard };
     
