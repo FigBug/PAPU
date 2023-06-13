@@ -34,6 +34,8 @@ fi
 ROOT=$(cd "$(dirname "$0")/.."; pwd)
 cd "$ROOT"
 echo "$ROOT"
+rm -Rf bin
+mkdir bin
 
 BRANCH=${GITHUB_REF##*/}
 echo "$BRANCH"
@@ -96,6 +98,7 @@ if [ "$OS" = "mac" ]; then
   # Notarize
   cd "$ROOT/ci/bin"
   zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst $PLUGIN.vst3 $PLUGIN.component
+  cp ${PLUGIN}_Mac.zip "$ROOT/bin"
 
   "$ROOT/ci/bin/notarize" -ns ${PLUGIN}_Mac.zip $APPLE_USER $APPLE_PASS com.figbug.$PLUGIN.vst
 
@@ -124,6 +127,7 @@ if [ "$OS" = "linux" ]; then
   # Upload
   cd "$ROOT/ci/bin"
   zip -r ${PLUGIN}_Linux.zip $PLUGIN.so $PLUGIN.vst3 $PLUGIN.lv2
+  cp ${PLUGIN}_Linux.zip "$ROOT/bin"
 
   if [ "$BRANCH" = "release" ]; then
     curl -F "files=@${PLUGIN}_Linux.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
@@ -153,6 +157,7 @@ if [ "$OS" = "win" ]; then
     cp "$ROOT/plugin/Builds/VisualStudio2022/Win32/Release/VST3/${PLUGIN}.vst3/Contents/x86-win/${PLUGIN}.vst3" VST3_32
 
   7z a ${PLUGIN}_Win.zip VST VST_32 VST3 VST3_32
+  cp ${PLUGIN}_Win.zip "$ROOT/bin"
 
   if [ "$BRANCH" = "release" ]; then
     curl -F "files=@${PLUGIN}_Win.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
