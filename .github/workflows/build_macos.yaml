@@ -28,4 +28,3 @@ jobs:
         with:
           name: Binaries
           path: bin
-          retention-days: 1
