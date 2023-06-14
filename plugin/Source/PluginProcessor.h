@@ -30,6 +30,9 @@ public:
 
     int getNote()   { return lastNote; }
 
+    int waveOn = 0;
+	int releaseCounter = 0;
+
 private:
     int parameterIntValue (const juce::String& uid);
     void runOscs (int curNote, bool trigger);
@@ -39,7 +42,10 @@ private:
     int lastNote = -1;
     double pitchBend = 0;
     juce::Array<int> noteQueue;
-    float freq1 = 0.0f, freq2 = 0.0f;
+    float freq1 = 0.0f, freq2 = 0.0f, freq3 = 0.0f;
+
+    // uint8_t pat[16] = {0x2, 0x46, 0x8a, 0xce, 0xff, 0xfe, 0xed, 0xdc, 0xcb, 0xa9, 0x87, 0x65, 0x44, 0x33, 0x22, 0x11};
+    uint8_t pat[16] = { 0x2, 0x46, 0x8a, 0xcd, 0xef, 0xfe, 0xde, 0xff, 0xee, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10,  };
 
     Gb_Apu apu;
     Stereo_Buffer buf;
@@ -93,14 +99,17 @@ public:
     static juce::String paramPulse2Fine;
     static juce::String paramNoiseOL;
     static juce::String paramNoiseOR;
+    static juce::String paramNoiseA;
+    static juce::String paramNoiseR;
     static juce::String paramNoiseShift;
     static juce::String paramNoiseStep;
     static juce::String paramNoiseRatio;
-    static juce::String paramNoiseA;
-    static juce::String paramNoiseR;
+    static juce::String paramWaveOL;
+    static juce::String paramWaveOR;
+    static juce::String paramWaveWfm;
     static juce::String paramOutput;
     static juce::String paramVoices;
-    
+
     gin::AudioFifo fifo {1, 44100};
 
     juce::MidiKeyboardState state;
@@ -108,11 +117,10 @@ private:
     void runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos);
     PAPUEngine* findFreeVoice();
     PAPUEngine* findVoiceForNote (int note);
-    
+
     juce::OwnedArray<PAPUEngine> papus;
     int nextVoice = 0;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PAPUAudioProcessor)
 };
-

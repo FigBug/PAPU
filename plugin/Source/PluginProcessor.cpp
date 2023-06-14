@@ -25,6 +25,9 @@ juce::String PAPUAudioProcessor::paramNoiseStep        = "stepN";
 juce::String PAPUAudioProcessor::paramNoiseRatio       = "ratioN";
 juce::String PAPUAudioProcessor::paramNoiseA           = "AN";
 juce::String PAPUAudioProcessor::paramNoiseR           = "AR";
+juce::String PAPUAudioProcessor::paramWaveOL           = "OLW";
+juce::String PAPUAudioProcessor::paramWaveOR           = "ORW";
+juce::String PAPUAudioProcessor::paramWaveWfm          = "wavewfm";
 juce::String PAPUAudioProcessor::paramOutput           = "output";
 juce::String PAPUAudioProcessor::paramVoices           = "param";
 
@@ -43,6 +46,13 @@ void PAPUEngine::prepareToPlay (double sampleRate)
     buf.set_sample_rate (long (sampleRate));
 
     apu.output (buf.center(), buf.left(), buf.right());
+
+    writeReg (0xff1A, 0x00, true); // reset
+    // set pattern
+    for (uint8_t s = 0; s < 16; s++) {
+    	writeReg (0xff30 + s, pat[s] & 0xff, true);
+    }
+    writeReg (0xff1A, 0x80, true); // enable
 
     writeReg (0xff26, 0x8f, true);
 }
@@ -88,6 +98,22 @@ void PAPUEngine::runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos)
 
 void PAPUEngine::runOscs (int curNote, bool trigger)
 {
+	if (releaseCounter > 0) {
+		releaseCounter -= 1;
+		if ((releaseCounter % 3) == 0) {
+			switch (waveOn) {
+				case 0x40:
+					waveOn = 0x60;
+					writeReg ( 0xff1C, waveOn, trigger);
+					break;
+				case 0x60:
+					waveOn = 0x00;
+					writeReg ( 0xff1C, waveOn, trigger);
+					break;
+			}
+		}
+	}
+
     if (curNote != -1)
     {
         // Ch 1
@@ -114,6 +140,14 @@ void PAPUEngine::runOscs (int curNote, bool trigger)
         uint8_t a2 = uint8_t (parameterIntValue (PAPUAudioProcessor::paramPulse2A));
         writeReg (0xff17, a2 ? (0x00 | (1 << 3) | a2) : 0xf0, trigger);
         writeReg (0xff19, (trigger ? 0x80 : 0x00) | ((period2 >> 8) & 0x07), trigger);
+
+        // Ch 3
+		waveOn = 0x20;
+        freq3 = float (gin::getMidiNoteInHertz (curNote + pitchBend));
+        uint16_t period3 = uint16_t (-((65536 - 2048 * freq3)/freq3));
+        writeReg ( 0xff1D, period3 & 0xff, trigger); // lower freq bits
+        writeReg ( 0xff1C, waveOn, trigger);
+        writeReg ( 0xff1E, (trigger ? 0x80 : 0x00) | ((period3 >> 8) & 0x07), trigger); // trigger, high freq bits
 
         // Noise
         uint8_t aN = uint8_t (parameterIntValue (PAPUAudioProcessor::paramNoiseA));
@@ -157,6 +191,12 @@ void PAPUEngine::runOscs (int curNote, bool trigger)
             writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, trigger);
         }
 
+		waveOn = 0x40; // 50%
+		releaseCounter = 3 + 3 + 3 + 3;
+        uint16_t period3 = uint16_t (-((65536 - 2048 * freq3)/freq3));
+        writeReg ( 0xff1D, period3 & 0xff, trigger); // lower freq bits
+        writeReg ( 0xff1C, waveOn, trigger); // set 100% volume if trigger, else 0%
+
         uint8_t rN = uint8_t (parameterIntValue (PAPUAudioProcessor::paramNoiseR));
         uint8_t aN = uint8_t (parameterIntValue (PAPUAudioProcessor::paramNoiseA));
 
@@ -193,6 +233,8 @@ void PAPUEngine::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer
           (parameterIntValue (PAPUAudioProcessor::paramPulse1OR) ? 0x01 : 0x00) |
           (parameterIntValue (PAPUAudioProcessor::paramPulse2OL) ? 0x20 : 0x00) |
           (parameterIntValue (PAPUAudioProcessor::paramPulse2OR) ? 0x02 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramWaveOL)   ? 0x40 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramWaveOR)   ? 0x04 : 0x00) |
           (parameterIntValue (PAPUAudioProcessor::paramNoiseOL)  ? 0x80 : 0x00) |
           (parameterIntValue (PAPUAudioProcessor::paramNoiseOR)  ? 0x08 : 0x00);
 
@@ -251,6 +293,8 @@ void PAPUEngine::prepareBlock (juce::AudioSampleBuffer& buffer)
           (parameterIntValue (PAPUAudioProcessor::paramPulse1OR) ? 0x01 : 0x00) |
           (parameterIntValue (PAPUAudioProcessor::paramPulse2OL) ? 0x20 : 0x00) |
           (parameterIntValue (PAPUAudioProcessor::paramPulse2OR) ? 0x02 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramWaveOL)   ? 0x40 : 0x00) |
+          (parameterIntValue (PAPUAudioProcessor::paramWaveOR)   ? 0x04 : 0x00) |
           (parameterIntValue (PAPUAudioProcessor::paramNoiseOL)  ? 0x80 : 0x00) |
           (parameterIntValue (PAPUAudioProcessor::paramNoiseOR)  ? 0x08 : 0x00);
 
@@ -336,10 +380,10 @@ juce::String stTextFunction (const gin::Parameter&, float v)
         case 6: str = "46.9 ms"; break;
         case 7: str = "54.7 ms"; break;
     }
-    
+
     if (v < 0)
         str = "-" + str;
-    
+
     return str;
 }
 
@@ -356,8 +400,8 @@ juce::String intTextFunction (const gin::Parameter&, float v)
 //==============================================================================
 PAPUAudioProcessor::PAPUAudioProcessor()
 {
-    addExtParam (paramPulse1OL,    "Pulse 1 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
-    addExtParam (paramPulse1OR,    "Pulse 1 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse1OL,    "Pulse 1 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse1OR,    "Pulse 1 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
     addExtParam (paramPulse1Duty,  "Pulse 1 Duty",      "PW",      "",  {    0.0f,   3.0f, 1.0f, 1.0f },  0.0f, 0.0f, dutyTextFunction);
     addExtParam (paramPulse1A,     "Pulse 1 A",         "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
     addExtParam (paramPulse1R,     "Pulse 1 R",         "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
@@ -379,6 +423,9 @@ PAPUAudioProcessor::PAPUAudioProcessor()
     addExtParam (paramNoiseShift,  "Noise Shift",       "Shift",   "",  {    0.0f,  13.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
     addExtParam (paramNoiseStep,   "Noise Step",        "Steps",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, stepTextFunction);
     addExtParam (paramNoiseRatio,  "Noise Ratio",       "Ratio",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveOL,      "Wave OL",           "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
+    addExtParam (paramWaveOR,      "Wave OR",           "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
+    addExtParam (paramWaveWfm,     "WaveWfm",           "WaveWfm", "",  {    0.0f,   5.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
     addExtParam (paramOutput,      "Output",            "Output",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  7.0f, 0.0f, percentTextFunction);
     addExtParam (paramVoices,      "Voices",            "Voices",  "",  {    1.0f,   8.0f, 1.0f, 1.0f },  1.0f, 0.0f, intTextFunction);
 
@@ -461,10 +508,10 @@ void PAPUAudioProcessor::processBlock (juce::AudioSampleBuffer& buffer, juce::Mi
         auto dataR = buffer.getReadPointer (1);
 
         auto mono = (float*) alloca (size_t (numSamples) * sizeof (float));
-        
+
         for (int i = 0; i < numSamples; i++)
             mono[i] = (dataL[i] + dataR[i]) / 2.0f;
-        
+
         fifo.writeMono (mono, numSamples);
     }
 }
