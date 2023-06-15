@@ -111,15 +111,15 @@ void Gb_Square::reset()
 {
 	phase = 1;
 	duty = 1;
-	
+
 	sweep_period = 0;
 	sweep_delay = 0;
 	sweep_shift = 0;
 	sweep_dir = 0;
 	sweep_freq = 0;
-	
+
 	new_length = 0;
-	
+
 	Gb_Env::reset();
 }
 
@@ -134,14 +134,14 @@ void Gb_Square::clock_sweep()
 	{
 		sweep_delay = sweep_period;
 		frequency = sweep_freq;
-		
+
 		period = (2048 - frequency) * 4;
-		
+
 		int offset = sweep_freq >> sweep_shift;
 		if ( sweep_dir )
 			offset = -offset;
 		sweep_freq += offset;
-		
+
 		if ( sweep_freq < 0 )
 		{
 			sweep_freq = 0;
@@ -157,7 +157,7 @@ void Gb_Square::clock_sweep()
 void Gb_Square::write_register( int reg, int value )
 {
 	static unsigned char const duty_table [4] = { 1, 2, 4, 6 };
-	
+
 	switch ( reg )
 	{
 	case 0:
@@ -165,17 +165,17 @@ void Gb_Square::write_register( int reg, int value )
 		sweep_shift = value & 7;
 		sweep_dir = value & 0x08;
 		break;
-	
+
 	case 1:
 		new_length = length = 64 - (value & 0x3f);
 		duty = duty_table [value >> 6];
 		break;
-	
+
 	case 3:
 		frequency = (frequency & ~0xFF) + value;
 		length = new_length;
 		break;
-	
+
 	case 4:
 		frequency = (value & 7) * 0x100 + (frequency & 0xFF);
 		length = new_length;
@@ -190,9 +190,9 @@ void Gb_Square::write_register( int reg, int value )
 		}
 		break;
 	}
-	
+
 	period = (2048 - frequency) * 4;
-	
+
 	Gb_Env::write_register( reg, value );
 }
 
@@ -200,7 +200,7 @@ void Gb_Square::run( gb_time_t time, gb_time_t end_time )
 {
 	// to do: when frequency goes above 20000 Hz output should actually be 1/2 volume
 	// rather than 0
-	
+
 	if ( !enabled || (!length && length_enabled) || !volume || sweep_freq == 2048 ||
 			!frequency || period < 27 )
 	{
@@ -220,7 +220,7 @@ void Gb_Square::run( gb_time_t time, gb_time_t end_time )
 			synth->offset( time, amp - last_amp, output );
 			last_amp = amp;
 		}
-		
+
 		time += delay;
 		if ( time < end_time )
 		{
@@ -239,7 +239,7 @@ void Gb_Square::run( gb_time_t time, gb_time_t end_time )
 				time += period;
 			}
 			while ( time < end_time );
-			
+
 			this->phase = phase;
 			last_amp = amp >> 1;
 		}
@@ -270,20 +270,20 @@ void Gb_Wave::write_register( int reg, int value )
 		new_enabled = value & 0x80;
 		enabled &= new_enabled;
 		break;
-	
+
 	case 1:
 		new_length = length = 256 - value;
 		break;
-	
+
 	case 2:
 		volume = ((value >> 5) & 3);
 		volume_shift = (volume - 1) & 7; // silence = 7
 		break;
-	
+
 	case 3:
 		frequency = (frequency & ~0xFF) + value;
 		break;
-	
+
 	case 4:
 		frequency = (value & 7) * 0x100 + (frequency & 0xFF);
 		if ( new_enabled && (value & trigger) )
@@ -294,9 +294,9 @@ void Gb_Wave::write_register( int reg, int value )
 		}
 		break;
 	}
-	
+
 	period = (2048 - frequency) * 2;
-	
+
 	Gb_Osc::write_register( reg, value );
 }
 
@@ -315,7 +315,7 @@ void Gb_Wave::run( gb_time_t time, gb_time_t end_time )
 	else
 	{
 		int const vol_factor = global_volume * 2;
-		
+
 		// wave data or shift may have changed
 		int diff = (wave [wave_pos] >> volume_shift) * vol_factor - last_amp;
 		if ( diff )
@@ -323,19 +323,25 @@ void Gb_Wave::run( gb_time_t time, gb_time_t end_time )
 			last_amp += diff;
 			synth->offset( time, diff, output );
 		}
-		
+
 		time += delay;
 		if ( time < end_time )
 		{
 			int const volume_shift = this->volume_shift;
 		 	int wave_pos = this->wave_pos;
-		 	
+
 			do
 			{
 				wave_pos = unsigned (wave_pos + 1) % wave_size;
 				int amp = (wave [wave_pos] >> volume_shift) * vol_factor;
 				int delta = amp - last_amp;
-				if ( delta )
+                if (((last_amp > 7 && amp <= 7) || (last_amp < 7 && amp >= 7) || amp == 7) && disableOnZeroCrossing)
+                {
+                    enabled = false;
+                    disableOnZeroCrossing = false;
+                    continue;
+                }
+				else if ( delta )
 				{
 					last_amp = amp;
 					synth->offset_inline( time, delta, output );
@@ -343,7 +349,7 @@ void Gb_Wave::run( gb_time_t time, gb_time_t end_time )
 				time += period;
 			}
 			while ( time < end_time );
-			
+
 			this->wave_pos = wave_pos;
 		}
 		delay = int (time - end_time);
@@ -390,7 +396,7 @@ void Gb_Noise::write_register( int reg, int value )
 		bits = ~0u;
 		length = new_length;
 	}
-	
+
 	Gb_Env::write_register( reg, value );
 }
 
@@ -413,7 +419,7 @@ void Gb_Noise::run( gb_time_t time, gb_time_t end_time )
 			synth->offset( time, amp - last_amp, output );
 			last_amp = amp;
 		}
-		
+
 		time += delay;
 		if ( time < end_time )
 		{
@@ -425,7 +431,7 @@ void Gb_Noise::run( gb_time_t time, gb_time_t end_time )
 			const unsigned mask = ~(1u << tap);
 			unsigned bits = this->bits;
 			amp *= 2;
-			
+
 			do {
 				unsigned feedback = bits;
 				bits >>= 1;
@@ -441,7 +447,7 @@ void Gb_Noise::run( gb_time_t time, gb_time_t end_time )
 				resampled_time += resampled_period;
 			}
 			while ( time < end_time );
-			
+
 			this->bits = bits;
 			last_amp = amp >> 1;
 		}

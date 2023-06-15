@@ -25,12 +25,12 @@ Gb_Apu::Gb_Apu()
 	square1.has_sweep = true;
 	wave.synth  = &other_synth;
 	noise.synth = &other_synth;
-	
+
 	oscs [0] = &square1;
 	oscs [1] = &square2;
 	oscs [2] = &wave;
 	oscs [3] = &noise;
-	
+
 	volume( 1.0 );
 	reset();
 }
@@ -64,19 +64,19 @@ void Gb_Apu::reset()
 	last_time = 0;
 	frame_count = 0;
 	stereo_found = false;
-	
+
 	square1.reset();
 	square2.reset();
 	wave.reset();
 	noise.reset();
-	
+
 	memset( regs, 0, sizeof regs );
 }
 
 void Gb_Apu::osc_output( int index, Blip_Buffer* center, Blip_Buffer* left, Blip_Buffer* right )
 {
 	require( (unsigned) index < osc_count );
-	
+
 	Gb_Osc& osc = *oscs [index];
 	if ( center && !left && !right )
 	{
@@ -95,18 +95,22 @@ void Gb_Apu::osc_output( int index, Blip_Buffer* center, Blip_Buffer* left, Blip
 	osc.output = osc.outputs [osc.output_select];
 }
 
+void Gb_Apu::stopWave()
+{
+    wave.disableOnZeroCrossing = true;
+}
 void Gb_Apu::run_until( gb_time_t end_time )
 {
 	require( end_time >= last_time ); // end_time must not be before previous time
 	if ( end_time == last_time )
 		return;
-	
+
 	while ( true )
 	{
 		gb_time_t time = next_frame_time;
 		if ( time > end_time )
 			time = end_time;
-		
+
 		// run oscillators
 		for ( int i = 0; i < osc_count; ++i ) {
 			Gb_Osc& osc = *oscs [i];
@@ -117,18 +121,18 @@ void Gb_Apu::run_until( gb_time_t end_time )
 			}
 		}
 		last_time = time;
-		
+
 		if ( time == end_time )
 			break;
-		
+
 		next_frame_time += 4194304 / 256; // 256 Hz
-		
+
 		// 256 Hz actions
 		square1.clock_length();
 		square2.clock_length();
 		wave.clock_length();
 		noise.clock_length();
-		
+
 		frame_count = (frame_count + 1) & 3;
 		if ( frame_count == 0 ) {
 			// 64 Hz actions
@@ -136,7 +140,7 @@ void Gb_Apu::run_until( gb_time_t end_time )
 			square2.clock_envelope();
 			noise.clock_envelope();
 		}
-		
+
 		if ( frame_count & 1 )
 			square1.clock_sweep(); // 128 Hz action
 	}
@@ -146,13 +150,13 @@ bool Gb_Apu::end_frame( gb_time_t end_time )
 {
 	if ( end_time > last_time )
 		run_until( end_time );
-	
+
 	assert( next_frame_time >= end_time );
 	next_frame_time -= end_time;
-	
+
 	assert( last_time >= end_time );
 	last_time -= end_time;
-	
+
 	bool result = stereo_found;
 	stereo_found = false;
 	return result;
@@ -161,20 +165,20 @@ bool Gb_Apu::end_frame( gb_time_t end_time )
 void Gb_Apu::write_register( gb_time_t time, gb_addr_t addr, int data )
 {
 	require( (unsigned) data < 0x100 );
-	
+
 	int reg = addr - start_addr;
 	if ( (unsigned) reg >= register_count )
 		return;
-	
+
 	run_until( time );
-	
+
 	regs [reg] = data;
-	
+
 	if ( addr < 0xff24 )
 	{
 		// oscillator
 		int index = reg / 5;
-		oscs [index]->write_register( reg - index * 5, data ); 
+		oscs [index]->write_register( reg - index * 5, data );
 	}
 	// added
 	else if ( addr == 0xff24 )
@@ -200,17 +204,17 @@ void Gb_Apu::write_register( gb_time_t time, gb_addr_t addr, int data )
 				}
 				osc.global_volume = global_volume;
 			}
-			
+
 			if ( !any_enabled && square1.outputs [3] )
 				square_synth.offset( time, (global_volume - old_volume) * 15 * 2, square1.outputs [3] );
 		}
 	}
-	
+
 	else if ( addr == 0xff25 || addr == 0xff26 )
 	{
 		int mask = (regs [0xff26 - start_addr] & 0x80) ? ~0 : 0;
 		int flags = regs [0xff25 - start_addr] & mask;
-		
+
 		// left/right assignments
 		for ( int i = 0; i < osc_count; i++ )
 		{
@@ -240,11 +244,11 @@ int Gb_Apu::read_register( gb_time_t time, gb_addr_t addr )
 {
 	// function now takes actual address, i.e. 0xFFXX
 	require( start_addr <= addr && addr <= end_addr );
-	
+
 	run_until( time );
-	
+
 	int data = regs [addr - start_addr];
-	
+
 	if ( addr == 0xff26 )
 	{
 		data &= 0xf0;

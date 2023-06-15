@@ -98,22 +98,6 @@ void PAPUEngine::runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos)
 
 void PAPUEngine::runOscs (int curNote, bool trigger)
 {
-	if (releaseCounter > 0) {
-		releaseCounter -= 1;
-		if ((releaseCounter % 3) == 0) {
-			switch (waveOn) {
-				case 0x40:
-					waveOn = 0x60;
-					writeReg ( 0xff1C, waveOn, trigger);
-					break;
-				case 0x60:
-					waveOn = 0x00;
-					writeReg ( 0xff1C, waveOn, trigger);
-					break;
-			}
-		}
-	}
-
     if (curNote != -1)
     {
         // Ch 1
@@ -191,11 +175,10 @@ void PAPUEngine::runOscs (int curNote, bool trigger)
             writeReg (0xff17, r2 ? (0xf0 | (0 << 3) | r2) : 0, trigger);
         }
 
-		waveOn = 0x40; // 50%
-		releaseCounter = 3 + 3 + 3 + 3;
-        uint16_t period3 = uint16_t (-((65536 - 2048 * freq3)/freq3));
-        writeReg ( 0xff1D, period3 & 0xff, trigger); // lower freq bits
-        writeReg ( 0xff1C, waveOn, trigger); // set 100% volume if trigger, else 0%
+        apu.stopWave();
+        // uint16_t period3 = uint16_t (-((65536 - 2048 * freq3)/freq3));
+        // writeReg ( 0xff1D, period3 & 0xff, trigger); // lower freq bits
+        // writeReg ( 0xff1E, (trigger ? 0x80 : 0x00) | ((period3 >> 8) & 0x07), trigger); // trigger, high freq bits
 
         uint8_t rN = uint8_t (parameterIntValue (PAPUAudioProcessor::paramNoiseR));
         uint8_t aN = uint8_t (parameterIntValue (PAPUAudioProcessor::paramNoiseA));
