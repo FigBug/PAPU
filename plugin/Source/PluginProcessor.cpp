@@ -50,7 +50,9 @@ void PAPUEngine::prepareToPlay (double sampleRate)
     writeReg (0xff1A, 0x00, true); // reset
     // set pattern
     for (uint8_t s = 0; s < 16; s++) {
-    	writeReg (0xff30 + s, pat[s] & 0xff, true);
+        uint8_t high = (wave_samples[3][s * 2]) & 0xff;
+        uint8_t low = (wave_samples[3][(s * 2) + 1]) & 0xff;
+    	writeReg (0xff30 + s, (low | (high << 4)), true);
     }
     writeReg (0xff1A, 0x80, true); // enable
 
