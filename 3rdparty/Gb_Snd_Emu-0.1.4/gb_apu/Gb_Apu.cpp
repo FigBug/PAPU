@@ -97,7 +97,7 @@ void Gb_Apu::osc_output( int index, Blip_Buffer* center, Blip_Buffer* left, Blip
 
 void Gb_Apu::stopWave()
 {
-    wave.disableOnZeroCrossing = true;
+    wave.disableOnZeroCrossing = 32;
 }
 void Gb_Apu::run_until( gb_time_t end_time )
 {

@@ -27,7 +27,7 @@ juce::String PAPUAudioProcessor::paramNoiseA           = "AN";
 juce::String PAPUAudioProcessor::paramNoiseR           = "AR";
 juce::String PAPUAudioProcessor::paramWaveOL           = "OLW";
 juce::String PAPUAudioProcessor::paramWaveOR           = "ORW";
-juce::String PAPUAudioProcessor::paramWaveWfm          = "wavewfm";
+juce::String PAPUAudioProcessor::paramWaveWfm          = "waveform";
 juce::String PAPUAudioProcessor::paramOutput           = "output";
 juce::String PAPUAudioProcessor::paramVoices           = "param";
 
@@ -50,8 +50,8 @@ void PAPUEngine::prepareToPlay (double sampleRate)
     writeReg (0xff1A, 0x00, true); // reset
     // set pattern
     for (uint8_t s = 0; s < 16; s++) {
-        uint8_t high = (wave_samples[3][s * 2]) & 0xff;
-        uint8_t low = (wave_samples[3][(s * 2) + 1]) & 0xff;
+        uint8_t high = (wave_samples[waveIndex][s * 2]) & 0xff;
+        uint8_t low = (wave_samples[waveIndex][(s * 2) + 1]) & 0xff;
     	writeReg (0xff30 + s, (low | (high << 4)), true);
     }
     writeReg (0xff1A, 0x80, true); // enable
@@ -128,11 +128,10 @@ void PAPUEngine::runOscs (int curNote, bool trigger)
         writeReg (0xff19, (trigger ? 0x80 : 0x00) | ((period2 >> 8) & 0x07), trigger);
 
         // Ch 3
-		waveOn = 0x20;
         freq3 = float (gin::getMidiNoteInHertz (curNote + pitchBend));
         uint16_t period3 = uint16_t (-((65536 - 2048 * freq3)/freq3));
         writeReg ( 0xff1D, period3 & 0xff, trigger); // lower freq bits
-        writeReg ( 0xff1C, waveOn, trigger);
+        writeReg ( 0xff1C, 0x20, trigger);
         writeReg ( 0xff1E, (trigger ? 0x80 : 0x00) | ((period3 >> 8) & 0x07), trigger); // trigger, high freq bits
 
         // Noise
@@ -322,6 +321,23 @@ void PAPUEngine::handleMessage (const juce::MidiMessage& msg)
     }
 }
 
+void PAPUEngine::setWave(uint8_t index)
+{
+    if (index == waveIndex)
+        return;
+    
+    waveIndex = index;
+    writeReg (0xff1A, 0x00, true); // reset
+    // set pattern
+    for (uint8_t s = 0; s < 16; s++) {
+        uint8_t high = (wave_samples[waveIndex][s * 2]) & 0xff;
+        uint8_t low = (wave_samples[waveIndex][(s * 2) + 1]) & 0xff;
+        writeReg (0xff30 + s, (low | (high << 4)), true);
+    }
+    writeReg (0xff1A, 0x80, true); // enable
+    printf("done\n");
+}
+
 //==============================================================================
 juce::String percentTextFunction (const gin::Parameter& p, float v)
 {
@@ -410,7 +426,7 @@ PAPUAudioProcessor::PAPUAudioProcessor()
     addExtParam (paramNoiseRatio,  "Noise Ratio",       "Ratio",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
     addExtParam (paramWaveOL,      "Wave OL",           "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
     addExtParam (paramWaveOR,      "Wave OR",           "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
-    addExtParam (paramWaveWfm,     "WaveWfm",           "WaveWfm", "",  {    0.0f,   5.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveWfm,     "Waveform",           "Waveform", "",  {    0.0f,   14.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
     addExtParam (paramOutput,      "Output",            "Output",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  7.0f, 0.0f, percentTextFunction);
     addExtParam (paramVoices,      "Voices",            "Voices",  "",  {    1.0f,   8.0f, 1.0f, 1.0f },  1.0f, 0.0f, intTextFunction);
 
@@ -441,6 +457,15 @@ void PAPUAudioProcessor::processBlock (juce::AudioSampleBuffer& buffer, juce::Mi
    #if JUCE_IOS
     state.processNextMidiBuffer (midi, 0, numSamples, true);
    #endif
+   
+    uint8_t new_waveIndex = parameterIntValue (PAPUAudioProcessor::paramWaveWfm);
+    if (new_waveIndex != papus[0]->waveIndex) {
+        printf("New index! %d\n", new_waveIndex);
+        for (int i = 0; i < 16; i++)
+        {
+            papus[i]->setWave(new_waveIndex);
+        }
+    }
 
     int voices = parameterIntValue (paramVoices);
 

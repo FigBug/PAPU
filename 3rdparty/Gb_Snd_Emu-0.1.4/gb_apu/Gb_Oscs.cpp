@@ -335,11 +335,21 @@ void Gb_Wave::run( gb_time_t time, gb_time_t end_time )
 				wave_pos = unsigned (wave_pos + 1) % wave_size;
 				int amp = (wave [wave_pos] >> volume_shift) * vol_factor;
 				int delta = amp - last_amp;
-                if (((last_amp > 7 && amp <= 7) || (last_amp < 7 && amp >= 7) || amp == 7) && disableOnZeroCrossing)
-                {
-                    enabled = false;
-                    disableOnZeroCrossing = false;
-                    continue;
+                if (disableOnZeroCrossing >= 0) { // disableOnZeroCrossing has been requested, initially set at 32 == one full period
+                    // from above to below, from below to above or equals 7, digital 7 is 0
+                    // if disableOnZeroCrossing equals 32, one full period has passed, just stop here!
+                    if ((last_amp > 7 && amp <= 7) || (last_amp < 7 && amp >= 7) || (amp == 7) || (disableOnZeroCrossing == 0))
+                    {
+                        enabled = false;
+                        disableOnZeroCrossing = -1;
+                        synth->offset_inline( time, 7, output );
+                        time = end_time;
+                        continue;
+                    }
+                    else // decrement the zc timer
+                    {
+                        disableOnZeroCrossing -= 1;
+                    }
                 }
 				else if ( delta )
 				{

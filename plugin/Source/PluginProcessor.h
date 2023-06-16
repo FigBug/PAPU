@@ -48,9 +48,9 @@ public:
 
     int getNote()   { return lastNote; }
 
-    int waveOn = 0;
-	int releaseCounter = 0;
-
+    uint8_t waveIndex = 0;
+    void setWave(uint8_t index);
+    
 private:
     int parameterIntValue (const juce::String& uid);
     void runOscs (int curNote, bool trigger);
@@ -61,7 +61,6 @@ private:
     double pitchBend = 0;
     juce::Array<int> noteQueue;
     float freq1 = 0.0f, freq2 = 0.0f, freq3 = 0.0f;
-
 
     Gb_Apu apu;
     Stereo_Buffer buf;
