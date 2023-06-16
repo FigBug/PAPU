@@ -74,21 +74,21 @@ void PAPUAudioProcessorEditor::resized()
     {
         auto c = controls[i + 9 + 7];
         if (i == 0)
-            c->setBounds (getGridArea (0, 2).removeFromTop (cy / 2).translated (0, 7));
-        else if (i == 1)
-            c->setBounds (getGridArea (0, 2).removeFromBottom (cy / 2));
-        else
-            c->setBounds (getGridArea (i - 1, 2));
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        auto c = controls[i + 9 + 7 + 7];
-        if (i == 0)
             c->setBounds (getGridArea (0, 3).removeFromTop (cy / 2).translated (0, 7));
         else if (i == 1)
             c->setBounds (getGridArea (0, 3).removeFromBottom (cy / 2));
         else
             c->setBounds (getGridArea (i - 1, 3));
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        auto c = controls[i + 9 + 7 + 7];
+        if (i == 0)
+            c->setBounds (getGridArea (0, 2).removeFromTop (cy / 2).translated (0, 7));
+        else if (i == 1)
+            c->setBounds (getGridArea (0, 2).removeFromBottom (cy / 2));
+        else
+            c->setBounds (getGridArea (i - 1, 2));
     }
 
     int n = controls.size();

@@ -55,6 +55,7 @@ public:
 	bool end_frame( gb_time_t );
 
     void stopWave();
+    void resetStopWave();
 
 private:
 	// noncopyable

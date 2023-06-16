@@ -128,6 +128,7 @@ void PAPUEngine::runOscs (int curNote, bool trigger)
         writeReg (0xff19, (trigger ? 0x80 : 0x00) | ((period2 >> 8) & 0x07), trigger);
 
         // Ch 3
+        apu.resetStopWave();
         freq3 = float (gin::getMidiNoteInHertz (curNote + pitchBend));
         uint16_t period3 = uint16_t (-((65536 - 2048 * freq3)/freq3));
         writeReg ( 0xff1D, period3 & 0xff, trigger); // lower freq bits
