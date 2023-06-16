@@ -80,7 +80,7 @@ void PAPUAudioProcessorEditor::resized()
         else
             c->setBounds (getGridArea (i - 1, 3));
     }
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 5; i++)
     {
         auto c = controls[i + 9 + 7 + 7];
         if (i == 0)

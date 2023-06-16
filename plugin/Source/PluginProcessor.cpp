@@ -28,6 +28,8 @@ juce::String PAPUAudioProcessor::paramNoiseR           = "AR";
 juce::String PAPUAudioProcessor::paramWaveOL           = "OLW";
 juce::String PAPUAudioProcessor::paramWaveOR           = "ORW";
 juce::String PAPUAudioProcessor::paramWaveWfm          = "waveform";
+juce::String PAPUAudioProcessor::paramWaveTune         = "tunewave";
+juce::String PAPUAudioProcessor::paramWaveFine         = "finewave";
 juce::String PAPUAudioProcessor::paramOutput           = "output";
 juce::String PAPUAudioProcessor::paramVoices           = "param";
 
@@ -129,7 +131,7 @@ void PAPUEngine::runOscs (int curNote, bool trigger)
 
         // Ch 3
         apu.resetStopWave();
-        freq3 = float (gin::getMidiNoteInHertz (curNote + pitchBend));
+        freq3 = float (gin::getMidiNoteInHertz (curNote + pitchBend + parameterIntValue (PAPUAudioProcessor::paramWaveTune) + parameterIntValue (PAPUAudioProcessor::paramWaveFine) / 100.0f));
         uint16_t period3 = uint16_t (-((65536 - 2048 * freq3)/freq3));
         writeReg ( 0xff1D, period3 & 0xff, trigger); // lower freq bits
         writeReg ( 0xff1C, 0x20, trigger);
@@ -426,7 +428,9 @@ PAPUAudioProcessor::PAPUAudioProcessor()
     addExtParam (paramNoiseRatio,  "Noise Ratio",       "Ratio",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
     addExtParam (paramWaveOL,      "Wave OL",           "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
     addExtParam (paramWaveOR,      "Wave OR",           "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
-    addExtParam (paramWaveWfm,     "Waveform",           "Waveform", "",  {    0.0f,   14.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveWfm,     "Waveform",          "Waveform", "", {    0.0f,   14.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveTune,    "Wave Tune",         "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveFine,    "Wave Tune Fine",    "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
     addExtParam (paramOutput,      "Output",            "Output",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  7.0f, 0.0f, percentTextFunction);
     addExtParam (paramVoices,      "Voices",            "Voices",  "",  {    1.0f,   8.0f, 1.0f, 1.0f },  1.0f, 0.0f, intTextFunction);
 

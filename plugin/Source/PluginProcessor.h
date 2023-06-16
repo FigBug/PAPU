@@ -122,6 +122,8 @@ public:
     static juce::String paramWaveOL;
     static juce::String paramWaveOR;
     static juce::String paramWaveWfm;
+    static juce::String paramWaveTune;
+    static juce::String paramWaveFine;
     static juce::String paramOutput;
     static juce::String paramVoices;
 
