@@ -335,7 +335,6 @@ void PAPUEngine::setWave(uint8_t index)
         writeReg (0xff30 + s, (low | (high << 4)), true);
     }
     writeReg (0xff1A, 0x80, true); // enable
-    printf("done\n");
 }
 
 //==============================================================================
@@ -460,7 +459,6 @@ void PAPUAudioProcessor::processBlock (juce::AudioSampleBuffer& buffer, juce::Mi
    
     uint8_t new_waveIndex = parameterIntValue (PAPUAudioProcessor::paramWaveWfm);
     if (new_waveIndex != papus[0]->waveIndex) {
-        printf("New index! %d\n", new_waveIndex);
         for (int i = 0; i < 16; i++)
         {
             papus[i]->setWave(new_waveIndex);
