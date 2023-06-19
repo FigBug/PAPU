@@ -50,6 +50,10 @@ public:
 
     uint8_t waveIndex = 0;
     void setWave(uint8_t index);
+    float treble = -1.0;
+    int bass = -1;
+    inline Gb_Apu* getApu() { return &apu; }
+    inline Stereo_Buffer* getBuffer() { return &buf; }
     
 private:
     int parameterIntValue (const juce::String& uid);
@@ -124,6 +128,8 @@ public:
     static juce::String paramWaveWfm;
     static juce::String paramWaveTune;
     static juce::String paramWaveFine;
+    static juce::String paramTreble;
+    static juce::String paramBass;
     static juce::String paramOutput;
     static juce::String paramVoices;
 

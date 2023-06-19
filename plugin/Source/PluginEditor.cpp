@@ -93,8 +93,10 @@ void PAPUAudioProcessorEditor::resized()
 
     int n = controls.size();
 
-    controls[n - 1]->setBounds (getGridArea (8, 3));
-    controls[n - 2]->setBounds (getGridArea (9, 3));
+    controls[n - 1]->setBounds (getGridArea (11, 3));
+    controls[n - 2]->setBounds (getGridArea (12, 3));
+    controls[n - 3]->setBounds (getGridArea (9, 3));
+    controls[n - 4]->setBounds (getGridArea (10, 3));
 
     scope.setBounds (getGridArea (8, 0, 5, 3).reduced (5));
 }

@@ -30,6 +30,8 @@ juce::String PAPUAudioProcessor::paramWaveOR           = "ORW";
 juce::String PAPUAudioProcessor::paramWaveWfm          = "waveform";
 juce::String PAPUAudioProcessor::paramWaveTune         = "tunewave";
 juce::String PAPUAudioProcessor::paramWaveFine         = "finewave";
+juce::String PAPUAudioProcessor::paramTreble         = "trebeq";
+juce::String PAPUAudioProcessor::paramBass         = "bassf";
 juce::String PAPUAudioProcessor::paramOutput           = "output";
 juce::String PAPUAudioProcessor::paramVoices           = "param";
 
@@ -403,36 +405,38 @@ juce::String intTextFunction (const gin::Parameter&, float v)
 //==============================================================================
 PAPUAudioProcessor::PAPUAudioProcessor()
 {
-    addExtParam (paramPulse1OL,    "Pulse 1 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramPulse1OR,    "Pulse 1 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramPulse1Duty,  "Pulse 1 Duty",      "PW",      "",  {    0.0f,   3.0f, 1.0f, 1.0f },  0.0f, 0.0f, dutyTextFunction);
-    addExtParam (paramPulse1A,     "Pulse 1 A",         "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
-    addExtParam (paramPulse1R,     "Pulse 1 R",         "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
-    addExtParam (paramPulse1Tune,  "Pulse 1 Tune",      "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse1Fine,  "Pulse 1 Tune Fine", "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse1Sweep, "Pulse 1 Sweep",     "Sweep",   "",  {   -7.0f,   7.0f, 1.0f, 1.0f },  0.0f, 0.0f, stTextFunction);
-    addExtParam (paramPulse1Shift, "Pulse 1 Shift",     "Shift",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse2OL,    "Pulse 2 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramPulse2OR,    "Pulse 2 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramPulse2Duty,  "Pulse 2 Duty",      "PW",      "",  {    0.0f,   3.0f, 1.0f, 1.0f },  0.0f, 0.0f, dutyTextFunction);
-    addExtParam (paramPulse2A,     "Pulse 2 A",         "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
-    addExtParam (paramPulse2R,     "Pulse 2 R",         "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
-    addExtParam (paramPulse2Tune,  "Pulse 2 Tune",      "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse2Fine,  "Pulse 2 Tune Fine", "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
-    addExtParam (paramNoiseOL,     "Noise OL",          "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramNoiseOR,     "Noise OR",          "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramNoiseA,      "Noise A",           "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
-    addExtParam (paramNoiseR,      "Noise R",           "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },  1.0f, 0.0f, arTextFunction);
-    addExtParam (paramNoiseShift,  "Noise Shift",       "Shift",   "",  {    0.0f,  13.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
-    addExtParam (paramNoiseStep,   "Noise Step",        "Steps",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  0.0f, 0.0f, stepTextFunction);
-    addExtParam (paramNoiseRatio,  "Noise Ratio",       "Ratio",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
-    addExtParam (paramWaveOL,      "Wave OL",           "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
-    addExtParam (paramWaveOR,      "Wave OR",           "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },  1.0f, 0.0f, enableTextFunction);
-    addExtParam (paramWaveWfm,     "Waveform",          "Waveform", "", {    0.0f,   14.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
-    addExtParam (paramWaveTune,    "Wave Tune",         "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
-    addExtParam (paramWaveFine,    "Wave Tune Fine",    "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },  0.0f, 0.0f, intTextFunction);
-    addExtParam (paramOutput,      "Output",            "Output",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },  7.0f, 0.0f, percentTextFunction);
-    addExtParam (paramVoices,      "Voices",            "Voices",  "",  {    1.0f,   8.0f, 1.0f, 1.0f },  1.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse1OL,    "Pulse 1 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse1OR,    "Pulse 1 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse1Duty,  "Pulse 1 Duty",      "PW",      "",  {    0.0f,   3.0f, 1.0f, 1.0f },    0.0f, 0.0f, dutyTextFunction);
+    addExtParam (paramPulse1A,     "Pulse 1 A",         "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse1R,     "Pulse 1 R",         "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse1Tune,  "Pulse 1 Tune",      "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse1Fine,  "Pulse 1 Tune Fine", "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse1Sweep, "Pulse 1 Sweep",     "Sweep",   "",  {   -7.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, stTextFunction);
+    addExtParam (paramPulse1Shift, "Pulse 1 Shift",     "Shift",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse2OL,    "Pulse 2 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse2OR,    "Pulse 2 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse2Duty,  "Pulse 2 Duty",      "PW",      "",  {    0.0f,   3.0f, 1.0f, 1.0f },    0.0f, 0.0f, dutyTextFunction);
+    addExtParam (paramPulse2A,     "Pulse 2 A",         "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse2R,     "Pulse 2 R",         "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse2Tune,  "Pulse 2 Tune",      "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse2Fine,  "Pulse 2 Tune Fine", "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramNoiseOL,     "Noise OL",          "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramNoiseOR,     "Noise OR",          "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramNoiseA,      "Noise A",           "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramNoiseR,      "Noise R",           "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramNoiseShift,  "Noise Shift",       "Shift",   "",  {    0.0f,  13.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramNoiseStep,   "Noise Step",        "Steps",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, stepTextFunction);
+    addExtParam (paramNoiseRatio,  "Noise Ratio",       "Ratio",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveOL,      "Wave OL",           "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
+    addExtParam (paramWaveOR,      "Wave OR",           "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
+    addExtParam (paramWaveWfm,     "Waveform",          "Waveform", "", {    0.0f,  14.0f, 1.0f, 1.0f },   0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveTune,    "Wave Tune",         "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveFine,    "Wave Tune Fine",    "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramTreble,      "Treble EQ",         "Treble",  "",  {  -50.0f,  50.0f, 1.0f, 1.0f },  -30.0f, 0.0f, intTextFunction);
+    addExtParam (paramBass,        "Bass frequency",    "Bass",    "",  {   15.0f, 600.0f, 1.0f, 1.0f },  461.0f, 0.0f, intTextFunction);
+    addExtParam (paramOutput,      "Output",            "Output",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },    7.0f, 0.0f, percentTextFunction);
+    addExtParam (paramVoices,      "Voices",            "Voices",  "",  {    1.0f,   8.0f, 1.0f, 1.0f },    1.0f, 0.0f, intTextFunction);
 
     for (int i = 0; i < 16; i++)
         papus.add (new PAPUEngine (*this));
@@ -467,6 +471,25 @@ void PAPUAudioProcessor::processBlock (juce::AudioSampleBuffer& buffer, juce::Mi
         for (int i = 0; i < 16; i++)
         {
             papus[i]->setWave(new_waveIndex);
+            
+        }
+    }
+    
+    float new_treble = parameterValue (PAPUAudioProcessor::paramTreble);
+    if (new_treble != papus[0]->treble) {
+        for (int i = 0; i < 16; i++)
+        {   
+            papus[i]->treble = new_treble;
+            papus[i]->getApu()->treble_eq(new_treble);
+        }
+    }
+    
+    float new_bass = parameterIntValue (PAPUAudioProcessor::paramBass);
+    if (new_bass != papus[0]->bass) {
+        for (int i = 0; i < 16; i++)
+        {   
+            papus[i]->bass = new_bass;
+            papus[i]->getBuffer()->bass_freq(new_bass);
         }
     }
 
