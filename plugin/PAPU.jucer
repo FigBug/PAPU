@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="JPnRUR" name="PAPU" projectType="audioplug" version="1.1.0"
               bundleIdentifier="com.socalabs.PAPU" includeBinaryInAppConfig="1"
-              buildVST="0" buildVST3="0" buildAU="0" buildAUv3="0" buildRTAS="0"
+              buildVST="1" buildVST3="1" buildAU="1" buildAUv3="1" buildRTAS="0"
               buildAAX="0" pluginName="PAPU" pluginDesc="PAPU" pluginManufacturer="SocaLabs"
               pluginManufacturerCode="Soca" pluginCode="Papu" pluginChannelConfigs="{0,2}"
               pluginIsSynth="1" pluginWantsMidiIn="1" pluginProducesMidiOut="0"
@@ -11,7 +11,7 @@
               companyWebsite="www.socalabs.com" companyEmail="info@socalabs.com"
               displaySplashScreen="1" reportAppUsage="0" splashScreenColour="Dark"
               buildStandalone="1" enableIAA="0" cppLanguageStandard="17" companyCopyright="SocaLabs"
-              pluginFormats="buildLV2,buildStandalone"
+              pluginFormats="buildAU,buildAUv3,buildLV2,buildStandalone,buildVST,buildVST3"
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
               pluginAUMainType="'aumu'" pluginVSTCategory="kPlugCategSynth"
               defines="JUCE_DISPLAY_SPLASH_SCREEN=0&#10;JUCE_MODAL_LOOPS_PERMITTED=1"

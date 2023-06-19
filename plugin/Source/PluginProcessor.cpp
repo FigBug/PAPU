@@ -182,9 +182,6 @@ void PAPUEngine::runOscs (int curNote, bool trigger)
         }
 
         apu.stopWave();
-        // uint16_t period3 = uint16_t (-((65536 - 2048 * freq3)/freq3));
-        // writeReg ( 0xff1D, period3 & 0xff, trigger); // lower freq bits
-        // writeReg ( 0xff1E, (trigger ? 0x80 : 0x00) | ((period3 >> 8) & 0x07), trigger); // trigger, high freq bits
 
         uint8_t rN = uint8_t (parameterIntValue (PAPUAudioProcessor::paramNoiseR));
         uint8_t aN = uint8_t (parameterIntValue (PAPUAudioProcessor::paramNoiseA));
@@ -385,10 +382,10 @@ juce::String stTextFunction (const gin::Parameter&, float v)
         case 6: str = "46.9 ms"; break;
         case 7: str = "54.7 ms"; break;
     }
-
+    
     if (v < 0)
         str = "-" + str;
-
+    
     return str;
 }
 
@@ -544,10 +541,10 @@ void PAPUAudioProcessor::processBlock (juce::AudioSampleBuffer& buffer, juce::Mi
         auto dataR = buffer.getReadPointer (1);
 
         auto mono = (float*) alloca (size_t (numSamples) * sizeof (float));
-
+        
         for (int i = 0; i < numSamples; i++)
             mono[i] = (dataL[i] + dataR[i]) / 2.0f;
-
+        
         fifo.writeMono (mono, numSamples);
     }
 }

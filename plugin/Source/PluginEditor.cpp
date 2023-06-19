@@ -9,9 +9,9 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
   : ProcessorEditor (p), proc (p)
 {
     additionalProgramming = "Shay Green";
-
+    
     addAndMakeVisible (&scope);
-
+    
     for (auto pp : p.getPluginParameters())
     {
         gin::ParamComponent* c;
@@ -19,13 +19,13 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
             c = new gin::Knob (pp, true);
         else
             c = pp->isOnOff() ? (gin::ParamComponent*)new gin::Switch (pp) : (gin::ParamComponent*)new gin::Knob (pp);
-
+        
         addAndMakeVisible (c);
         controls.add (c);
     }
-
+    
     setGridSize (13, 4);
-
+    
     scope.setNumSamplesPerPixel (2);
     scope.setVerticalZoomFactor (3.0f);
     scope.setColour (gin::TriggeredScope::lineColourId, findColour (gin::PluginLookAndFeel::grey45ColourId));
@@ -90,14 +90,14 @@ void PAPUAudioProcessorEditor::resized()
         else
             c->setBounds (getGridArea (i - 1, 2));
     }
-
+    
     int n = controls.size();
-
+    
     controls[n - 1]->setBounds (getGridArea (11, 3));
     controls[n - 2]->setBounds (getGridArea (12, 3));
     controls[n - 3]->setBounds (getGridArea (9, 3));
     controls[n - 4]->setBounds (getGridArea (10, 3));
-
+    
     scope.setBounds (getGridArea (8, 0, 5, 3).reduced (5));
 }
 

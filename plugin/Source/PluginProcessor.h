@@ -132,7 +132,7 @@ public:
     static juce::String paramBass;
     static juce::String paramOutput;
     static juce::String paramVoices;
-
+    
     gin::AudioFifo fifo {1, 44100};
 
     juce::MidiKeyboardState state;
@@ -140,7 +140,7 @@ private:
     void runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos);
     PAPUEngine* findFreeVoice();
     PAPUEngine* findVoiceForNote (int note);
-
+    
     juce::OwnedArray<PAPUEngine> papus;
     int nextVoice = 0;
 
