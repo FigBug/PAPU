@@ -54,6 +54,9 @@ public:
 	// to the center buffer.
 	bool end_frame( gb_time_t );
 	
+	void stopWave();
+	void resetStopWave();
+	
 private:
 	// noncopyable
 	Gb_Apu( const Gb_Apu& );

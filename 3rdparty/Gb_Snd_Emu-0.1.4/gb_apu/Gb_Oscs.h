@@ -75,6 +75,7 @@ struct Gb_Wave : Gb_Osc {
 	enum { wave_size = 32 };
 	bool new_enabled;
 	BOOST::uint8_t wave [wave_size];
+	int8_t disableOnZeroCrossing = -1;
 	
 	typedef Blip_Synth<blip_med_quality,15 * gb_apu_max_vol * 2> Synth;
 	const Synth* synth;

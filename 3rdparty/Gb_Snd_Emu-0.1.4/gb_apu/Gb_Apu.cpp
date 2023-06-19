@@ -95,6 +95,16 @@ void Gb_Apu::osc_output( int index, Blip_Buffer* center, Blip_Buffer* left, Blip
 	osc.output = osc.outputs [osc.output_select];
 }
 
+void Gb_Apu::stopWave()
+{
+	wave.disableOnZeroCrossing = 32;
+}
+
+void Gb_Apu::resetStopWave()
+{
+	wave.disableOnZeroCrossing = -1;
+}
+
 void Gb_Apu::run_until( gb_time_t end_time )
 {
 	require( end_time >= last_time ); // end_time must not be before previous time

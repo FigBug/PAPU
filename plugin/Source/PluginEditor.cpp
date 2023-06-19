@@ -24,7 +24,7 @@ PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
         controls.add (c);
     }
     
-    setGridSize (13, 3);
+    setGridSize (13, 4);
     
     scope.setNumSamplesPerPixel (2);
     scope.setVerticalZoomFactor (3.0f);
@@ -74,17 +74,29 @@ void PAPUAudioProcessorEditor::resized()
     {
         auto c = controls[i + 9 + 7];
         if (i == 0)
+            c->setBounds (getGridArea (0, 3).removeFromTop (cy / 2).translated (0, 7));
+        else if (i == 1)
+            c->setBounds (getGridArea (0, 3).removeFromBottom (cy / 2));
+        else
+            c->setBounds (getGridArea (i - 1, 3));
+    }
+    for (int i = 0; i < 5; i++)
+    {
+        auto c = controls[i + 9 + 7 + 7];
+        if (i == 0)
             c->setBounds (getGridArea (0, 2).removeFromTop (cy / 2).translated (0, 7));
         else if (i == 1)
             c->setBounds (getGridArea (0, 2).removeFromBottom (cy / 2));
         else
             c->setBounds (getGridArea (i - 1, 2));
     }
-
+    
     int n = controls.size();
-
-    controls[n - 1]->setBounds (getGridArea (7, 1));
-    controls[n - 2]->setBounds (getGridArea (7, 2));
+    
+    controls[n - 1]->setBounds (getGridArea (11, 3));
+    controls[n - 2]->setBounds (getGridArea (12, 3));
+    controls[n - 3]->setBounds (getGridArea (9, 3));
+    controls[n - 4]->setBounds (getGridArea (10, 3));
     
     scope.setBounds (getGridArea (8, 0, 5, 3).reduced (5));
 }
