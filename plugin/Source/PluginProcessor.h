@@ -55,6 +55,14 @@ public:
     inline Gb_Apu* getApu() { return &apu; }
     inline Stereo_Buffer* getBuffer() { return &buf; }
     
+    gin::LFO::Parameters vib1Parameters;
+    gin::LFO::Parameters vib2Parameters;
+    gin::LFO::Parameters vib3Parameters;
+    gin::LFO vib1;
+    gin::LFO vib2;
+    gin::LFO vib3;
+    int vibNote;
+    
 private:
     int parameterIntValue (const juce::String& uid);
     void runOscs (int curNote, bool trigger);
@@ -65,6 +73,8 @@ private:
     double pitchBend = 0;
     juce::Array<int> noteQueue;
     float freq1 = 0.0f, freq2 = 0.0f, freq3 = 0.0f;
+    
+    void runVibrato(int todo);
 
     Gb_Apu apu;
     Stereo_Buffer buf;
@@ -109,6 +119,8 @@ public:
     static juce::String paramPulse1Fine;
     static juce::String paramPulse1Sweep;
     static juce::String paramPulse1Shift;
+    static juce::String paramPulse1VibRate;
+    static juce::String paramPulse1VibAmt;
     static juce::String paramPulse2OL;
     static juce::String paramPulse2OR;
     static juce::String paramPulse2Duty;
@@ -116,6 +128,8 @@ public:
     static juce::String paramPulse2R;
     static juce::String paramPulse2Tune;
     static juce::String paramPulse2Fine;
+    static juce::String paramPulse2VibRate;
+    static juce::String paramPulse2VibAmt;
     static juce::String paramNoiseOL;
     static juce::String paramNoiseOR;
     static juce::String paramNoiseA;
@@ -128,6 +142,8 @@ public:
     static juce::String paramWaveWfm;
     static juce::String paramWaveTune;
     static juce::String paramWaveFine;
+    static juce::String paramWaveVibRate;
+    static juce::String paramWaveVibAmt;
     static juce::String paramTreble;
     static juce::String paramBass;
     static juce::String paramOutput;
