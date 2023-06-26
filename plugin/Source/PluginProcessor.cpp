@@ -413,17 +413,17 @@ void PAPUEngine::setWave(uint8_t index)
 }
 
 //==============================================================================
-juce::String percentTextFunction (const gin::Parameter& p, float v)
+static juce::String percentTextFunction (const gin::Parameter& p, float v)
 {
     return juce::String::formatted("%.0f%%", v / p.getUserRangeEnd() * 100);
 }
 
-juce::String enableTextFunction (const gin::Parameter&, float v)
+static juce::String enableTextFunction (const gin::Parameter&, float v)
 {
     return v > 0.0f ? "On" : "Off";
 }
 
-juce::String dutyTextFunction (const gin::Parameter&, float v)
+static juce::String dutyTextFunction (const gin::Parameter&, float v)
 {
     const int duty = int (v);
     switch (duty)
@@ -436,17 +436,17 @@ juce::String dutyTextFunction (const gin::Parameter&, float v)
     return "";
 }
 
-juce::String arTextFunction (const gin::Parameter&, float v)
+static juce::String arTextFunction (const gin::Parameter&, float v)
 {
     return juce::String::formatted("%.1f s", v * 1.0/64.0 * 16);
 }
 
-juce::String hzTextFunction (const gin::Parameter&, float v)
+static juce::String hzTextFunction (const gin::Parameter&, float v)
 {
     return juce::String::formatted("%.1f Hz", v);
 }
 
-juce::String stTextFunction (const gin::Parameter&, float v)
+static juce::String stTextFunction (const gin::Parameter&, float v)
 {
     juce::String str;
     switch (abs (int (v)))
@@ -467,12 +467,12 @@ juce::String stTextFunction (const gin::Parameter&, float v)
     return str;
 }
 
-juce::String stepTextFunction (const gin::Parameter&, float v)
+static juce::String stepTextFunction (const gin::Parameter&, float v)
 {
     return v > 0.0f ? "15" : "7";
 }
 
-juce::String intTextFunction (const gin::Parameter&, float v)
+static juce::String intTextFunction (const gin::Parameter&, float v)
 {
     return juce::String (int (v));
 }
@@ -489,8 +489,8 @@ PAPUAudioProcessor::PAPUAudioProcessor()
     addExtParam (paramPulse1Fine,  "Pulse 1 Tune Fine", "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
     addExtParam (paramPulse1Sweep, "Pulse 1 Sweep",     "Sweep",   "",  {   -7.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, stTextFunction);
     addExtParam (paramPulse1Shift, "Pulse 1 Shift",     "Shift",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse1VibRate, "Pulse 1 Vib Rate",  "Rate",  "",  {    0.0f,  15.0f, 0.1f, 1.0f },    5.0f, 0.0f, hzTextFunction);
-    addExtParam (paramPulse1VibAmt,"Pulse 1 Vib Amt",   "Amount",  "", {    0.0f, 100.0f, 0.5f, 1.0f },    0.0f, 0.0f, percentTextFunction);
+    addExtParam (paramPulse1VibRate,"Pulse 1 Vib Rate", "Rate",    "",  {    0.0f,  15.0f, 0.1f, 1.0f },    5.0f, 0.0f, hzTextFunction);
+    addExtParam (paramPulse1VibAmt,"Pulse 1 Vib Amt",   "Amount",  "",  {    0.0f, 100.0f, 0.5f, 1.0f },    0.0f, 0.0f, percentTextFunction);
     addExtParam (paramPulse2OL,    "Pulse 2 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
     addExtParam (paramPulse2OR,    "Pulse 2 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
     addExtParam (paramPulse2Duty,  "Pulse 2 Duty",      "PW",      "",  {    0.0f,   3.0f, 1.0f, 1.0f },    0.0f, 0.0f, dutyTextFunction);
@@ -498,8 +498,8 @@ PAPUAudioProcessor::PAPUAudioProcessor()
     addExtParam (paramPulse2R,     "Pulse 2 R",         "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
     addExtParam (paramPulse2Tune,  "Pulse 2 Tune",      "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
     addExtParam (paramPulse2Fine,  "Pulse 2 Tune Fine", "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse2VibRate,"Pulse 2 Vib Rate", "Rate",  "",    {    0.0f,  15.0f, 0.1f, 1.0f },    5.0f, 0.0f, hzTextFunction);
-    addExtParam (paramPulse2VibAmt,"Pulse 2 Vib Amt",   "Amount",   "", {    0.0f, 100.0f, 0.5f, 1.0f },    0.0f, 0.0f, percentTextFunction);
+    addExtParam (paramPulse2VibRate,"Pulse 2 Vib Rate", "Rate",    "",  {    0.0f,  15.0f, 0.1f, 1.0f },    5.0f, 0.0f, hzTextFunction);
+    addExtParam (paramPulse2VibAmt,"Pulse 2 Vib Amt",   "Amount",  "",  {    0.0f, 100.0f, 0.5f, 1.0f },    0.0f, 0.0f, percentTextFunction);
     addExtParam (paramNoiseOL,     "Noise OL",          "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
     addExtParam (paramNoiseOR,     "Noise OR",          "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
     addExtParam (paramNoiseA,      "Noise A",           "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
@@ -544,87 +544,91 @@ void PAPUAudioProcessor::processBlock (juce::AudioSampleBuffer& buffer, juce::Mi
     buffer.clear();
 
    #if JUCE_IOS
-    state.processNextMidiBuffer (midi, 0, numSamples, true);
+    keyState.processNextMidiBuffer (midi, 0, numSamples, true);
    #endif
    
-    uint8_t new_waveIndex = parameterIntValue (PAPUAudioProcessor::paramWaveWfm);
-    if (new_waveIndex != papus[0]->waveIndex) {
+    auto new_waveIndex = uint8_t (parameterIntValue (PAPUAudioProcessor::paramWaveWfm));
+    if (new_waveIndex != papus[0]->waveIndex)
         for (int i = 0; i < 16; i++)
-        {
             papus[i]->setWave(new_waveIndex);
-            
-        }
-    }
-    
+
     float new_treble = parameterValue (PAPUAudioProcessor::paramTreble);
-    if (new_treble != papus[0]->treble) {
+    if (new_treble != papus[0]->treble)
+    {
         for (int i = 0; i < 16; i++)
         {   
             papus[i]->treble = new_treble;
-            papus[i]->getApu()->treble_eq(new_treble);
+            papus[i]->getApu()->treble_eq (new_treble);
         }
     }
     
-    float new_bass = parameterIntValue (PAPUAudioProcessor::paramBass);
-    if (new_bass != papus[0]->bass) {
+    int new_bass = parameterIntValue (PAPUAudioProcessor::paramBass);
+    if (new_bass != papus[0]->bass)
+    {
         for (int i = 0; i < 16; i++)
         {   
             papus[i]->bass = new_bass;
-            papus[i]->getBuffer()->bass_freq(new_bass);
+            papus[i]->getBuffer()->bass_freq (new_bass);
         }
     }
     
-    float new_vib1 = 0.25 * parameterValue (PAPUAudioProcessor::paramPulse1VibAmt) / 100.0;
-    if (new_vib1 != papus[0]->vib1Parameters.depth) {
+    float new_vib1 = 0.25f * parameterValue (PAPUAudioProcessor::paramPulse1VibAmt) / 100.0f;
+    if (new_vib1 != papus[0]->vib1Parameters.depth)
+    {
         for (int i = 0; i < 16; i++)
         {   
             papus[i]->vib1Parameters.depth = new_vib1;
-            papus[i]->vib1.setParameters(papus[i]->vib1Parameters);
+            papus[i]->vib1.setParameters (papus[i]->vib1Parameters);
         }
     }
     
     float new_rate1 = parameterValue (PAPUAudioProcessor::paramPulse1VibRate);
-    if (new_rate1 != papus[0]->vib1Parameters.frequency) {
+    if (new_rate1 != papus[0]->vib1Parameters.frequency)
+    {
         for (int i = 0; i < 16; i++)
         {   
             papus[i]->vib1Parameters.frequency = new_rate1;
-            papus[i]->vib1.setParameters(papus[i]->vib1Parameters);
+            papus[i]->vib1.setParameters (papus[i]->vib1Parameters);
         }
     }
     
-    float new_vib2 = 0.25 * parameterValue (PAPUAudioProcessor::paramPulse2VibAmt) / 100.0;
-    if (new_vib2 != papus[0]->vib2Parameters.depth) {
+    float new_vib2 = 0.25f * parameterValue (PAPUAudioProcessor::paramPulse2VibAmt) / 100.0f;
+    if (new_vib2 != papus[0]->vib2Parameters.depth)
+    {
         for (int i = 0; i < 16; i++)
         {   
             papus[i]->vib2Parameters.depth = new_vib2;
-            papus[i]->vib2.setParameters(papus[i]->vib2Parameters);
+            papus[i]->vib2.setParameters (papus[i]->vib2Parameters);
         }
     }
     
     float new_rate2 = parameterValue (PAPUAudioProcessor::paramPulse2VibRate);
-    if (new_rate2 != papus[0]->vib2Parameters.frequency) {
+    if (new_rate2 != papus[0]->vib2Parameters.frequency)
+    {
         for (int i = 0; i < 16; i++)
         {   
             papus[i]->vib2Parameters.frequency = new_rate2;
-            papus[i]->vib2.setParameters(papus[i]->vib2Parameters);
+            papus[i]->vib2.setParameters (papus[i]->vib2Parameters);
         }
     }
     
-    float new_vib3 = 0.25 * parameterValue (PAPUAudioProcessor::paramWaveVibAmt) / 100.0;
-    if (new_vib3 != papus[0]->vib3Parameters.depth) {
+    float new_vib3 = 0.25f * parameterValue (PAPUAudioProcessor::paramWaveVibAmt) / 100.0f;
+    if (new_vib3 != papus[0]->vib3Parameters.depth)
+    {
         for (int i = 0; i < 16; i++)
         {   
             papus[i]->vib3Parameters.depth = new_vib3;
-            papus[i]->vib3.setParameters(papus[i]->vib3Parameters);
+            papus[i]->vib3.setParameters (papus[i]->vib3Parameters);
         }
     }
     
     float new_rate3 = parameterValue (PAPUAudioProcessor::paramWaveVibRate);
-    if (new_rate3 != papus[0]->vib3Parameters.frequency) {
+    if (new_rate3 != papus[0]->vib3Parameters.frequency)
+    {
         for (int i = 0; i < 16; i++)
         {   
             papus[i]->vib3Parameters.frequency = new_rate3;
-            papus[i]->vib3.setParameters(papus[i]->vib3Parameters);
+            papus[i]->vib3.setParameters (papus[i]->vib3Parameters);
         }
     }
 

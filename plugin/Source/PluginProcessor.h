@@ -151,7 +151,10 @@ public:
     
     gin::AudioFifo fifo {1, 44100};
 
-    juce::MidiKeyboardState state;
+   #if JUCE_IOS
+    juce::MidiKeyboardState keyState;
+   #endif
+
 private:
     void runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos);
     PAPUEngine* findFreeVoice();

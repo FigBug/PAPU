@@ -22,7 +22,7 @@ public:
     
     gin::TriggeredScope scope { proc.fifo };
 
-    juce::MidiKeyboardComponent keyboard { proc.state, juce::MidiKeyboardComponent::horizontalKeyboard };
+    juce::MidiKeyboardComponent keyboard { proc.keyState, juce::MidiKeyboardComponent::horizontalKeyboard };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PAPUAudioProcessorEditor)
 };
