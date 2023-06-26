@@ -36,8 +36,8 @@ juce::String PAPUAudioProcessor::paramWaveTune         = "tunewave";
 juce::String PAPUAudioProcessor::paramWaveFine         = "finewave";
 juce::String PAPUAudioProcessor::paramWaveVibRate      = "ratewave";
 juce::String PAPUAudioProcessor::paramWaveVibAmt       = "amtwave";
-juce::String PAPUAudioProcessor::paramTreble         = "trebeq";
-juce::String PAPUAudioProcessor::paramBass         = "bassf";
+juce::String PAPUAudioProcessor::paramTreble           = "trebeq";
+juce::String PAPUAudioProcessor::paramBass             = "bassf";
 juce::String PAPUAudioProcessor::paramOutput           = "output";
 juce::String PAPUAudioProcessor::paramVoices           = "param";
 

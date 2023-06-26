@@ -67,6 +67,8 @@ void PAPUAudioProcessorEditor::resized()
             c->setBounds (getGridArea (0, 1).removeFromTop (cy / 2).translated (0, 7));
         else if (i == 1)
             c->setBounds (getGridArea (0, 1).removeFromBottom (cy / 2));
+        else if (i >= 7)
+            c->setBounds (getGridArea (i + 1, 1));
         else
             c->setBounds (getGridArea (i - 1, 1));
     }
@@ -87,6 +89,10 @@ void PAPUAudioProcessorEditor::resized()
             c->setBounds (getGridArea (0, 2).removeFromTop (cy / 2).translated (0, 7));
         else if (i == 1)
             c->setBounds (getGridArea (0, 2).removeFromBottom (cy / 2));
+        else if (i >= 5)
+            c->setBounds (getGridArea (i + 3, 2));
+        else if (i >= 3)
+            c->setBounds (getGridArea (i + 1, 2));
         else
             c->setBounds (getGridArea (i - 1, 2));
     }
