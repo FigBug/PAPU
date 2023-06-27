@@ -133,7 +133,7 @@ void Blip_Impulse_::init( blip_pair_t_* imps, int w, int r, int fb )
 	generate = true;
 	volume_unit_ = -1.0;
 	res = r;
-	buf = NULL;
+	buf = nullptr;
 	
 	impulse = &impulses [width * res * 2 * (fine_bits ? 2 : 1)];
 	offset = 0;
