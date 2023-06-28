@@ -36,6 +36,7 @@ juce::String PAPUAudioProcessor::paramWaveTune         = "tunewave";
 juce::String PAPUAudioProcessor::paramWaveFine         = "finewave";
 juce::String PAPUAudioProcessor::paramWaveVibRate      = "ratewave";
 juce::String PAPUAudioProcessor::paramWaveVibAmt       = "amtwave";
+juce::String PAPUAudioProcessor::paramChannelSplit     = "channelsplit";
 juce::String PAPUAudioProcessor::paramTreble           = "trebeq";
 juce::String PAPUAudioProcessor::paramBass             = "bassf";
 juce::String PAPUAudioProcessor::paramOutput           = "output";
@@ -316,7 +317,17 @@ void PAPUEngine::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer
           (parameterIntValue (PAPUAudioProcessor::paramNoiseOR)  ? 0x08 : 0x00);
 
     writeReg (0xff25, reg, false);
-
+    
+    bool new_channelsplit = parameterIntValue (PAPUAudioProcessor::paramChannelSplit) ? true : false;
+    if (new_channelsplit != channelsplit)
+    {
+        channelsplit = new_channelsplit;
+        noteQueue1.clear();
+        noteQueue2.clear();
+        noteQueue3.clear();
+        noteQueue4.clear();
+    }
+    
     int done = 0;
     runOscs (lastNote1, lastNote2, lastNote3, lastNote4, false, false, false, false);
     runUntil (done, buffer, 0);
@@ -330,18 +341,18 @@ void PAPUEngine::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer
         runUntil (done, buffer, pos);
         
         if (msg.isNoteOn())
-        {
-            if (msg.getChannel() == 1) noteQueue1.add (msg.getNoteNumber());
-            if (msg.getChannel() == 2) noteQueue2.add (msg.getNoteNumber());
-            if (msg.getChannel() == 3) noteQueue3.add (msg.getNoteNumber());
-            if (msg.getChannel() == 4) noteQueue4.add (msg.getNoteNumber());
+        {   
+            if (msg.getChannel() == 1 || !channelsplit) noteQueue1.add (msg.getNoteNumber());
+            else if (msg.getChannel() == 2) noteQueue2.add (msg.getNoteNumber());
+            else if (msg.getChannel() == 3) noteQueue3.add (msg.getNoteNumber());
+            else if (msg.getChannel() == 4) noteQueue4.add (msg.getNoteNumber());
         }
         else if (msg.isNoteOff())
         {
-            if (msg.getChannel() == 1) noteQueue1.removeFirstMatchingValue (msg.getNoteNumber());
-            if (msg.getChannel() == 2) noteQueue2.removeFirstMatchingValue (msg.getNoteNumber());
-            if (msg.getChannel() == 3) noteQueue3.removeFirstMatchingValue (msg.getNoteNumber());
-            if (msg.getChannel() == 4) noteQueue4.removeFirstMatchingValue (msg.getNoteNumber());
+            if (msg.getChannel() == 1 || !channelsplit) noteQueue1.removeFirstMatchingValue (msg.getNoteNumber());
+            else if (msg.getChannel() == 2) noteQueue2.removeFirstMatchingValue (msg.getNoteNumber());
+            else if (msg.getChannel() == 3) noteQueue3.removeFirstMatchingValue (msg.getNoteNumber());
+            else if (msg.getChannel() == 4) noteQueue4.removeFirstMatchingValue (msg.getNoteNumber());
         }
         else if (msg.isAllNotesOff())
         {
@@ -356,10 +367,10 @@ void PAPUEngine::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer
             pitchBend = (msg.getPitchWheelValue() - 8192) / 8192.0f * 2;
         }
         const int curNote1 = noteQueue1.size() > 0 ? noteQueue1.getLast() : -1;
-        const int curNote2 = noteQueue2.size() > 0 ? noteQueue2.getLast() : -1;
-        const int curNote3 = noteQueue3.size() > 0 ? noteQueue3.getLast() : -1;
-        const int curNote4 = noteQueue4.size() > 0 ? noteQueue4.getLast() : -1;
-
+        const int curNote2 = !channelsplit ? curNote1 : noteQueue2.size() > 0 ? noteQueue2.getLast() : -1;
+        const int curNote3 = !channelsplit ? curNote1 : noteQueue3.size() > 0 ? noteQueue3.getLast() : -1;
+        const int curNote4 = !channelsplit ? curNote1 : noteQueue4.size() > 0 ? noteQueue4.getLast() : -1;
+        
         if (updateBend ||
             lastNote1 != curNote1 ||
             lastNote2 != curNote2 ||
@@ -415,19 +426,29 @@ void PAPUEngine::handleMessage (const juce::MidiMessage& msg)
 {
     bool updateBend = false;
     
+    bool new_channelsplit = parameterIntValue (PAPUAudioProcessor::paramChannelSplit) ? true : false;
+    if (new_channelsplit != channelsplit)
+    {
+        channelsplit = new_channelsplit;
+        noteQueue1.clear();
+        noteQueue2.clear();
+        noteQueue3.clear();
+        noteQueue4.clear();
+    }    
+    
     if (msg.isNoteOn())
     {
-        if (msg.getChannel() == 1) noteQueue1.add (msg.getNoteNumber());
-        if (msg.getChannel() == 2) noteQueue2.add (msg.getNoteNumber());
-        if (msg.getChannel() == 3) noteQueue3.add (msg.getNoteNumber());
-        if (msg.getChannel() == 4) noteQueue4.add (msg.getNoteNumber());
+        if (msg.getChannel() == 1 || !channelsplit) noteQueue1.add (msg.getNoteNumber());
+        else if (msg.getChannel() == 2) noteQueue2.add (msg.getNoteNumber());
+        else if (msg.getChannel() == 3) noteQueue3.add (msg.getNoteNumber());
+        else if (msg.getChannel() == 4) noteQueue4.add (msg.getNoteNumber());
     }
     else if (msg.isNoteOff())
     {
-        if (msg.getChannel() == 1) noteQueue1.removeFirstMatchingValue (msg.getNoteNumber());
-        if (msg.getChannel() == 2) noteQueue2.removeFirstMatchingValue (msg.getNoteNumber());
-        if (msg.getChannel() == 3) noteQueue3.removeFirstMatchingValue (msg.getNoteNumber());
-        if (msg.getChannel() == 4) noteQueue4.removeFirstMatchingValue (msg.getNoteNumber());
+        if (msg.getChannel() == 1 || !channelsplit) noteQueue1.removeFirstMatchingValue (msg.getNoteNumber());
+        else if (msg.getChannel() == 2) noteQueue2.removeFirstMatchingValue (msg.getNoteNumber());
+        else if (msg.getChannel() == 3) noteQueue3.removeFirstMatchingValue (msg.getNoteNumber());
+        else if (msg.getChannel() == 4) noteQueue4.removeFirstMatchingValue (msg.getNoteNumber());
     }
     else if (msg.isAllNotesOff())
     {
@@ -442,9 +463,9 @@ void PAPUEngine::handleMessage (const juce::MidiMessage& msg)
         pitchBend = (msg.getPitchWheelValue() - 8192) / 8192.0f * 2;
     }
     const int curNote1 = noteQueue1.size() > 0 ? noteQueue1.getLast() : -1;
-    const int curNote2 = noteQueue2.size() > 0 ? noteQueue2.getLast() : -1;
-    const int curNote3 = noteQueue3.size() > 0 ? noteQueue3.getLast() : -1;
-    const int curNote4 = noteQueue4.size() > 0 ? noteQueue4.getLast() : -1;
+    const int curNote2 = !channelsplit ? curNote1 : noteQueue2.size() > 0 ? noteQueue2.getLast() : -1;
+    const int curNote3 = !channelsplit ? curNote1 : noteQueue3.size() > 0 ? noteQueue3.getLast() : -1;
+    const int curNote4 = !channelsplit ? curNote1 : noteQueue4.size() > 0 ? noteQueue4.getLast() : -1;
 
     if (updateBend ||
         lastNote1 != curNote1 ||
@@ -552,44 +573,45 @@ static juce::String intTextFunction (const gin::Parameter&, float v)
 //==============================================================================
 PAPUAudioProcessor::PAPUAudioProcessor()
 {
-    addExtParam (paramPulse1OL,    "Pulse 1 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
-    addExtParam (paramPulse1OR,    "Pulse 1 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
-    addExtParam (paramPulse1Duty,  "Pulse 1 Duty",      "PW",      "",  {    0.0f,   3.0f, 1.0f, 1.0f },    0.0f, 0.0f, dutyTextFunction);
-    addExtParam (paramPulse1A,     "Pulse 1 A",         "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
-    addExtParam (paramPulse1R,     "Pulse 1 R",         "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
-    addExtParam (paramPulse1Tune,  "Pulse 1 Tune",      "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse1Fine,  "Pulse 1 Tune Fine", "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse1Sweep, "Pulse 1 Sweep",     "Sweep",   "",  {   -7.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, stTextFunction);
-    addExtParam (paramPulse1Shift, "Pulse 1 Shift",     "Shift",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse1VibRate,"Pulse 1 Vib Rate", "Rate",    "",  {    0.0f,  15.0f, 0.1f, 1.0f },    5.0f, 0.0f, hzTextFunction);
-    addExtParam (paramPulse1VibAmt,"Pulse 1 Vib Amt",   "Amount",  "",  {    0.0f, 100.0f, 0.5f, 1.0f },    0.0f, 0.0f, percentTextFunction);
-    addExtParam (paramPulse2OL,    "Pulse 2 OL",        "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramPulse2OR,    "Pulse 2 OR",        "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramPulse2Duty,  "Pulse 2 Duty",      "PW",      "",  {    0.0f,   3.0f, 1.0f, 1.0f },    0.0f, 0.0f, dutyTextFunction);
-    addExtParam (paramPulse2A,     "Pulse 2 A",         "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
-    addExtParam (paramPulse2R,     "Pulse 2 R",         "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
-    addExtParam (paramPulse2Tune,  "Pulse 2 Tune",      "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse2Fine,  "Pulse 2 Tune Fine", "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramPulse2VibRate,"Pulse 2 Vib Rate", "Rate",    "",  {    0.0f,  15.0f, 0.1f, 1.0f },    5.0f, 0.0f, hzTextFunction);
-    addExtParam (paramPulse2VibAmt,"Pulse 2 Vib Amt",   "Amount",  "",  {    0.0f, 100.0f, 0.5f, 1.0f },    0.0f, 0.0f, percentTextFunction);
-    addExtParam (paramNoiseOL,     "Noise OL",          "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramNoiseOR,     "Noise OR",          "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramNoiseA,      "Noise A",           "Attack",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
-    addExtParam (paramNoiseR,      "Noise R",           "Release", "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
-    addExtParam (paramNoiseShift,  "Noise Shift",       "Shift",   "",  {    0.0f,  13.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramNoiseStep,   "Noise Step",        "Steps",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, stepTextFunction);
-    addExtParam (paramNoiseRatio,  "Noise Ratio",       "Ratio",   "",  {    0.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramWaveOL,      "Wave OL",           "Left",    "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramWaveOR,      "Wave OR",           "Right",   "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
-    addExtParam (paramWaveWfm,     "Waveform",          "Waveform", "", {    0.0f,  14.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramWaveTune,    "Wave Tune",         "Tune",    "",  {  -48.0f,  48.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramWaveFine,    "Wave Tune Fine",    "Fine",    "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
-    addExtParam (paramWaveVibRate, "Wave Vib Rate",     "Rate",    "",  {    0.0f,  15.0f, 0.1f, 1.0f },    5.0f, 0.0f, hzTextFunction);
-    addExtParam (paramWaveVibAmt,  "Wave Vib Amt",      "Amount",  "",  {    0.0f, 100.0f, 0.5f, 1.0f },    0.0f, 0.0f, percentTextFunction);
-    addExtParam (paramTreble,      "Treble EQ",         "Treble",  "",  {  -50.0f,  50.0f, 1.0f, 1.0f },  -30.0f, 0.0f, intTextFunction);
-    addExtParam (paramBass,        "Bass frequency",    "Bass",    "",  {   15.0f, 600.0f, 1.0f, 1.0f },  461.0f, 0.0f, intTextFunction);
-    addExtParam (paramOutput,      "Output",            "Output",  "",  {    0.0f,   7.0f, 1.0f, 1.0f },    7.0f, 0.0f, percentTextFunction);
-    addExtParam (paramVoices,      "Voices",            "Voices",  "",  {    1.0f,   8.0f, 1.0f, 1.0f },    1.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse1OL,      "Pulse 1 OL",        "Left",          "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse1OR,      "Pulse 1 OR",        "Right",         "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse1Duty,    "Pulse 1 Duty",      "PW",            "",  {    0.0f,   3.0f, 1.0f, 1.0f },    0.0f, 0.0f, dutyTextFunction);
+    addExtParam (paramPulse1A,       "Pulse 1 A",         "Attack",        "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse1R,       "Pulse 1 R",         "Release",       "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse1Tune,    "Pulse 1 Tune",      "Tune",          "",  {  -48.0f,  48.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse1Fine,    "Pulse 1 Tune Fine", "Fine",          "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse1Sweep,   "Pulse 1 Sweep",     "Sweep",         "",  {   -7.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, stTextFunction);
+    addExtParam (paramPulse1Shift,   "Pulse 1 Shift",     "Shift",         "",  {    0.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse1VibRate, "Pulse 1 Vib Rate",  "Rate",          "",  {    0.0f,  15.0f, 0.1f, 1.0f },    5.0f, 0.0f, hzTextFunction);
+    addExtParam (paramPulse1VibAmt,  "Pulse 1 Vib Amt",   "Amount",        "",  {    0.0f, 100.0f, 0.5f, 1.0f },    0.0f, 0.0f, percentTextFunction);
+    addExtParam (paramPulse2OL,      "Pulse 2 OL",        "Left",          "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse2OR,      "Pulse 2 OR",        "Right",         "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramPulse2Duty,    "Pulse 2 Duty",      "PW",            "",  {    0.0f,   3.0f, 1.0f, 1.0f },    0.0f, 0.0f, dutyTextFunction);
+    addExtParam (paramPulse2A,       "Pulse 2 A",         "Attack",        "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse2R,       "Pulse 2 R",         "Release",       "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramPulse2Tune,    "Pulse 2 Tune",      "Tune",          "",  {  -48.0f,  48.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse2Fine,    "Pulse 2 Tune Fine", "Fine",          "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramPulse2VibRate, "Pulse 2 Vib Rate",  "Rate",          "",  {    0.0f,  15.0f, 0.1f, 1.0f },    5.0f, 0.0f, hzTextFunction);
+    addExtParam (paramPulse2VibAmt,  "Pulse 2 Vib Amt",   "Amount",        "",  {    0.0f, 100.0f, 0.5f, 1.0f },    0.0f, 0.0f, percentTextFunction);
+    addExtParam (paramNoiseOL,       "Noise OL",          "Left",          "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramNoiseOR,       "Noise OR",          "Right",         "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramNoiseA,        "Noise A",           "Attack",        "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramNoiseR,        "Noise R",           "Release",       "",  {    0.0f,   7.0f, 1.0f, 1.0f },    1.0f, 0.0f, arTextFunction);
+    addExtParam (paramNoiseShift,    "Noise Shift",       "Shift",         "",  {    0.0f,  13.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramNoiseStep,     "Noise Step",        "Steps",         "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, stepTextFunction);
+    addExtParam (paramNoiseRatio,    "Noise Ratio",       "Ratio",         "",  {    0.0f,   7.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveOL,        "Wave OL",           "Left",          "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramWaveOR,        "Wave OR",           "Right",         "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramWaveWfm,       "Waveform",          "Waveform",      "",  {    0.0f,  14.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveTune,      "Wave Tune",         "Tune",          "",  {  -48.0f,  48.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveFine,      "Wave Tune Fine",    "Fine",          "",  { -100.0f, 100.0f, 1.0f, 1.0f },    0.0f, 0.0f, intTextFunction);
+    addExtParam (paramWaveVibRate,   "Wave Vib Rate",     "Rate",          "",  {    0.0f,  15.0f, 0.1f, 1.0f },    5.0f, 0.0f, hzTextFunction);
+    addExtParam (paramWaveVibAmt,    "Wave Vib Amt",      "Amount",        "",  {    0.0f, 100.0f, 0.5f, 1.0f },    0.0f, 0.0f, percentTextFunction);
+    addExtParam (paramChannelSplit,  "Channel split",     "Channel split", "",  {    0.0f,   1.0f, 1.0f, 1.0f },    0.0f, 0.0f, enableTextFunction);
+    addExtParam (paramTreble,        "Treble EQ",         "Treble",        "",  {  -50.0f,  50.0f, 1.0f, 1.0f },  -30.0f, 0.0f, intTextFunction);
+    addExtParam (paramBass,          "Bass frequency",    "Bass",          "",  {   15.0f, 600.0f, 1.0f, 1.0f },  461.0f, 0.0f, intTextFunction);
+    addExtParam (paramOutput,        "Output",            "Output",        "",  {    0.0f,   7.0f, 1.0f, 1.0f },    7.0f, 0.0f, percentTextFunction);
+    addExtParam (paramVoices,        "Voices",            "Voices",        "",  {    1.0f,   8.0f, 1.0f, 1.0f },    1.0f, 0.0f, intTextFunction);
 
     for (int i = 0; i < 16; i++)
         papus.add (new PAPUEngine (*this));
@@ -716,6 +738,8 @@ void PAPUAudioProcessor::processBlock (juce::AudioSampleBuffer& buffer, juce::Mi
     
         for (int i = 0; i < voices; i++)
             papus[i]->prepareBlock (buffer);
+            
+        bool channelsplit = parameterIntValue (PAPUAudioProcessor::paramChannelSplit) ? true : false;
     
         for (auto itr : midi)
         {
@@ -726,12 +750,12 @@ void PAPUAudioProcessor::processBlock (juce::AudioSampleBuffer& buffer, juce::Mi
     
             if (msg.isNoteOn())
             {
-                if (auto voice = findFreeVoice(msg.getChannel()))
+                if (auto voice = findFreeVoice(!channelsplit ? 1 : msg.getChannel()))
                     voice->handleMessage (msg);
             }
             else if (msg.isNoteOff())
             {
-                if (auto voice = findVoiceForNote (msg.getNoteNumber(), msg.getChannel()))
+                if (auto voice = findVoiceForNote (msg.getNoteNumber(), !channelsplit ? 1 : msg.getChannel()))
                     voice->handleMessage (msg);
             }
             else if (msg.isAllNotesOff())

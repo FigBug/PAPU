@@ -74,6 +74,8 @@ public:
     gin::LFO vib3;
     int vibNote1, vibNote2, vibNote3;
     
+    bool channelsplit = false;
+    
 private:
     int parameterIntValue (const juce::String& uid);
     void runOscs (int curNote1, int curNote2, int curNote3, int curNote4, bool trigger1, bool trigger2, bool trigger3, bool trigger4);
@@ -161,6 +163,7 @@ public:
     static juce::String paramWaveFine;
     static juce::String paramWaveVibRate;
     static juce::String paramWaveVibAmt;
+    static juce::String paramChannelSplit;
     static juce::String paramTreble;
     static juce::String paramBass;
     static juce::String paramOutput;
