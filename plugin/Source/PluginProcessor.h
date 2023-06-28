@@ -46,7 +46,18 @@ public:
     void handleMessage (const juce::MidiMessage& msg);
     void runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos);
 
-    int getNote()   { return lastNote; }
+    int getNote(int note)
+    {
+        if (note == 1) {return lastNote1;}
+        else if (note == 2) {return lastNote2;}
+        else if (note == 3) {return lastNote3;}
+        else if (note == 4) {return lastNote4;}
+        else {return -1;}
+    }
+    int getNote1() { return lastNote1; }
+    int getNote2() { return lastNote2; }
+    int getNote3() { return lastNote3; }
+    int getNote4() { return lastNote4; }
 
     uint8_t waveIndex = 0;
     void setWave(uint8_t index);
@@ -61,17 +72,25 @@ public:
     gin::LFO vib1;
     gin::LFO vib2;
     gin::LFO vib3;
-    int vibNote;
+    int vibNote1, vibNote2, vibNote3;
+    
+    bool channelsplit = false;
     
 private:
     int parameterIntValue (const juce::String& uid);
-    void runOscs (int curNote, bool trigger);
+    void runOscs (int curNote1, int curNote2, int curNote3, int curNote4, bool trigger1, bool trigger2, bool trigger3, bool trigger4);
 
     PAPUAudioProcessor& processor;
 
-    int lastNote = -1;
+    int lastNote1 = -1;
+    int lastNote2 = -1;
+    int lastNote3 = -1;
+    int lastNote4 = -1;
     double pitchBend = 0;
-    juce::Array<int> noteQueue;
+    juce::Array<int> noteQueue1;
+    juce::Array<int> noteQueue2;
+    juce::Array<int> noteQueue3;
+    juce::Array<int> noteQueue4;
     float freq1 = 0.0f, freq2 = 0.0f, freq3 = 0.0f;
     
     void runVibrato(int todo);
@@ -144,6 +163,7 @@ public:
     static juce::String paramWaveFine;
     static juce::String paramWaveVibRate;
     static juce::String paramWaveVibAmt;
+    static juce::String paramChannelSplit;
     static juce::String paramTreble;
     static juce::String paramBass;
     static juce::String paramOutput;
@@ -157,8 +177,8 @@ public:
 
 private:
     void runUntil (int& done, juce::AudioSampleBuffer& buffer, int pos);
-    PAPUEngine* findFreeVoice();
-    PAPUEngine* findVoiceForNote (int note);
+    PAPUEngine* findFreeVoice(int channel);
+    PAPUEngine* findVoiceForNote (int note, int channel);
     
     juce::OwnedArray<PAPUEngine> papus;
     int nextVoice = 0;
