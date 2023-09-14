@@ -572,6 +572,7 @@ static juce::String intTextFunction (const gin::Parameter&, float v)
 
 //==============================================================================
 PAPUAudioProcessor::PAPUAudioProcessor()
+    : gin::Processor (false, gin::ProcessorOptions().withAdditionalCredits({"Shay Green"}))
 {
     addExtParam (paramPulse1OL,      "Pulse 1 OL",        "Left",          "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
     addExtParam (paramPulse1OR,      "Pulse 1 OR",        "Right",         "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
@@ -615,6 +616,8 @@ PAPUAudioProcessor::PAPUAudioProcessor()
 
     for (int i = 0; i < 16; i++)
         papus.add (new PAPUEngine (*this));
+    
+    init();
 }
 
 PAPUAudioProcessor::~PAPUAudioProcessor()

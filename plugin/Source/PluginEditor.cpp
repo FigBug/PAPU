@@ -8,8 +8,6 @@
 PAPUAudioProcessorEditor::PAPUAudioProcessorEditor (PAPUAudioProcessor& p)
   : ProcessorEditor (p), proc (p)
 {
-    additionalProgramming = "Shay Green";
-    
     addAndMakeVisible (&scope);
     
     for (auto pp : p.getPluginParameters())

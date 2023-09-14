@@ -68,7 +68,7 @@
 #endif
 
 // Set up boost
-#include "boost/config.hpp"
+#include "../boost/config.hpp"
 #ifndef BOOST_MINIMAL
 	#define BOOST 
 	#ifndef BLARGG_COMPILER_HAS_NAMESPACE
@@ -128,7 +128,7 @@
 #include <limits.h>
 
 // BOOST_STATIC_ASSERT( expr )
-#include "boost/static_assert.hpp"
+#include "../boost/static_assert.hpp"
 
 // Common standard headers
 #if BLARGG_COMPILER_HAS_NAMESPACE
