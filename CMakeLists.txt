@@ -175,7 +175,7 @@ target_compile_definitions (${PLUGIN_NAME} PRIVATE
 								JUCE_USE_MP3AUDIOFORMAT=0
 								JUCE_USE_LAME_AUDIO_FORMAT=0
 								JUCE_USE_WINDOWS_MEDIA_FORMAT=0
-								JucePlugin_PreferredChannelConfigurations={0,1}
+								JucePlugin_PreferredChannelConfigurations={0,2}
 								_CRT_SECURE_NO_WARNINGS
 							)
 
