@@ -1,12 +1,12 @@
 [submodule "modules/drowaudio"]
 	path = modules/dRowAudio
-	url = git@github.com:FigBug/drowaudio.git
+	url = https://github.com/FigBug/drowaudio.git
 [submodule "modules/gin"]
 	path = modules/gin
-	url = git@github.com:FigBug/Gin.git
+	url = https://github.com/FigBug/Gin.git
 [submodule "modules/juce"]
 	path = modules/juce
-	url = git@github.com:WeAreROLI/JUCE.git
+	url = https://github.com/WeAreROLI/JUCE.git
 [submodule "modules/plugin_sdk"]
 	path = modules/plugin_sdk
 	url = https://github.com/TurnipHat/plugin_sdk.git
