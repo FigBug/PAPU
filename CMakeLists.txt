@@ -182,8 +182,6 @@ target_compile_definitions (${PLUGIN_NAME} PRIVATE
 							)
 
 if (APPLE)
-	set_target_properties("juce_vst3_helper" PROPERTIES XCODE_ATTRIBUTE_CLANG_LINK_OBJC_RUNTIME NO)
-
     foreach(t ${FORMATS} "Assets" "All" "")
         set(tgt ${CMAKE_PROJECT_NAME})
         if (NOT t STREQUAL "")
