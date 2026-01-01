@@ -71,7 +71,7 @@ if [ "$(uname)" == "Darwin" ]; then
   xcrun stapler staple $PLUGIN.component
   zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst $PLUGIN.vst3 $PLUGIN.component
   
-  if [ "$BRANCH" = "release" ]; then
+  if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
     curl -F "files=@${PLUGIN}_Mac.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
   fi
 fi
@@ -93,7 +93,7 @@ if [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
   cd "$ROOT/ci/bin"
   zip -r ${PLUGIN}_Linux.zip $PLUGIN.so $PLUGIN.vst3 $PLUGIN.lv2
 
-  if [ "$BRANCH" = "release" ]; then
+  if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
     curl -F "files=@${PLUGIN}_Linux.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
   fi
 fi
@@ -112,7 +112,7 @@ if [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
 
   7z a ${PLUGIN}_Win.zip $PLUGIN.dll $PLUGIN.vst3
 
-  if [ "$BRANCH" = "release" ]; then
+  if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
     curl -F "files=@${PLUGIN}_Win.zip" "https://socalabs.com/files/set.php?key=$APIKEY"
   fi
 fi

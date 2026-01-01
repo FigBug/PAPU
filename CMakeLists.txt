@@ -4,7 +4,8 @@ cmake_minimum_required (VERSION 3.24.0 FATAL_ERROR)
 # Set for each plugin
 #
 set (PLUGIN_NAME PAPU)
-set (PLUGIN_VERSION 1.2.0)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" PLUGIN_VERSION)
+string(STRIP "${PLUGIN_VERSION}" PLUGIN_VERSION)
 set (BUNDLE_ID com.socalabs.PAPU)
 set (AU_ID PAPUAU)
 set (LV2_URI https://socalabs.com/papu/)

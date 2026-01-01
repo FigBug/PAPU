@@ -3,7 +3,9 @@ on:
   push:
     branches:
       - master
-      - release
+      - 'feature/*'
+    tags:
+      - 'v*'
 jobs:
   build:
     name: Build Linux
@@ -25,6 +27,11 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Binaries
-          path: bin
-          retention-days: 1          
+          name: PAPU_Linux
+          path: ci/bin/*.zip
+          retention-days: 30
+      - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ci/bin/*.zip          
