@@ -571,8 +571,16 @@ static juce::String intTextFunction (const gin::Parameter&, float v)
 }
 
 //==============================================================================
+static gin::ProcessorOptions createProcessorOptions()
+{
+    gin::ProcessorOptions opts;
+    opts.withAdditionalCredits ({"Shay Green"});
+    opts.hasMidiLearn = true;
+    return opts;
+}
+
 PAPUAudioProcessor::PAPUAudioProcessor()
-    : gin::Processor (false, gin::ProcessorOptions().withAdditionalCredits({"Shay Green"}))
+    : gin::Processor (false, createProcessorOptions())
 {
     addExtParam (paramPulse1OL,      "Pulse 1 OL",        "Left",          "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
     addExtParam (paramPulse1OR,      "Pulse 1 OR",        "Right",         "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
@@ -639,6 +647,9 @@ void PAPUAudioProcessor::processBlock (juce::AudioSampleBuffer& buffer, juce::Mi
 {
     int numSamples = buffer.getNumSamples();
     buffer.clear();
+
+    if (midiLearn)
+        midiLearn->processBlock (midi, numSamples);
 
    #if JUCE_IOS
     keyState.processNextMidiBuffer (midi, 0, numSamples, true);
