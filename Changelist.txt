@@ -1,2 +1,5 @@
+1.2.2:
+- Zip file updated
+
 1.2.1:
 - Added MIDI learn
