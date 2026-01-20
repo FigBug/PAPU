@@ -17,7 +17,7 @@ jobs:
         shell: bash
       - uses: actions/checkout@v1
         with:
-          submodules: true
+          submodules: recursive
       - name: "Run script"
         run: |
           export OS="mac"
