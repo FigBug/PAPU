@@ -51,4 +51,7 @@ xcuserdata
 Builds
 JuceLibraryCode
 .DS_Store
-ci/bin
+bin
+Installer/macOS/bin
+Installer/win/bin
+Installer/_flat_presets

@@ -1,0 +1,6 @@
+#!/bin/sh
+rm -Rf "/Library/Audio/Plug-Ins/VST/PAPU.vst"
+rm -Rf "/Library/Audio/Plug-Ins/VST3/PAPU.vst3"
+rm -Rf "/Library/Audio/Plug-Ins/Components/PAPU.component"
+rm -Rf "/Library/Audio/Plug-Ins/CLAP/PAPU.clap"
+exit 0
