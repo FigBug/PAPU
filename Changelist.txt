@@ -1,3 +1,7 @@
+1.2.4:
+- AGPL license
+- Removed Init preset
+
 1.2.3:
 - Added factory presets
 
