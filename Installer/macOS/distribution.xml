@@ -12,7 +12,7 @@
         <line choice="com.socalabs.papu.vst3"/>
         <line choice="com.socalabs.papu.au"/>
         <line choice="com.socalabs.papu.clap"/>
-
+        <line choice="com.socalabs.papu.resources"/>
     </choices-outline>
 
     <choice id="com.socalabs.papu.vst"
@@ -43,10 +43,18 @@
         <pkg-ref id="com.socalabs.papu.clap.pkg"/>
     </choice>
 
+    <choice id="com.socalabs.papu.resources"
+            title="Factory Presets"
+            description="Install factory content to /Library/Audio/Presets/SocaLabs/PAPU"
+            visible="true"
+            enabled="false"
+            selected="true">
+        <pkg-ref id="com.socalabs.papu.resources.pkg"/>
+    </choice>
 
     <pkg-ref id="com.socalabs.papu.vst.pkg"   version="0">vst.pkg</pkg-ref>
     <pkg-ref id="com.socalabs.papu.vst3.pkg"  version="0">vst3.pkg</pkg-ref>
     <pkg-ref id="com.socalabs.papu.au.pkg"    version="0">au.pkg</pkg-ref>
     <pkg-ref id="com.socalabs.papu.clap.pkg"  version="0">clap.pkg</pkg-ref>
-
+    <pkg-ref id="com.socalabs.papu.resources.pkg" version="0">resources.pkg</pkg-ref>
 </installer-gui-script>

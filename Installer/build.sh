@@ -23,6 +23,13 @@ mkdir -p "$PROJECT_ROOT/Installer/$PLATFORM/bin"
 rm -Rf "$PROJECT_ROOT/bin"
 mkdir -p "$PROJECT_ROOT/bin"
 
+FLAT_PRESETS="$PROJECT_ROOT/Installer/_flat_presets"
+rm -Rf "$FLAT_PRESETS"
+mkdir -p "$FLAT_PRESETS"
+find "$PROJECT_ROOT/plugin/Resources/Presets" -name "*.xml" -type f -exec cp {} "$FLAT_PRESETS/" \; 2>/dev/null
+# Some plugins keep XMLs at the Resources root rather than under Presets/.
+find "$PROJECT_ROOT/plugin/Resources" -maxdepth 1 -name "*.xml" -type f -exec cp {} "$FLAT_PRESETS/" \; 2>/dev/null
+
 
 ############################################################
 # macOS — pkgbuild + productbuild
@@ -65,6 +72,9 @@ if [ "$PLATFORM" = "macOS" ]; then
   cp -RL "$ART_DIR/AU/$PLUGIN.component" "$STAGE/au/"
   cp -RL "$ART_DIR/CLAP/$PLUGIN.clap"    "$STAGE/clap/"
 
+  mkdir -p "$STAGE/resources/Library/Audio/Presets/$VENDOR/$PLUGIN/Presets"
+  cp "$FLAT_PRESETS/"*.xml "$STAGE/resources/Library/Audio/Presets/$VENDOR/$PLUGIN/Presets/" 2>/dev/null || true
+  find "$STAGE/resources" -name ".DS_Store" -delete
 
   if [ -n "${APPLICATION:-}" ]; then
     codesign -s "$DEV_APP_ID" --options=runtime --timestamp --force -v "$STAGE/vst/$PLUGIN.vst"
@@ -79,6 +89,7 @@ if [ "$PLATFORM" = "macOS" ]; then
   pkgbuild --root "$STAGE/vst3" --install-location "/Library/Audio/Plug-Ins/VST3"       --identifier "${BUNDLE_BASE}.vst3.pkg" --version "$VERSION" "$PKG_DIR/vst3.pkg"
   pkgbuild --root "$STAGE/au"   --install-location "/Library/Audio/Plug-Ins/Components" --identifier "${BUNDLE_BASE}.au.pkg"   --version "$VERSION" "$PKG_DIR/au.pkg"
   pkgbuild --root "$STAGE/clap" --install-location "/Library/Audio/Plug-Ins/CLAP"       --identifier "${BUNDLE_BASE}.clap.pkg" --version "$VERSION" "$PKG_DIR/clap.pkg"
+  pkgbuild --root "$STAGE/resources" --install-location "/" --identifier "${BUNDLE_BASE}.resources.pkg" --version "$VERSION" --scripts "$PROJECT_ROOT/Installer/macOS/scripts" "$PKG_DIR/resources.pkg"
 
   cp "$PROJECT_ROOT/Installer/EULA.rtf"          "$PKG_DIR/EULA.rtf"
   cp "$PROJECT_ROOT/Installer/macOS/welcome.txt" "$PKG_DIR/welcome.txt"

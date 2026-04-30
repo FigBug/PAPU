@@ -9,4 +9,4 @@ Components:
   • VST3                 /Library/Audio/Plug-Ins/VST3
   • Audio Unit           /Library/Audio/Plug-Ins/Components
   • CLAP                 /Library/Audio/Plug-Ins/CLAP
-
+  • Factory content      /Library/Audio/Presets/SocaLabs/PAPU

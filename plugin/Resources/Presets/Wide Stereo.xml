@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<state name="Wide Stereo" valueTree="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&#13;&#10;&lt;state/&gt;&#13;&#10;">
+  <param uid="OL1" val="1.0"/>
+  <param uid="OR1" val="0.0"/>
+  <param uid="duty1" val="2.0"/>
+  <param uid="A1" val="0.0"/>
+  <param uid="R1" val="1.0"/>
+  <param uid="tune1" val="0.0"/>
+  <param uid="fine1" val="0.0"/>
+  <param uid="sweep1" val="0.0"/>
+  <param uid="shift1" val="0.0"/>
+  <param uid="rate1" val="5.0"/>
+  <param uid="amt1" val="0.0"/>
+  <param uid="OL2" val="0.0"/>
+  <param uid="OR2" val="1.0"/>
+  <param uid="duty2" val="2.0"/>
+  <param uid="A2" val="0.0"/>
+  <param uid="R2" val="1.0"/>
+  <param uid="tune2" val="0.0"/>
+  <param uid="fine2" val="12.0"/>
+  <param uid="rate2" val="5.0"/>
+  <param uid="amt2" val="0.0"/>
+  <param uid="OLN" val="0.0"/>
+  <param uid="ORL" val="0.0"/>
+  <param uid="shiftN" val="0.0"/>
+  <param uid="stepN" val="0.0"/>
+  <param uid="ratioN" val="0.0"/>
+  <param uid="AN" val="1.0"/>
+  <param uid="AR" val="1.0"/>
+  <param uid="OLW" val="0.0"/>
+  <param uid="ORW" val="0.0"/>
+  <param uid="waveform" val="0.0"/>
+  <param uid="tunewave" val="0.0"/>
+  <param uid="finewave" val="0.0"/>
+  <param uid="ratewave" val="5.0"/>
+  <param uid="amtwave" val="0.0"/>
+  <param uid="channelsplit" val="1.0"/>
+  <param uid="trebeq" val="-30.0"/>
+  <param uid="bassf" val="461.0"/>
+  <param uid="output" val="7.0"/>
+  <param uid="voices" val="1.0"/>
+</state>

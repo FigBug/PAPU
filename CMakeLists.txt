@@ -255,6 +255,13 @@ if (UNIX AND NOT APPLE)
 			 DESTINATION lib/clap
 			 COMPONENT CLAP)
 
+
+	# Factory presets ship flat — gin's loadDirectory doesn't recurse.
+	file (GLOB _preset_xmls "${CMAKE_CURRENT_SOURCE_DIR}/plugin/Resources/Presets/*.xml")
+	install (FILES ${_preset_xmls}
+			 DESTINATION share/SocaLabs/${PLUGIN_NAME}/Presets
+			 COMPONENT Resources)
+
 	set (CPACK_PACKAGE_NAME "papu")
 	set (CPACK_PACKAGE_VERSION "${PLUGIN_VERSION}")
 	set (CPACK_PACKAGE_VENDOR "SocaLabs")
@@ -264,7 +271,7 @@ if (UNIX AND NOT APPLE)
 	set (CPACK_PACKAGING_INSTALL_PREFIX "/usr")
 	set (CPACK_GENERATOR "DEB")
 	set (CPACK_DEB_COMPONENT_INSTALL OFF)
-	set (CPACK_COMPONENTS_ALL VST VST3 LV2 CLAP)
+	set (CPACK_COMPONENTS_ALL VST VST3 LV2 CLAP Resources)
 	set (CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 	set (CPACK_DEBIAN_PACKAGE_MAINTAINER "Roland Rabien <support@socalabs.com>")
 	set (CPACK_DEBIAN_PACKAGE_SECTION "sound")

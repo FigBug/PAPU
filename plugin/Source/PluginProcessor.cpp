@@ -571,6 +571,47 @@ static juce::String intTextFunction (const gin::Parameter&, float v)
 }
 
 //==============================================================================
+//==============================================================================
+namespace
+{
+    juce::File userResourceRoot()
+    {
+       #if JUCE_MAC
+        return juce::File::getSpecialLocation (juce::File::userHomeDirectory)
+                  .getChildFile ("Library/Audio/Presets/SocaLabs/PAPU");
+       #elif JUCE_WINDOWS
+        return juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
+                  .getChildFile ("SocaLabs/PAPU");
+       #else
+        return juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
+                  .getChildFile ("SocaLabs/PAPU");
+       #endif
+    }
+
+    juce::File systemResourceRoot()
+    {
+       #if JUCE_MAC
+        return juce::File ("/Library/Audio/Presets/SocaLabs/PAPU");
+       #elif JUCE_WINDOWS
+        return juce::File::getSpecialLocation (juce::File::commonApplicationDataDirectory)
+                  .getChildFile ("SocaLabs/PAPU");
+       #else
+        return juce::File ("/usr/share/SocaLabs/PAPU");
+       #endif
+    }
+
+    juce::File legacyUserProgramDirectory()
+    {
+       #if JUCE_MAC
+        return juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
+                  .getChildFile ("Application Support/com.socalabs/PAPU/programs");
+       #else
+        return juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
+                  .getChildFile ("com.socalabs/PAPU/programs");
+       #endif
+    }
+}
+
 static gin::ProcessorOptions createProcessorOptions()
 {
     return gin::ProcessorOptions()
@@ -856,3 +897,17 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new PAPUAudioProcessor();
 }
+//==============================================================================
+juce::File PAPUAudioProcessor::getProgramDirectory()
+{
+    auto dir = userResourceRoot().getChildFile ("Presets");
+    if (! dir.isDirectory())
+        dir.createDirectory();
+    return dir;
+}
+
+juce::Array<juce::File> PAPUAudioProcessor::getFactoryProgramDirectories()
+{
+    return { systemResourceRoot().getChildFile ("Presets") };
+}
+
