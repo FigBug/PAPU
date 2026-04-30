@@ -5,6 +5,9 @@ cd "$(dirname "$0")"
 ROOT=$(pwd)
 
 VER="$GITHUB_REF_NAME"
+# Tags are pushed with a leading "v" (see tag.sh) but Changelist entries are
+# numeric. Strip the prefix for the changelog lookup and the upload.php version field.
+VER="${VER#v}"
 
 NOTES=$(awk -v ver="$VER" '
     BEGIN { found=0; printing=0; pattern="^"ver":?$" }
