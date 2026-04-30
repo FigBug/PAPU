@@ -39,7 +39,7 @@ PLUGIN=papu
 for f in "./Binaries Linux"/*.deb \
          "./Binaries Windows"/*.exe \
          "./Binaries macOS"/*.pkg; do
-  curl -sS -F "files=@${f}" \
+  curl -sS --fail-with-body -F "files=@${f}" \
           -F "plugin=${PLUGIN}" \
           -F "version=${VER}" \
           -F "changelog=${NOTES}" \
