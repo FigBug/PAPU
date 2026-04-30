@@ -4,10 +4,10 @@ set -x
 cd "$(dirname "$0")"
 ROOT=$(pwd)
 
-VER="$GITHUB_REF_NAME"
+TAG="$GITHUB_REF_NAME"
 # Tags are pushed with a leading "v" (see tag.sh) but Changelist entries are
-# numeric. Strip the prefix for the changelog lookup and the upload.php version field.
-VER="${VER#v}"
+# numeric. Use TAG for the gh release tag, VER (stripped) elsewhere.
+VER="${TAG#v}"
 
 NOTES=$(awk -v ver="$VER" '
     BEGIN { found=0; printing=0; pattern="^"ver":?$" }
@@ -33,7 +33,7 @@ if [ -f "./Binaries macOS/Symbols_Mac.zip" ]; then
   ASSETS+=("./Binaries macOS/Symbols_Mac.zip")
 fi
 
-gh release create "$VER" --title "$VER" -F /tmp/release_notes.txt "${ASSETS[@]}"
+gh release create "$TAG" --title "$TAG" -F /tmp/release_notes.txt "${ASSETS[@]}"
 
 PLUGIN=papu
 for f in "./Binaries Linux"/*.deb \
