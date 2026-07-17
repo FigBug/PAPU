@@ -56,6 +56,7 @@ Name: "vst";       Description: "VST plug-in";   Types: full custom; Flags: chec
 Name: "vst3";      Description: "VST3 plug-in";  Types: full custom; Flags: checkablealone
 Name: "clap";      Description: "CLAP plug-in";  Types: full custom; Flags: checkablealone
 Name: "resources"; Description: "Factory presets"; Types: full custom; Flags: fixed
+Name: "crashreporter"; Description: "Crash reporter (shared component, only updated if newer)"; Types: full custom; Flags: checkablealone
 
 [InstallDelete]
 Type: files;          Name: "{commoncf64}\VST2\PAPU.dll";   Components: vst
@@ -68,3 +69,9 @@ Source: "bin\VST\PAPU.dll";    DestDir: "{commoncf64}\VST2";                    
 Source: "bin\VST3\PAPU.vst3\*"; DestDir: "{commoncf64}\VST3\PAPU.vst3\"; Flags: ignoreversion overwritereadonly recursesubdirs; Components: vst3
 Source: "bin\CLAP\PAPU.clap";   DestDir: "{commoncf64}\CLAP";                    Flags: ignoreversion overwritereadonly; Components: clap
 Source: "..\_flat_presets\*.xml"; DestDir: "{commonappdata}\SocaLabs\PAPU\Presets\"; Flags: ignoreversion; Components: resources
+; CrashReporter app → C:\Program Files\Rabien Software\Crash Reporter, plus this
+; plugin's registration JSON → C:\ProgramData\Rabien Software\Crash Reporter\Plugins.
+; Shared across plugins: the app is only updated if newer and never removed on
+; uninstall; the registration JSON is always installed and never removed.
+Source: "bin\CrashReporter\CrashReporter.exe"; DestDir: "{commonpf}\Rabien Software\Crash Reporter"; Flags: skipifsourcedoesntexist uninsneveruninstall; Components: crashreporter
+Source: "bin\CrashReporter\papu.json";       DestDir: "{commonappdata}\Rabien Software\Crash Reporter\Plugins"; Flags: ignoreversion uninsneveruninstall

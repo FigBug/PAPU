@@ -2,6 +2,8 @@
 #include "PluginEditor.h"
 #include "PadPluginEditor.h"
 
+#include <mutex>
+
 juce::String PAPUAudioProcessor::paramPulse1Sweep      = "sweep1";
 juce::String PAPUAudioProcessor::paramPulse1Shift      = "shift1";
 juce::String PAPUAudioProcessor::paramPulse1Duty       = "duty1";
@@ -619,9 +621,31 @@ static gin::ProcessorOptions createProcessorOptions()
         .withMidiLearn();
 }
 
+// If the shared CrashReporter is installed, launch it once per process (on the
+// first plugin instance) so it can scan and upload any crash from last session.
+static void launchCrashReporterOnce()
+{
+    static std::once_flag flag;
+    std::call_once (flag, []
+    {
+       #if JUCE_MAC
+        juce::File app ("/Library/Application Support/Rabien Software/Crash Reporter/CrashReporter.app");
+       #elif JUCE_WINDOWS
+        auto app = juce::File::getSpecialLocation (juce::File::globalApplicationsDirectory)
+                       .getChildFile ("Rabien Software").getChildFile ("Crash Reporter").getChildFile ("CrashReporter.exe");
+       #else
+        juce::File app;
+       #endif
+
+        if (app.exists())
+            juce::Process::openDocument (app.getFullPathName(), {});
+    });
+}
+
 PAPUAudioProcessor::PAPUAudioProcessor()
     : gin::Processor (false, createProcessorOptions())
 {
+    launchCrashReporterOnce();
     addExtParam (paramPulse1OL,      "Pulse 1 OL",        "Left",          "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
     addExtParam (paramPulse1OR,      "Pulse 1 OR",        "Right",         "",  {    0.0f,   1.0f, 1.0f, 1.0f },    1.0f, 0.0f, enableTextFunction);
     addExtParam (paramPulse1Duty,    "Pulse 1 Duty",      "PW",            "",  {    0.0f,   3.0f, 1.0f, 1.0f },    0.0f, 0.0f, dutyTextFunction);
