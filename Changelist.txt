@@ -1,3 +1,6 @@
+1.2.8:
+- Fix Linux packages including JUCE source files
+
 1.2.7:
 - Crash reporting improvements
 
