@@ -508,68 +508,108 @@ void PAPUEngine::setWave(uint8_t index)
 }
 
 //==============================================================================
-static juce::String percentTextFunction (const gin::Parameter& p, float v)
+static std::variant<float, juce::String> percentTextFunction (const gin::Parameter& p, const std::variant<float, juce::String>& in)
 {
-    return juce::String::formatted("%.0f%%", v / p.getUserRangeEnd() * 100);
+    if (auto v = std::get_if<float> (&in))
+        return juce::String::formatted ("%.0f%%", *v / p.getUserRangeEnd() * 100);
+
+    return std::get<juce::String> (in).getFloatValue() / 100.0f * p.getUserRangeEnd();
 }
 
-static juce::String enableTextFunction (const gin::Parameter&, float v)
+static std::variant<float, juce::String> enableTextFunction (const gin::Parameter&, const std::variant<float, juce::String>& in)
 {
-    return v > 0.0f ? "On" : "Off";
+    if (auto v = std::get_if<float> (&in))
+        return juce::String (*v > 0.0f ? "On" : "Off");
+
+    auto t = std::get<juce::String> (in).trim();
+    if (t.equalsIgnoreCase ("On"))  return 1.0f;
+    if (t.equalsIgnoreCase ("Off")) return 0.0f;
+    return t.getFloatValue();
 }
 
-static juce::String dutyTextFunction (const gin::Parameter&, float v)
+static std::variant<float, juce::String> dutyTextFunction (const gin::Parameter&, const std::variant<float, juce::String>& in)
 {
-    const int duty = int (v);
-    switch (duty)
+    if (auto v = std::get_if<float> (&in))
     {
-        case 0: return "12.5%";
-        case 1: return "25%";
-        case 2: return "50%";
-        case 3: return "75%";
+        switch (int (*v))
+        {
+            case 0: return juce::String ("12.5%");
+            case 1: return juce::String ("25%");
+            case 2: return juce::String ("50%");
+            case 3: return juce::String ("75%");
+        }
+        return juce::String();
     }
-    return "";
+
+    auto pct = std::get<juce::String> (in).getFloatValue();
+    if (pct <= 18.75f) return 0.0f;
+    if (pct <= 37.5f)  return 1.0f;
+    if (pct <= 62.5f)  return 2.0f;
+    return 3.0f;
 }
 
-static juce::String arTextFunction (const gin::Parameter&, float v)
+static std::variant<float, juce::String> arTextFunction (const gin::Parameter&, const std::variant<float, juce::String>& in)
 {
-    return juce::String::formatted("%.1f s", v * 1.0/64.0 * 16);
+    if (auto v = std::get_if<float> (&in))
+        return juce::String::formatted ("%.1f s", *v * 1.0/64.0 * 16);
+
+    return std::get<juce::String> (in).getFloatValue() * 4.0f;
 }
 
-static juce::String hzTextFunction (const gin::Parameter&, float v)
+static std::variant<float, juce::String> hzTextFunction (const gin::Parameter&, const std::variant<float, juce::String>& in)
 {
-    return juce::String::formatted("%.1f Hz", v);
+    if (auto v = std::get_if<float> (&in))
+        return juce::String::formatted ("%.1f Hz", *v);
+
+    return std::get<juce::String> (in).getFloatValue();
 }
 
-static juce::String stTextFunction (const gin::Parameter&, float v)
+static std::variant<float, juce::String> stTextFunction (const gin::Parameter&, const std::variant<float, juce::String>& in)
 {
-    juce::String str;
-    switch (abs (int (v)))
+    if (auto v = std::get_if<float> (&in))
     {
-        case 0: str = "Off"; break;
-        case 1: str = "7.8 ms"; break;
-        case 2: str = "15.6 ms"; break;
-        case 3: str = "23.4 ms"; break;
-        case 4: str = "31.3 ms"; break;
-        case 5: str = "39.1 ms"; break;
-        case 6: str = "46.9 ms"; break;
-        case 7: str = "54.7 ms"; break;
+        juce::String str;
+        switch (abs (int (*v)))
+        {
+            case 0: str = "Off"; break;
+            case 1: str = "7.8 ms"; break;
+            case 2: str = "15.6 ms"; break;
+            case 3: str = "23.4 ms"; break;
+            case 4: str = "31.3 ms"; break;
+            case 5: str = "39.1 ms"; break;
+            case 6: str = "46.9 ms"; break;
+            case 7: str = "54.7 ms"; break;
+        }
+
+        if (*v < 0)
+            str = "-" + str;
+
+        return str;
     }
-    
-    if (v < 0)
-        str = "-" + str;
-    
-    return str;
+
+    auto t = std::get<juce::String> (in).trim();
+    if (t.equalsIgnoreCase ("Off"))
+        return 0.0f;
+
+    // Each sweep step is 7.8125 ms
+    auto ms = t.getFloatValue();
+    return float (juce::jlimit (-7, 7, juce::roundToInt (std::abs (ms) / 7.8125f)) * (ms < 0 ? -1 : 1));
 }
 
-static juce::String stepTextFunction (const gin::Parameter&, float v)
+static std::variant<float, juce::String> stepTextFunction (const gin::Parameter&, const std::variant<float, juce::String>& in)
 {
-    return v > 0.0f ? "15" : "7";
+    if (auto v = std::get_if<float> (&in))
+        return juce::String (*v > 0.0f ? "15" : "7");
+
+    return std::get<juce::String> (in).getFloatValue() >= 11.0f ? 1.0f : 0.0f;
 }
 
-static juce::String intTextFunction (const gin::Parameter&, float v)
+static std::variant<float, juce::String> intTextFunction (const gin::Parameter&, const std::variant<float, juce::String>& in)
 {
-    return juce::String (int (v));
+    if (auto v = std::get_if<float> (&in))
+        return juce::String (int (*v));
+
+    return std::get<juce::String> (in).getFloatValue();
 }
 
 //==============================================================================
